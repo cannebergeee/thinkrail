@@ -3,6 +3,7 @@ import type {
 	NativeUpdateFailedPhase,
 	NativeUpdateState,
 } from "@thinkrail/contracts";
+import { desktopError } from "../errorReporting";
 
 const AUTO_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
 const AUTO_CHECK_JITTER_RATIO = 0.1;
@@ -138,7 +139,7 @@ export function createNativeUpdateController(
 			try {
 				listener(state);
 			} catch (error) {
-				console.error("[desktop] native update listener failed", error);
+				desktopError("updates", "native update listener failed", error);
 			}
 		}
 	};

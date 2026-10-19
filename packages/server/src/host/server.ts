@@ -158,6 +158,7 @@ export interface CreateServerOptions {
 		| "build"
 		| "posthogApiKey"
 		| "posthogHost"
+		| "appRoot"
 		| "mute"
 		| "env"
 		| "fetchImpl"

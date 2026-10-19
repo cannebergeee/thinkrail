@@ -1,4 +1,5 @@
 import { Updater, Utils } from "electrobun/main";
+import { desktopError } from "../errorReporting";
 import {
 	createNativeUpdateController,
 	type NativeUpdateController,
@@ -45,7 +46,7 @@ export function createElectrobunQuitCoordinator(
 			});
 		},
 		reportLifecycleError: (error) => {
-			console.error("[desktop] update lifecycle failed", error);
+			desktopError("updates", "update lifecycle failed", error);
 		},
 	});
 }
