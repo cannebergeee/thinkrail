@@ -16,19 +16,31 @@ image, SVG, CSV, JSON, notebook, PDF, HTML) with their review composers, thread 
 and the shared Monaco, Pierre and markdown-document machinery they run on. It is presentation: it owns no
 content loading, review persistence, tabs or navigation — a host supplies those.
 
-The package exists so one renderer stack serves every surface that shows a file. The web app's file and
-diff panes consume it today, so a renderer fix lands everywhere at once.
+The package exists so one renderer stack serves every surface that shows a file: the web app's file and
+diff panes, the file-comparison diff tab, and extension tool cards (visualize's file previews,
+[[module-ext-visualize]]), so a renderer fix lands everywhere at once.
 
 ## Public surface
 
-One barrel, `@thinkrail/resource-renderers` (`src/index.ts`): the registry contract (types,
-`registerResourceRenderer`, `resolveRenderers`, `describeResource`, `anchorLabel`, `isPlaceable`,
-`threadLabel`, `outdatedReason`), `registerBundledResourceRenderers()` (idempotent), the host seam
-(`ResourceHostProvider` and the `ResourceHost`, `ResourceMarkdown`, `ResourceCodeHost`, `ResourceCodeLanguage`,
-`ResourceMarkdownProps`, `MarkdownRehypePlugins` types), and the pieces panes compose around a renderer:
-`ReviewThreadCard`, `ReviewDraftContext`/`ReviewDraftPersistence`, and `createAskAgentRequest`. Renderer
-implementations are never exported; they stay behind each registration's dynamic `loadView`/`loadDiff`,
-so the barrel's eager weight is registration metadata only.
+One barrel, `@thinkrail/resource-renderers` (`src/index.ts`):
+
+- the registry contract — types, `registerResourceRenderer`, `resolveRenderers`, `describeResource`,
+  `anchorLabel`, `isPlaceable`, `threadLabel`, `outdatedReason`, and the selection helpers
+  `selectResourceRenderer`, `rendererImplementationKey`, `rendererTestId` — plus
+  `registerBundledResourceRenderers()` (idempotent);
+- the host seam — `ResourceHostProvider`, `useResourceHost`, `useOptionalResourceHost` and the `ResourceHost`,
+  `ResourceScope`, `ResourceFileReviewProps`, `ResourceReviewSendProps`, `ResourceMarkdown`, `ResourceCodeHost`, `ResourceCodeLanguage`,
+  `ResourceMarkdownProps`, `MarkdownRehypePlugins` types;
+- **`ResourcePreview`** — a self-loading file view, or with `before` a before/after diff of two workspace
+  files, with the registry's toggle, the unplaced strip, review commenting and Send review, and caller slots
+  (`leading`, `actions`, controlled `rendererId` / `layout`);
+- the pieces panes compose around a renderer: the lazy `RendererView` / `RendererDiff` mounts (implementation
+  identity = renderer id + phone class), `usePlacedThreadIds`, `UnplacedReviewStrip` /
+  `unplacedReviewEntries` / `focusedUnplacedEntry`, `ReviewThreadCard`,
+  `ReviewDraftContext`/`ReviewDraftPersistence`, and `createAskAgentRequest`.
+
+Renderer implementations are never exported; they stay behind each registration's dynamic
+`loadView`/`loadDiff`, so the barrel's eager weight is registration metadata only.
 
 ## Host seam
 
@@ -40,8 +52,18 @@ A host wraps renderers in `ResourceHostProvider` with a `ResourceHost`:
   canonicalization, and the code `theme` resolved from CSS variables); Monaco initializes from it once
   (`ensureMonaco`) and re-themes on every completed theme swap.
 - `bytesUrl(workspaceId, path, oid?)` — the host byte route for images, PDFs and relative markdown assets.
-- `openFile(workspaceId, path)` — where a relative document link navigates.
-- `fileLineWidth` / `fileLineWidthBounded` — the reader's line-width preference.
+- `openFile(workspaceId, path, { keep? })` and `openComparison(workspaceId, before, path)` — navigation for
+  relative document links (preview) and explicit Open-in-tab actions (keep).
+- `readFile(workspaceId, path)` and `subscribeFileChanges(workspaceId, onChange)` — `ResourcePreview`'s
+  content and live refresh (`null` paths mean "anything may have changed").
+- `FileReview` (a render-prop component: `{ workspaceId, path, kind, sessionId?, children(review) }`) and
+  `ReviewSend` — the host's review surface and Send review control; the optional session routes sends. The
+  seam is a component, not a hook on the host object: passing hooks around as values breaks React's rules and
+  made the React Compiler bail out of the preview; a before/after nests two `FileReview`s.
+- `fileLineWidth` / `fileLineWidthBounded`, `mobile` — reader preferences and the phone class.
+- `scope?: { workspaceId, sessionId? }` — set by a nested provider when a subtree belongs to one workspace
+  and chat (the web chat wraps every tool renderer); `ResourcePreview` falls back to it when no
+  `workspaceId` prop is given.
 
 Both loaders are **lazy**, cached per loader identity and read with `use`, because the host's markdown and
 the language catalog (with Shiki core) must stay out of the eager graph. The rendered markdown diff renders
@@ -189,7 +211,8 @@ and onion opacity are measured geometry and therefore the bounded exception to t
 those values alone are inline,
 while every colour, border, spacing, and control skin remains a token utility.
 
-`thinkrail/svg` is the higher-ranked SVG candidate while Source remains available through
+`thinkrail/svg` contains the vector in its pane in both dimensions (≤ 960 px wide), measured in a layout
+effect so a drag's first geometry is already final. It is the higher-ranked SVG candidate while Source remains available through
 `thinkrail/code`. Its `sandbox=""` iframe receives a minimal `srcdoc` document whose only image is a
 percent-encoded `data:image/svg+xml` URL; SVG source never enters the document's HTML stream. The frame
 has no script or same-origin capability and a CSP of `default-src 'none'; img-src data:; style-src
@@ -280,7 +303,13 @@ output uses this same sanitizer. The injected CSP is exactly `default-src 'none'
 style-src 'unsafe-inline'; font-src data:; base-uri 'none'; form-action 'none'; object-src 'none'; frame-src
 'none'; child-src 'none'`. The diff is the shared visual frame constrained to 2-up sandboxed documents only.
 It advertises no anchor geometry, so HTML threads remain in the pane-owned unplaced strip and Source is the
-only authoring candidate.
+only authoring candidate. View and diff share a **preview width** switch in the notice bar — Desktop 1280 /
+Tablet 768 / Phone 390 / Fill, default Desktop, persisted as `{ viewport }` view state: the frame renders at
+the design width and is CSS-scaled down to its box (never up), keeping its own vertical scroll, so a narrow
+pane, a 2-up half or a chat card shows the true layout shrunk rather than an accidental mobile reflow; Fill
+is the old reflow. Scaling is pure geometry on the wrapper — the iframe keeps `sandbox=""` and nothing
+measures the document (no `allow-same-origin`). The sanitizer also strips form controls, so mockups draw
+buttons and inputs with styled elements; spot (region) comments on HTML are not offered yet.
 
 Pierre parses the two complete text sides (`absent` → `null`) with the current ignore-whitespace value,
 uses the `thinkrail` CSS-variable Shiki theme, word-level inline changes, collapsed unchanged regions with
