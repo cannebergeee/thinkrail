@@ -176,6 +176,13 @@ zero analytics traffic. CI/test suppression remains host-owned and covers both t
 
 ## Single-file binary (`build:binary`)
 
+The binary embeds its source map (`--sourcemap`, ~+17 MB; Bun's `--compile` embeds a map whenever it
+emits one, so no upload path avoids the size) so Bun resolves error stacks on-device; the build deletes
+the external `.map` it also writes, refuses to embed web `.map` files, and compiles from
+`BINARY_SOURCE_MAP_BASE` (`apps/cli`), which the launcher passes as analytics `remapBase` for binary
+builds because remapped frames are relative to that directory. No minification: it would mangle the
+names that stack frames and `constructor.name`-dependent code rely on.
+
 `bun run build:binary` produces a **standalone `thinkrail` executable** — one self-contained file per
 platform — via `bun build --compile`. Bun bundles the host *and* transparently embeds the `bun-pty` native
 lib; the extra steps are the **web UI** (a directory the host normally serves), the **bundled pi
@@ -183,7 +190,7 @@ extensions** (which the server path-loads out of `node_modules` in dev — impos
 and `trash`'s **native helper sidecars** (which macOS/Windows must execute from real filesystem paths):
 
 - `scripts/build-binary.ts` consumes `@thinkrail/server/build-support`, writes three **transient** generated modules, runs
-  `bun build --compile --no-compile-autoload-bunfig --target=<host|--target>` on
+  `bun build --compile --no-compile-autoload-bunfig --sourcemap --target=<host|--target>` on
   `src/compiled-entry.ts`, then deletes them (so the artifact cannot execute a project-local
   `bunfig.toml` preload before ThinkRail boots, and the working tree + `tsc` stay clean); each generated
   module has a committed `.d.ts` type contract `tsc` resolves against
