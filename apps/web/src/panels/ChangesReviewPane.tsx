@@ -11,6 +11,7 @@ import type { GitFileChange, GitStatus } from "@thinkrail/contracts";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { usePhoneViewport } from "@/lib";
+import { diffRendererSupportsLayout } from "@/resources";
 import { LoadingRegion } from "../components/Skeleton";
 import {
 	type ChangesTab,
@@ -25,7 +26,6 @@ import { ChangesReviewGuide, guideSteps } from "./ChangesReviewGuide";
 import { LARGE_SCOPE_FILES, scopeKey, scopeLabel, sectionCollapsedByDefault } from "./changesModel";
 import { DiffStatBadge } from "./DiffStatBadge";
 import { HeaderIconButton } from "./HeaderIconButton";
-import { diffRendererSupportsLayout } from "./resourcePane";
 import { ownsReviewShortcut } from "./reviewShortcuts";
 import { SendAllReviewsButton } from "./SendReviewButton";
 import { createSectionContentCache } from "./sectionContentCache";

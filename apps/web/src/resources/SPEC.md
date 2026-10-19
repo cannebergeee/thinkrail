@@ -48,7 +48,11 @@ control rather than emulate one.
   `ReviewThread`, `ReviewThreadActions`, `SurfaceReview`, `ResourceViewProps`, `ResourceDiffProps`
   (both including an optional actual-placement callback), `HunkActions`, `ResourceRenderer` and its support
   types, plus `registerResourceRenderer`,
-  `resolveRenderers`, `describeResource`, `anchorLabel`, and `isPlaceable`.
+  `resolveRenderers`, `describeResource`, `anchorLabel`, and `isPlaceable`. `diffRendererSupportsLayout`
+  answers, from a path alone (before content loads), whether the diff renderer it would resolve to honours
+  the split/unified layout control — inferring the text/binary split from the path's MIME so known image
+  and PDF paths resolve to their layout-less renderers; MIME inference itself stays module-internal. A
+  pane uses it to hide a scope-wide layout toggle no file can use.
 - **Allowed deps:** `@thinkrail/contracts` types, the `lib` barrel, and React types.
 - **Forbidden:** store, transport, shell, panels, and renderer implementations. Bundled implementations
   live under `panels/resources` and register metadata plus lazy loaders from the workbench composition edge.

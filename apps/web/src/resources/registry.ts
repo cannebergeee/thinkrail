@@ -1,4 +1,5 @@
-import { inferredMime } from "./describe";
+import type { GitDiffScope, ResourceMeta } from "@thinkrail/contracts";
+import { describeResource, inferredMime } from "./describe";
 import type {
 	ResourceDescriptor,
 	ResourceEnvironment,
@@ -88,4 +89,34 @@ export function resolveRenderers(
 		)
 		.sort((left, right) => right.rank - left.rank);
 	return [...candidates, fallback];
+}
+
+const PENDING_META: ResourceMeta = { hash: null, byteLength: null, text: true };
+
+function inferredBinary(path: string): boolean {
+	const mime = inferredMime(path);
+	return (
+		mime !== undefined &&
+		(mime === "application/pdf" || mime.startsWith("image/")) &&
+		mime !== "image/svg+xml"
+	);
+}
+
+// Whether the diff renderer a file would get — resolved from its path alone, before content loads —
+// honours the split/unified layout control. The text/binary split is inferred from the path's MIME
+// (known image and PDF types resolve to their layout-less renderers; an unknown-extension binary reads
+// as text until its bytes load). Lets a pane-level toggle hide itself when no file in a scope can use it.
+export function diffRendererSupportsLayout(
+	workspaceId: string,
+	path: string,
+	scope: GitDiffScope,
+	selectedId: string | undefined,
+	mobile: boolean,
+): boolean {
+	const meta = inferredBinary(path) ? { ...PENDING_META, text: false } : PENDING_META;
+	const candidates = resolveRenderers(describeResource(workspaceId, path, meta, scope), "diff", {
+		mobile,
+	});
+	const renderer = candidates.find((candidate) => candidate.id === selectedId) ?? candidates[0];
+	return renderer?.capabilities.layout ?? false;
 }

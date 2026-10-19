@@ -1,11 +1,6 @@
-import type { GitDiffScope, ResourceMeta } from "@thinkrail/contracts";
+import type { ResourceMeta } from "@thinkrail/contracts";
 import { useEffect, useRef } from "react";
-import {
-	describeResource,
-	inferredMime,
-	type ResourceRenderer,
-	resolveRenderers,
-} from "../resources";
+import type { ResourceRenderer } from "../resources";
 import { useAppStore } from "../store";
 import { getTransport } from "../transport";
 
@@ -37,29 +32,6 @@ export function selectResourceRenderer(
 
 export function rendererImplementationKey(rendererId: string, mobile: boolean): string {
 	return `${rendererId}:${mobile ? "phone" : "desktop"}`;
-}
-
-function inferredBinary(path: string): boolean {
-	const mime = inferredMime(path);
-	return (
-		mime !== undefined &&
-		(mime === "application/pdf" || mime.startsWith("image/")) &&
-		mime !== "image/svg+xml"
-	);
-}
-
-export function diffRendererSupportsLayout(
-	workspaceId: string,
-	path: string,
-	scope: GitDiffScope,
-	selectedId: string | undefined,
-	mobile: boolean,
-): boolean {
-	const meta = inferredBinary(path) ? { ...PENDING_TEXT_META, text: false } : PENDING_TEXT_META;
-	const candidates = resolveRenderers(describeResource(workspaceId, path, meta, scope), "diff", {
-		mobile,
-	});
-	return selectResourceRenderer(candidates, selectedId, path).capabilities.layout;
 }
 
 export function useResetViewStateOnImplementationChange(

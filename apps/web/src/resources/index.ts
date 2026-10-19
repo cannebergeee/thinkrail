@@ -1,5 +1,9 @@
-export { describeResource, inferredMime } from "./describe";
-export { registerResourceRenderer, resolveRenderers } from "./registry";
+export { describeResource } from "./describe";
+export {
+	diffRendererSupportsLayout,
+	registerResourceRenderer,
+	resolveRenderers,
+} from "./registry";
 export { anchorLabel, isPlaceable } from "./review";
 export type {
 	AnchorDraft,
