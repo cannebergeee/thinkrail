@@ -82,7 +82,6 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 	const [guideHidden, setGuideHidden] = useState(false);
 	const guideOpen = guideAvailable && !guideHidden && layout === "stacked" && !mobile;
 	const [largeNoticeDismissed, setLargeNoticeDismissed] = useState(false);
-	const restoredStacked = useRef(false);
 
 	const { reload } = useWorkspaceRead(
 		workspaceId,
@@ -116,7 +115,6 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 				setError(null);
 				setScopeGone(false);
 				warnedRef.current = false;
-				restoredStacked.current = false;
 			},
 		},
 		`${scopeKey(scope)}:${targetRef}`,
@@ -173,7 +171,6 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 			layout,
 			reveal: tab.reveal,
 			activePath: tab.activePath,
-			restoredStacked,
 		});
 
 	useEffect(() => {
