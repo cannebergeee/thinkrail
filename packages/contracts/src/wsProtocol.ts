@@ -4,6 +4,7 @@ import type {
 	BackgroundCommandCompletionDetails,
 	BackgroundCommandOutputResult,
 	BranchList,
+	BranchStatus,
 	ChangeReceipt,
 	DelegationRunDetails,
 	DelegationRunStatus,
@@ -33,11 +34,12 @@ import type {
 	McpStatusSnapshot,
 	OpenBranchReview,
 	OpenPrResult,
-	PrDraft,
+	PrBodySource,
 	Project,
 	ProjectPathStatus,
 	ProjectTrustSummary,
 	ProviderStatusReport,
+	PrPreview,
 	ResourceMeta,
 	RevertTarget,
 	ReviewAnchor,
@@ -112,7 +114,8 @@ export type TemplateReadLocation =
 	| { projectId: string; workspaceId?: never }
 	| { workspaceId?: never; projectId?: never };
 
-export const PROTOCOL_VERSION = 85;
+export const PROTOCOL_VERSION = 86;
+export const BRANCH_STATUS_PROTOCOL_VERSION = 86;
 export const PROJECT_RENAME_PROTOCOL_VERSION = 85;
 export const MCP_TOOL_GRANTS_PROTOCOL_VERSION = 84;
 export const MCP_PROTOCOL_VERSION = 83;
@@ -205,6 +208,8 @@ export const WS_METHODS = {
 	workspaceOpenExisting: "workspace.openExisting",
 	workspaceList: "workspace.list",
 	workspaceOpenReview: "workspace.openReview",
+	workspaceBranchStatus: "workspace.branchStatus",
+	workspacePush: "workspace.push",
 	workspaceRemove: "workspace.remove",
 	workspaceDiffStats: "workspace.diffStats",
 	workspaceSetSkillOverride: "workspace.setSkillOverride",
@@ -223,6 +228,7 @@ export const WS_METHODS = {
 	githubRefresh: "github.refresh",
 	prPreview: "pr.preview",
 	prOpen: "pr.open",
+	prGenerate: "pr.generate",
 	fsReadDir: "fs.readDir",
 	fsReadFile: "fs.readFile",
 	specGraph: "spec.graph",
@@ -570,6 +576,14 @@ export interface WsMethodMap {
 		params: { workspaceId: string; allowCached?: boolean };
 		result: OpenBranchReview | null;
 	};
+	"workspace.branchStatus": {
+		params: { workspaceId: string; allowCached?: boolean };
+		result: BranchStatus;
+	};
+	"workspace.push": {
+		params: { workspaceId: string; confirmBase?: boolean };
+		result: { dirtyFiles: number };
+	};
 	"workspace.remove": { params: { id: string }; result: Ack };
 	"workspace.diffStats": { params: { id: string }; result: DiffStats };
 	"workspace.setSkillOverride": {
@@ -599,13 +613,23 @@ export interface WsMethodMap {
 	"github.authStatus": { params: Record<string, never>; result: GithubAuthStatus };
 	"github.refresh": { params: Record<string, never>; result: GithubAuthStatus };
 	"pr.preview": {
-		params: { workspaceId: string; sessionId: string; title?: string };
-		result: PrDraft;
+		params: {
+			workspaceId: string;
+			sessionId?: string;
+			title?: string;
+			source?: PrBodySource;
+			template?: string;
+		};
+		result: PrPreview;
+	};
+	"pr.generate": {
+		params: { workspaceId: string; sessionId?: string; template?: string };
+		result: { body: string | null };
 	};
 	"pr.open": {
 		params: {
 			workspaceId: string;
-			sessionId: string;
+			sessionId?: string;
 			title?: string;
 			titleEdited?: boolean;
 			body?: string;
