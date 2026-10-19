@@ -17,7 +17,7 @@ not this module; the theme-aware highlighter remains app-local.
   block so a rendered document doesn't show spec metadata as a heading) + `cssColorToHex()` (canonicalize
   a CSS color to hex — minified CSS serves `#fff`/`gray`-style equivalents, which strict consumers like
   Monaco and xterm reject; `""` when unparseable). Plus the primitives that more than one module needs and
-  none should re-state: **`normalizePath()`** / **`isAbsolutePath()`** (a path from a pi tool call or the
+  none should re-state: **`normalizePath()`** / **`isAbsolutePath()`** / **`fileName()`** (a path's last segment) (a path from a pi tool call or the
   host may use either separator and may be relative or absolute — every path predicate in the app starts
   from these, so `chat`'s display helpers and `store`'s worktree matcher share one definition),
   **`viewport.ts`** → `isPhoneViewport()` plus the live `usePhoneViewport()` projection (coarse pointer
@@ -79,7 +79,7 @@ not this module; the theme-aware highlighter remains app-local.
   namespace, and **`layoutResourceIdentity()`** gives every frontend-local placement/cache alias one
   semantic resource key, so delimiters and stable noncanonical placement ids cannot split or alias identities.
 - **Public surface (barrel):** `stripFrontmatter`, `cssColorToHex`, `isPhoneViewport`,
-  `usePhoneViewport`, `normalizePath`, `isAbsolutePath`, `projectRelativePath` (canonical worktree-relative POSIX identity;
+  `usePhoneViewport`, `normalizePath`, `isAbsolutePath`, `fileName`, `projectRelativePath` (canonical worktree-relative POSIX identity;
   collapses in-root `.`/`..` aliases but preserves an attempted leading escape for host rejection; Windows
   drive-rooted containment compares path/root case-insensitively while preserving the candidate's casing),
   `shallowEqualArrays`, `userText`, `isShellInert` (a value made only of characters that stay literal in POSIX, PowerShell,

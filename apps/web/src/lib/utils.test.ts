@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import {
 	compactAge,
 	cssColorToHex,
+	fileName,
 	hasPlatformModifier,
 	isAbsolutePath,
 	isShellInert,
@@ -158,6 +159,14 @@ test("a changes review tab is identified by its scope alone, apart from any file
 			scope: { kind: "branch" },
 		}),
 	);
+});
+
+test("fileName is a path's last segment whichever separator wrote it", () => {
+	expect(fileName("C:\\Users\\me\\repo")).toBe("repo");
+	expect(fileName("/home/me/repo/")).toBe("repo");
+	expect(fileName("src/foo.ts")).toBe("foo.ts");
+	expect(fileName("C:\\")).toBe("C:");
+	expect(fileName("")).toBe("");
 });
 
 test("normalizePath brings both separator styles to one form and drops a leading ./", () => {
