@@ -97,7 +97,8 @@ function finale(context: ShipContext, review: OpenBranchReview, noun: "PR" | "MR
 		context.reviewActions &&
 		review.state === "closed" &&
 		review.kind === "pull-request" &&
-		context.status.provider === "github"
+		context.status.provider === "github" &&
+		!context.status.onBase
 	) {
 		extra.push({
 			id: "reopen",
@@ -138,7 +139,7 @@ function finale(context: ShipContext, review: OpenBranchReview, noun: "PR" | "MR
 function openReviewArm(context: ShipContext, review: OpenBranchReview, noun: "PR" | "MR"): ShipArm {
 	const { status } = context;
 	const details = review.details;
-	if (!context.reviewActions || review.kind !== "pull-request" || !details) {
+	if (!context.reviewActions || review.kind !== "pull-request" || !details || status.onBase) {
 		return { primary: null, secondary: [] };
 	}
 	const candidates: ShipAction[] = [];
