@@ -1,6 +1,11 @@
 import type { GitDiffScope, ResourceMeta } from "@thinkrail/contracts";
 import { useEffect, useRef } from "react";
-import { describeResource, type ResourceRenderer, resolveRenderers } from "../resources";
+import {
+	describeResource,
+	inferredMime,
+	type ResourceRenderer,
+	resolveRenderers,
+} from "../resources";
 import { useAppStore } from "../store";
 import { getTransport } from "../transport";
 
@@ -34,7 +39,15 @@ export function rendererImplementationKey(rendererId: string, mobile: boolean): 
 	return `${rendererId}:${mobile ? "phone" : "desktop"}`;
 }
 
-// Layout capability of the diff renderer a file resolves to from its path alone (before content loads).
+function inferredBinary(path: string): boolean {
+	const mime = inferredMime(path);
+	return (
+		mime !== undefined &&
+		(mime === "application/pdf" || mime.startsWith("image/")) &&
+		mime !== "image/svg+xml"
+	);
+}
+
 export function diffRendererSupportsLayout(
 	workspaceId: string,
 	path: string,
@@ -42,8 +55,10 @@ export function diffRendererSupportsLayout(
 	selectedId: string | undefined,
 	mobile: boolean,
 ): boolean {
-	const resource = describeResource(workspaceId, path, PENDING_TEXT_META, scope);
-	const candidates = resolveRenderers(resource, "diff", { mobile });
+	const meta = inferredBinary(path) ? { ...PENDING_TEXT_META, text: false } : PENDING_TEXT_META;
+	const candidates = resolveRenderers(describeResource(workspaceId, path, meta, scope), "diff", {
+		mobile,
+	});
 	return selectResourceRenderer(candidates, selectedId, path).capabilities.layout;
 }
 
