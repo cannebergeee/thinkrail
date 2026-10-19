@@ -112,7 +112,8 @@ export type TemplateReadLocation =
 	| { projectId: string; workspaceId?: never }
 	| { workspaceId?: never; projectId?: never };
 
-export const PROTOCOL_VERSION = 85;
+export const PROTOCOL_VERSION = 86;
+export const CLIENT_ERROR_REPORT_PROTOCOL_VERSION = 86;
 export const PROJECT_RENAME_PROTOCOL_VERSION = 85;
 export const MCP_TOOL_GRANTS_PROTOCOL_VERSION = 84;
 export const MCP_PROTOCOL_VERSION = 83;
@@ -301,6 +302,7 @@ export const WS_METHODS = {
 	hostUpdate: "host.update",
 	settingsUpdate: "settings.update",
 	feedbackRespond: "feedback.respond",
+	clientReportError: "client.reportError",
 	historySearch: "history.search",
 	reviewGet: "review.get",
 	reviewCommentAdd: "review.commentAdd",
@@ -470,6 +472,16 @@ export function customMessageText(content: WireCustomMessage["content"]): string
 		.filter((c): c is Extract<typeof c, { type: "text" }> => c.type === "text")
 		.map((c) => c.text)
 		.join("");
+}
+
+export type ClientErrorKind = "render" | "window" | "rejection";
+
+export interface ClientErrorReport {
+	kind: ClientErrorKind;
+	type: string;
+	message: string;
+	stack?: string;
+	boundary?: string;
 }
 
 export interface Ack {
@@ -824,6 +836,7 @@ export interface WsMethodMap {
 	"host.update": { params: Record<string, never>; result: Ack };
 	"settings.update": { params: { config: AppConfigUpdate }; result: AppConfig };
 	"feedback.respond": { params: { action: InterviewResponse }; result: Ack };
+	"client.reportError": { params: ClientErrorReport; result: Ack };
 	"history.search": {
 		params: { query: string; scope: HistoryScope; limit?: number };
 		result: HistorySearchResult;

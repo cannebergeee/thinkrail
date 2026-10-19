@@ -13,6 +13,7 @@ import {
 	ANALYTICS_CONSENT_PROTOCOL_VERSION,
 	CHANGE_MUTATIONS_PROTOCOL_VERSION,
 	CHAT_RESOURCES_PROTOCOL_VERSION,
+	CLIENT_ERROR_REPORT_PROTOCOL_VERSION,
 	CONTEXT_WINDOW_SETTINGS_PROTOCOL_VERSION,
 	customMessageText,
 	DEFAULT_MODEL_PROTOCOL_VERSION,
@@ -196,8 +197,14 @@ test("the project trust summary and pi-level resource consent are pinned to v81"
 	expect(WS_METHODS.projectTrustSummary).toBe("project.trustSummary");
 });
 
+test("client error reports are pinned to v86", () => {
+	expect(PROTOCOL_VERSION).toBe(86);
+	expect(CLIENT_ERROR_REPORT_PROTOCOL_VERSION).toBe(86);
+	expect(WS_METHODS.clientReportError).toBe("client.reportError");
+});
+
 test("project rename is pinned to v85", () => {
-	expect(PROTOCOL_VERSION).toBe(85);
+	expect(PROTOCOL_VERSION).toBeGreaterThanOrEqual(PROJECT_RENAME_PROTOCOL_VERSION);
 	expect(PROJECT_RENAME_PROTOCOL_VERSION).toBe(85);
 	expect(WS_METHODS.projectRename).toBe("project.rename");
 });

@@ -4,16 +4,25 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { initChatPreferencesPersistence } from "./chat/chatPreferences";
 import { initModelVisibilityPersistence } from "./chat/modelVisibility";
-import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ErrorBoundary, setErrorBoundaryReporter } from "./components/ErrorBoundary";
 import { initNavigation } from "./navigation";
 import { initProjectExpansionPersistence } from "./panels/projectExpansion";
 import { Shell } from "./shell/Shell";
 import { applyThemePreference, initializeBundledThemes, readThemeHint } from "./themes";
-import { initTransport } from "./transport";
+import {
+	clientErrorReport,
+	initTransport,
+	installClientErrorReporting,
+	reportClientError,
+} from "./transport";
 
 initializeBundledThemes();
 applyThemePreference(readThemeHint());
 initTransport();
+installClientErrorReporting();
+setErrorBoundaryReporter((error, label) =>
+	reportClientError(clientErrorReport("render", error, label)),
+);
 initChatPreferencesPersistence();
 initModelVisibilityPersistence();
 initProjectExpansionPersistence();

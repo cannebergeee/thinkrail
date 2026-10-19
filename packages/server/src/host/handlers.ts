@@ -68,7 +68,12 @@ import {
 	stopBackgroundCommand,
 	stopSubagent,
 } from "../agent";
-import { type AdditionalAnalyticsCapture, type SendMode, track } from "../analytics";
+import {
+	type AdditionalAnalyticsCapture,
+	reportClientError,
+	type SendMode,
+	track,
+} from "../analytics";
 import {
 	cancelLogin,
 	connectJbcentral,
@@ -1094,6 +1099,10 @@ const handlers: WsHandlers = {
 	},
 	"feedback.respond": (params) => {
 		respondToInterview(params.action);
+		return { ok: true } as const;
+	},
+	"client.reportError": (params) => {
+		reportClientError(typeof params === "object" && params !== null ? params : {});
 		return { ok: true } as const;
 	},
 	"history.search": (p) => {
