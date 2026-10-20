@@ -47,6 +47,7 @@ import { cn } from "@thinkrail/ui/utils";
 import { type MouseEvent, type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { AttentionDot } from "@/components/AttentionDot";
 import { RunningIcon } from "@/components/RunningIcon";
+import { t } from "@/i18n";
 import { copyText, platformShortcutLabel } from "@/lib";
 import { LoadingRegion } from "../components/Skeleton";
 import { useNow } from "../components/useNow";
@@ -265,7 +266,7 @@ export function ProjectTree() {
 	return (
 		<nav data-testid="project-tree" className="flex flex-col gap-4">
 			<header className="flex h-panel-row items-center justify-between pr-4 pl-8">
-				<span className="tr-text-eyebrow text-text-muted">Projects</span>
+				<span className="tr-text-eyebrow text-text-muted">{t("Projects")}</span>
 				<AddProjectMenu
 					recentProjects={recentProjects}
 					onOpen={() => void pickAndOpen()}
@@ -278,7 +279,7 @@ export function ProjectTree() {
 						size="icon"
 						className="size-panel-row"
 						data-testid="add-project-menu"
-						aria-label="Add project"
+						aria-label={t("Add project")}
 					>
 						<Plus className="size-14" />
 					</Button>
@@ -358,7 +359,7 @@ export function ProjectTree() {
 									className="flex items-center gap-8 py-4 pr-8 pl-16 tr-text-ui text-text-muted"
 								>
 									<Loader2 className="size-14 shrink-0 animate-spin motion-reduce:animate-none" />
-									Creating worktree…
+									{t("Creating worktree…")}
 								</div>
 							)}
 						</li>
@@ -447,13 +448,17 @@ function SettledPartition({
 						<ChevronRight className="size-14 shrink-0" />
 					)}
 					<RiCheckboxCircleLine className="size-14 shrink-0" />
-					<span className="truncate">Settled · {settledCount}</span>
+					<span className="truncate">
+						{t("Settled ·")} {settledCount}
+					</span>
 				</button>
 			</div>
 			{shelfExpanded ? (
 				<ul className="flex flex-col gap-2" data-testid="settled-shelf-rows">
 					{settledCount === 0 ? (
-						<li className="py-4 pr-4 pl-24 text-text-subtle tr-text-metadata">Nothing settled</li>
+						<li className="py-4 pr-4 pl-24 text-text-subtle tr-text-metadata">
+							{t("Nothing settled")}
+						</li>
 					) : (
 						shown.map((row) => renderRow(row.workspace, row.reason))
 					)}
@@ -467,7 +472,7 @@ function SettledPartition({
 								}
 								className="flex h-panel-row w-full items-center rounded-sm pl-24 text-left text-text-subtle tr-text-metadata hover:bg-control-bg-hovered hover:text-text-muted"
 							>
-								Show {Math.min(SETTLED_SHELF_MORE, remaining)} more
+								{t("Show")} {Math.min(SETTLED_SHELF_MORE, remaining)} more
 							</button>
 						</li>
 					) : null}
@@ -567,7 +572,7 @@ function ProjectRow({
 						data-testid="project-name-input"
 						type="text"
 						spellCheck={false}
-						aria-label="Project name"
+						aria-label={t("Project name")}
 						defaultValue={project.name}
 						{...renameInputProps}
 						className={cn("w-full min-w-0 border-0 bg-transparent p-0 outline-none", nameClass)}
@@ -644,7 +649,7 @@ function ProjectRow({
 						}}
 					>
 						<Plus />
-						Create workspace
+						{t("Create workspace")}
 					</ContextMenuItem>
 					<ContextMenuItem
 						data-testid="project-menu-open-existing-worktree"
@@ -654,7 +659,7 @@ function ProjectRow({
 						}}
 					>
 						<FolderOpen />
-						Open existing worktree…
+						{t("Open existing worktree…")}
 					</ContextMenuItem>
 					<ContextMenuSeparator />
 					{canRename ? (
@@ -666,7 +671,7 @@ function ProjectRow({
 							}}
 						>
 							<Pencil />
-							Rename
+							{t("Rename")}
 						</ContextMenuItem>
 					) : null}
 					<ContextMenuItem
@@ -677,16 +682,18 @@ function ProjectRow({
 						}}
 					>
 						<X />
-						Close project
+						{t("Close project")}
 					</ContextMenuItem>
 				</ContextMenuContent>
 			</ContextMenu>
 			<ConfirmDialog
 				open={confirmOpen}
 				onOpenChange={setConfirmOpen}
-				title={`Close ${project.name}?`}
-				description="Removes this project from the open projects list. Its repository, workspaces, chats, and running activity are kept. Reopen it from Add project → Recents."
-				confirmLabel="Close project"
+				title={t("Close {0}?", project.name)}
+				description={t(
+					"Removes this project from the open projects list. Its repository, workspaces, chats, and running activity are kept. Reopen it from Add project → Recents.",
+				)}
+				confirmLabel={t("Close project")}
 				confirmTestId="confirm-close-project"
 				onConfirm={() => {
 					closeConfirmedRef.current = true;
@@ -813,11 +820,11 @@ function WorkspaceRow({
 		</span>
 	) : null;
 	const hoverAction = isSettled ? (
-		<IconTooltip label="Keep active">
+		<IconTooltip label={t("Keep active")}>
 			<button
 				type="button"
 				data-testid="workspace-keep-active"
-				aria-label={`Keep ${workspace.name} active`}
+				aria-label={t("Keep {0} active", workspace.name)}
 				onClick={onKeepActive}
 				className={HOVER_CONTROL_CLASS}
 			>
@@ -829,7 +836,7 @@ function WorkspaceRow({
 			<button
 				type="button"
 				data-testid="workspace-settle"
-				aria-label={`Settle ${workspace.name}`}
+				aria-label={t("Settle {0}", workspace.name)}
 				disabled={settleBlocked}
 				onClick={onSettle}
 				className={HOVER_CONTROL_CLASS}
@@ -865,7 +872,7 @@ function WorkspaceRow({
 								data-editing
 								type="text"
 								spellCheck={false}
-								aria-label="Workspace name"
+								aria-label={t("Workspace name")}
 								defaultValue={workspace.name}
 								{...renameInputProps}
 								className={`w-full min-w-0 truncate border-0 bg-transparent p-0 tr-text-ui leading-tight outline-none ${isActive ? "text-primary" : "text-text-muted"}`}
@@ -904,7 +911,7 @@ function WorkspaceRow({
 					<DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
 						<DropdownMenuTrigger
 							data-testid="workspace-menu"
-							aria-label={`Actions for ${workspace.name}`}
+							aria-label={t("Actions for {0}", workspace.name)}
 							className={HOVER_CONTROL_CLASS}
 						>
 							<MoreVertical className="size-14" />
@@ -918,7 +925,7 @@ function WorkspaceRow({
 								<DropdownMenuSub>
 									<DropdownMenuSubTrigger data-testid="workspace-open-in">
 										<ExternalLink />
-										Open in
+										{t("Open in")}
 									</DropdownMenuSubTrigger>
 									<DropdownMenuSubContent>
 										{editors.map((editor) => (
@@ -936,27 +943,27 @@ function WorkspaceRow({
 							{canRename ? (
 								<DropdownMenuItem data-testid="workspace-rename" onSelect={startRename}>
 									<Pencil />
-									Rename
+									{t("Rename")}
 								</DropdownMenuItem>
 							) : null}
 							<DropdownMenuItem data-testid="workspace-copy-path" onSelect={onCopyPath}>
 								<Copy />
-								Copy path
+								{t("Copy path")}
 							</DropdownMenuItem>
 							<DropdownMenuItem data-testid="workspace-reveal" onSelect={onReveal}>
 								<FolderOpen />
-								Reveal in file manager
+								{t("Reveal in file manager")}
 							</DropdownMenuItem>
 							{readAction !== null || canSettle ? <DropdownMenuSeparator /> : null}
 							{readAction === "markRead" ? (
 								<DropdownMenuItem data-testid="workspace-mark-read" onSelect={onMarkRead}>
 									<MailOpen />
-									Mark as read
+									{t("Mark as read")}
 								</DropdownMenuItem>
 							) : readAction === "markUnread" ? (
 								<DropdownMenuItem data-testid="workspace-mark-unread" onSelect={onMarkUnread}>
 									<MailUnread />
-									Mark as unread
+									{t("Mark as unread")}
 								</DropdownMenuItem>
 							) : null}
 							{canSettle ? (
@@ -966,7 +973,7 @@ function WorkspaceRow({
 										onSelect={onKeepActive}
 									>
 										<ArrowGoBack />
-										Keep active
+										{t("Keep active")}
 									</DropdownMenuItem>
 								) : (
 									<DropdownMenuItem
@@ -975,7 +982,7 @@ function WorkspaceRow({
 										onSelect={onSettle}
 									>
 										<Check />
-										Settle
+										{t("Settle")}
 									</DropdownMenuItem>
 								)
 							) : null}
@@ -991,7 +998,7 @@ function WorkspaceRow({
 										}}
 									>
 										<Trash2 />
-										{isExternal ? "Remove from ThinkRail" : "Remove workspace"}
+										{isExternal ? t("Remove from ThinkRail") : t("Remove workspace")}
 									</DropdownMenuItem>
 								</>
 							)}

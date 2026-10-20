@@ -13,6 +13,7 @@ import {
 } from "@thinkrail/ui/dialog";
 import { Textarea } from "@thinkrail/ui/textarea";
 import { useState } from "react";
+import { t } from "@/i18n";
 
 export interface PrComposeState {
 	draft: boolean;
@@ -41,12 +42,14 @@ function ComposeForm({
 				<DialogTitle>{action}</DialogTitle>
 				<DialogDescription>
 					{updating
-						? "Review the refreshed description before pushing — it overwrites the open PR's."
-						: "Review the title and description before the PR is created — both came from this plan."}
+						? t("Review the refreshed description before pushing — it overwrites the open PR's.")
+						: t(
+								"Review the title and description before the PR is created — both came from this plan.",
+							)}
 				</DialogDescription>
 			</DialogHeader>
 			<label className="flex flex-col gap-4">
-				<span className="tr-text-eyebrow text-text-subtle">Title</span>
+				<span className="tr-text-eyebrow text-text-subtle">{t("Title")}</span>
 				<input
 					type="text"
 					data-testid="open-pr-compose-title"
@@ -57,7 +60,7 @@ function ComposeForm({
 			</label>
 			<div className="flex min-h-0 flex-1 flex-col gap-4">
 				<label htmlFor="open-pr-compose-body" className="tr-text-eyebrow text-text-subtle">
-					Description
+					{t("Description")}
 				</label>
 				<Textarea
 					id="open-pr-compose-body"

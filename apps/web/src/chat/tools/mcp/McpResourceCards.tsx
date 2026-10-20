@@ -1,6 +1,7 @@
 import { RiFileTextLine, RiStackLine } from "@remixicon/react";
 import { strArg, type ToolRenderProps } from "@thinkrail/extension-api/web";
 import { cn } from "@thinkrail/ui/utils";
+import { t } from "@/i18n";
 import { useFold } from "../../foldState";
 import { McpActions, McpCliActionButton, useMcpFailureText } from "./McpActions";
 import { McpHeader, McpOutput, McpRunning } from "./McpCardParts";
@@ -77,7 +78,9 @@ function ListingView({
 			className="flex min-w-0 flex-col gap-4 tr-text-metadata"
 		>
 			{listing.items.length === 0 ? (
-				<span className="text-text-muted italic">No {noun}.</span>
+				<span className="text-text-muted italic">
+					{t("No")} {noun}.
+				</span>
 			) : (
 				<ul
 					className={cn(
@@ -102,11 +105,13 @@ function ListingView({
 					onClick={toggleAll}
 					className="self-start rounded-xs text-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
 				>
-					{all ? "Show fewer" : `Show all ${listing.items.length} ${noun}`}
+					{all ? t("Show fewer") : t("Show all {0} {1}", listing.items.length, noun)}
 				</button>
 			) : null}
 			{listing.nextCursor ? (
-				<span className="text-text-muted">More {noun} on the next page.</span>
+				<span className="text-text-muted">
+					{t("More")} {noun} on the next page.
+				</span>
 			) : null}
 			{listing.errors.map((entry) => (
 				<ListingError key={`${entry.server}\u0000${entry.error}`} entry={entry} />
@@ -150,11 +155,11 @@ export function McpResourceListCard({
 					{server || "All servers"}
 				</span>
 				{strArg(args, "cursor") ? (
-					<span className="shrink-0 text-text-subtle">next page</span>
+					<span className="shrink-0 text-text-subtle">{t("next page")}</span>
 				) : null}
 			</McpHeader>
 			{status === "running" ? (
-				<McpRunning label={`Listing ${noun}…`} />
+				<McpRunning label={t("Listing {0}…", noun)} />
 			) : listing ? (
 				<ListingView
 					id={`${toolCallId}:listing`}
@@ -194,7 +199,7 @@ export function McpReadResourceCard({ toolCallId, args, result, status }: ToolRe
 				) : null}
 			</McpHeader>
 			{status === "running" ? (
-				<McpRunning label="Reading the resource…" />
+				<McpRunning label={t("Reading the resource…")} />
 			) : (
 				<>
 					<McpOutput id={`${toolCallId}:content`} text={text} result={result} failed={failed} />

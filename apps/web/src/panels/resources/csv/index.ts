@@ -1,8 +1,9 @@
+import { t } from "@/i18n";
 import type { ResourceRenderer } from "@/resources";
 
 export const csvRenderer: ResourceRenderer = {
 	id: "thinkrail/csv",
-	label: "Table",
+	label: t("Table"),
 	match: { glob: ["*.csv", "*.tsv"], text: true },
 	rank: 120,
 	capabilities: {

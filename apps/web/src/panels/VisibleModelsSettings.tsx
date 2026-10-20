@@ -4,6 +4,7 @@ import { cn } from "@thinkrail/ui/utils";
 import { useId, useMemo, useState } from "react";
 import { formatContext } from "@/chat/modelPicker";
 import { ProviderGlyph } from "@/chat/ProviderGlyph";
+import { t } from "@/i18n";
 import { useAppStore } from "@/store";
 import { SettingsSwitch } from "./SettingsSwitch";
 
@@ -43,11 +44,15 @@ export function VisibleModelsSettings({ models }: Props) {
 				className="flex w-full items-start gap-8 py-12 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary"
 			>
 				<span className="flex flex-1 flex-col gap-2">
-					<span className="tr-text-ui text-text-default">Visible models</span>
+					<span className="tr-text-ui text-text-default">{t("Visible models")}</span>
 					<span className="tr-text-metadata text-text-muted">
 						{hiddenCount === 0
-							? "New models are shown automatically."
-							: `${hiddenCount} model${hiddenCount === 1 ? "" : "s"} hidden. New models are shown automatically.`}
+							? t("New models are shown automatically.")
+							: t(
+									"{0} model{1} hidden. New models are shown automatically.",
+									hiddenCount,
+									hiddenCount === 1 ? "" : "s",
+								)}
 					</span>
 				</span>
 				<span className="mt-2 shrink-0">
@@ -67,8 +72,8 @@ export function VisibleModelsSettings({ models }: Props) {
 							type="text"
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
-							placeholder="Search models…"
-							aria-label="Search models to show"
+							placeholder={t("Search models…")}
+							aria-label={t("Search models to show")}
 							className="h-32 w-full rounded-sm border border-control-border-default bg-control-bg pl-24 pr-8 tr-text-ui text-text-default placeholder:text-text-muted outline-none transition-colors focus:border-control-border-active"
 						/>
 					</div>
@@ -76,7 +81,7 @@ export function VisibleModelsSettings({ models }: Props) {
 					<div className="max-h-320 overflow-y-auto">
 						{filteredModels.length === 0 ? (
 							<div className="px-12 py-16 text-center text-text-muted tr-text-metadata">
-								{search.trim() ? "No models match your search." : "No models available."}
+								{search.trim() ? t("No models match your search.") : t("No models available.")}
 							</div>
 						) : (
 							filteredModels.map((model, index) => {
@@ -104,12 +109,12 @@ export function VisibleModelsSettings({ models }: Props) {
 											</span>
 											<span className="truncate tr-text-metadata text-text-muted">
 												{model.provider} · {formatContext(model.contextWindow)}
-												{model.reasoning ? " · reasoning" : ""}
+												{model.reasoning ? t(" · reasoning") : ""}
 											</span>
 										</span>
 										<SettingsSwitch
 											checked={isVisible}
-											label={`Show ${model.name}`}
+											label={t("Show {0}", model.name)}
 											testId={`model-visibility-${model.provider}-${model.id}`}
 											onChange={() => toggleModelVisibility(model)}
 										/>

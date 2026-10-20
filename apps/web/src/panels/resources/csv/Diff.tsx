@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
+import { t } from "@/i18n";
 import type { ResourceDiffProps, ReviewThread, SurfaceReview } from "@/resources";
 import { ReviewComposer } from "../../ReviewComposer";
 import { ReviewThreadCard } from "../../ReviewThreadCard";
@@ -240,7 +241,7 @@ export default function CsvDiff({
 															<button
 																key={entry.thread.id}
 																type="button"
-																aria-label={`Show comment ${entry.number}`}
+																aria-label={t("Show comment {0}", entry.number)}
 																className="flex size-20 items-center justify-center rounded-full bg-primary tr-text-metadata text-text-on-primary outline-none focus-visible:ring-2 focus-visible:ring-primary"
 																onClick={() => scrollToCard(entry.thread.id)}
 															>

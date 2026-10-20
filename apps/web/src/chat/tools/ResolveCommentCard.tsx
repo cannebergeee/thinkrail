@@ -1,6 +1,7 @@
 import { RiCheckboxCircleLine as CheckCircle2 } from "@remixicon/react";
 import { strArg, type ToolRenderProps } from "@thinkrail/extension-api/web";
 import type { ReactNode } from "react";
+import { t } from "@/i18n";
 
 export function ResolveCommentCard({ args, status }: ToolRenderProps): ReactNode {
 	const commentId = strArg(args, "commentId");
@@ -13,9 +14,9 @@ export function ResolveCommentCard({ args, status }: ToolRenderProps): ReactNode
 			<div className="min-w-0">
 				<span className="tr-code-text text-text-muted">{commentId}</span>
 				{status === "error" ? (
-					<span className="ml-4 text-feedback-error">couldn't be resolved</span>
+					<span className="ml-4 text-feedback-error">{t("couldn't be resolved")}</span>
 				) : (
-					<span className="ml-4 text-text-muted">resolved</span>
+					<span className="ml-4 text-text-muted">{t("resolved")}</span>
 				)}
 				{note && <p className="text-text-subtle italic">{note}</p>}
 			</div>

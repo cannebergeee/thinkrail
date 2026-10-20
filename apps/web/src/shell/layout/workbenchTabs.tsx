@@ -18,6 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@thinkrail/ui/popover";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
 import { Fragment, memo, type ReactNode, useEffect, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { DOUBLE_CLICK_SETTLE_MS, type LayoutAttention, tupleKey } from "../../lib";
 import {
 	type AuxiliaryRailControlProps,
@@ -260,7 +261,7 @@ export const TabStrip = memo(function TabStrip({
 								"end",
 							)}
 							target={{ kind: "insert", location, index: tabs.length }}
-							label="Insert at end"
+							label={t("Insert at end")}
 							className="relative h-full w-20 shrink-0"
 						/>
 					) : null}
@@ -283,9 +284,9 @@ export const TabStrip = memo(function TabStrip({
 			{trailing}
 			{overflowing ? (
 				<Popover open={overflowOpen} onOpenChange={setOverflowOpen}>
-					<IconTooltip label="Search open tabs" wrapTrigger>
+					<IconTooltip label={t("Search open tabs")} wrapTrigger>
 						<PopoverTrigger
-							aria-label="Search open tabs"
+							aria-label={t("Search open tabs")}
 							className="flex w-panel-header-row shrink-0 items-center justify-center border-border-muted border-l text-text-muted hover:bg-control-bg-hovered hover:text-text-default"
 						>
 							<Search className="size-14" />
@@ -303,9 +304,9 @@ export const TabStrip = memo(function TabStrip({
 						}}
 					>
 						<Command>
-							<CommandInput placeholder="Find an open tab…" />
+							<CommandInput placeholder={t("Find an open tab…")} />
 							<CommandList>
-								<CommandEmpty>No matching tabs.</CommandEmpty>
+								<CommandEmpty>{t("No matching tabs.")}</CommandEmpty>
 								{tabs.map((tab) => (
 									<CommandItem
 										key={tab.id}
@@ -512,10 +513,10 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 	const groups = collectAllGroups(document);
 	const missingTools = unplacedTools(document);
 	const splitReason = (direction: CenterSplitDirection): string | null => {
-		if (location.area !== "center") return "Only center tabs can split the center.";
-		if (tab.kind === "tool") return "Tools stay in a side region.";
+		if (location.area !== "center") return t("Only center tabs can split the center.");
+		if (tab.kind === "tool") return t("Tools stay in a side region.");
 		if (collectCenterGroups(document.center).length >= LAYOUT_LIMITS.maxCenterGroups) {
-			return `Center groups are limited to ${LAYOUT_LIMITS.maxCenterGroups}.`;
+			return t("Center groups are limited to {0}.", LAYOUT_LIMITS.maxCenterGroups);
 		}
 		const horizontal = direction === "left" || direction === "right";
 		if (splitGeometry && !(horizontal ? splitGeometry.horizontal : splitGeometry.vertical)) {
@@ -656,7 +657,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 								data-testid="chat-tab-name-input"
 								type="text"
 								spellCheck={false}
-								aria-label="Chat name"
+								aria-label={t("Chat name")}
 								defaultValue={name}
 								onKeyDown={onNameKeyDown}
 								onBlur={commitRename}
@@ -675,7 +676,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 							type="button"
 							tabIndex={-1}
 							data-testid={tab.kind === "terminal" ? "terminal-tab-close" : "editor-tab-close"}
-							aria-label={`Close ${name}`}
+							aria-label={t("Close {0}", name)}
 							onClick={onClose}
 							className="mr-4 rounded-sm p-2 opacity-0 hover:bg-control-bg-hovered group-hover:opacity-100 focus:opacity-100"
 						>
@@ -691,7 +692,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 					event.preventDefault();
 				}}
 			>
-				<ContextMenuItem onSelect={() => focusTab()}>Focus tab</ContextMenuItem>
+				<ContextMenuItem onSelect={() => focusTab()}>{t("Focus tab")}</ContextMenuItem>
 				{tab.kind === "chat" && onRenameChat ? (
 					<ContextMenuItem
 						onSelect={() => {
@@ -702,7 +703,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 							setEditingName(true);
 						}}
 					>
-						Rename chat
+						{t("Rename chat")}
 					</ContextMenuItem>
 				) : null}
 				<ContextMenuItem
@@ -710,18 +711,20 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 					onSelect={() => onFocusAdjacentGroup(-1, location.groupId)}
 				>
 					{canFocusAdjacentGroup
-						? "Focus previous group"
-						: "Focus previous group — no other visible group"}
+						? t("Focus previous group")
+						: t("Focus previous group — no other visible group")}
 				</ContextMenuItem>
 				<ContextMenuItem
 					disabled={!canFocusAdjacentGroup}
 					onSelect={() => onFocusAdjacentGroup(1, location.groupId)}
 				>
-					{canFocusAdjacentGroup ? "Focus next group" : "Focus next group — no other visible group"}
+					{canFocusAdjacentGroup
+						? t("Focus next group")
+						: t("Focus next group — no other visible group")}
 				</ContextMenuItem>
 				{location.area === "center" ? (
 					<ContextMenuItem disabled={!preview} onSelect={() => focusTab(true)}>
-						{preview ? "Keep preview" : "Keep preview — already kept"}
+						{preview ? t("Keep preview") : t("Keep preview — already kept")}
 					</ContextMenuItem>
 				) : null}
 				<ContextMenuItem
@@ -730,8 +733,8 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 						if (previousIndex !== undefined) reorder(previousIndex);
 					}}
 				>
-					Move {rail?.vertical ? "up" : "left"}
-					{previousIndex === undefined ? " — already first" : ""}
+					{t("Move")} {rail?.vertical ? "up" : "left"}
+					{previousIndex === undefined ? t(" — already first") : ""}
 				</ContextMenuItem>
 				<ContextMenuItem
 					disabled={nextIndex === undefined}
@@ -739,8 +742,8 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 						if (nextIndex !== undefined) reorder(nextIndex);
 					}}
 				>
-					Move {rail?.vertical ? "down" : "right"}
-					{nextIndex === undefined ? " — already last" : ""}
+					{t("Move")} {rail?.vertical ? "down" : "right"}
+					{nextIndex === undefined ? t(" — already last") : ""}
 				</ContextMenuItem>
 				{location.area === "center" ? (
 					<>
@@ -758,7 +761,9 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 										if (!isLayoutUnavailable(result)) onApply(result);
 									}}
 								>
-									{unavailable ? `Split ${direction} — ${unavailable}` : `Split ${direction}`}
+									{unavailable
+										? t("Split {0} — {1}", direction, unavailable)
+										: t("Split {0}", direction)}
 								</ContextMenuItem>
 							);
 						})}
@@ -826,7 +831,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 										if (!isLayoutUnavailable(result)) onApply(result);
 									}}
 								>
-									New group {positionLabel}
+									{t("New group")} {positionLabel}
 									{available ? "" : ` — ${unavailable}`}
 								</ContextMenuItem>
 							);
@@ -856,7 +861,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 											if (!isLayoutUnavailable(result)) onApply(result);
 										}}
 									>
-										New {region} group at {region === "bottom" ? "left" : "top"}
+										{t("New")} {region} group at {region === "bottom" ? "left" : "top"}
 										{startUnavailable ? ` — ${startUnavailable}` : ""}
 									</ContextMenuItem>
 									<ContextMenuItem
@@ -867,7 +872,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 											if (!isLayoutUnavailable(result)) onApply(result);
 										}}
 									>
-										New {region} group at {region === "bottom" ? "right" : "bottom"}
+										{t("New")} {region} group at {region === "bottom" ? "right" : "bottom"}
 										{endUnavailable ? ` — ${endUnavailable}` : ""}
 									</ContextMenuItem>
 								</Fragment>
@@ -880,7 +885,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 						<ContextMenuSeparator />
 						{missingTools.map((tool) => (
 							<ContextMenuItem key={tool} onSelect={() => onRevealTool(tool)}>
-								Show {toolTab(tool).name}
+								{t("Show")} {toolTab(tool).name}
 							</ContextMenuItem>
 						))}
 					</>
@@ -888,7 +893,9 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 				<ContextMenuSeparator />
 				{location.area !== "center" ? (
 					<ContextMenuItem onSelect={() => onHideSide(location.area)}>
-						{location.area === "bottom" ? "Hide bottom panel" : `Hide ${location.area} side`}
+						{location.area === "bottom"
+							? t("Hide bottom panel")
+							: t("Hide {0} side", location.area)}
 					</ContextMenuItem>
 				) : null}
 				<ContextMenuItem
@@ -899,14 +906,14 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 					}}
 				>
 					{isLayoutUnavailable(groupRemoval)
-						? `Remove group — ${groupRemoval.reason}`
-						: "Remove group"}
+						? t("Remove group — {0}", groupRemoval.reason)
+						: t("Remove group")}
 				</ContextMenuItem>
 				<ContextMenuItem
 					onSelect={onClose}
 					className="text-feedback-error focus:text-feedback-error"
 				>
-					{rail ? "Remove tool from group" : "Close"}
+					{rail ? t("Remove tool from group") : t("Close")}
 				</ContextMenuItem>
 			</ContextMenuContent>
 		</ContextMenu>

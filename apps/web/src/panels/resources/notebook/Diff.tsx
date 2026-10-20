@@ -1,6 +1,7 @@
 import { RiChatNewLine as MessageSquarePlus } from "@remixicon/react";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { useEffect, useMemo, useRef } from "react";
+import { t } from "@/i18n";
 import type { ResourceDiffProps, ReviewThread, SurfaceReview } from "@/resources";
 import { ReviewComposer } from "../../ReviewComposer";
 import { ReviewThreadCard } from "../../ReviewThreadCard";
@@ -227,7 +228,7 @@ function NotebookDiffSurface({
 						>
 							<header className="flex min-h-32 items-center gap-4 border-border-muted border-b bg-container-header-bg px-8">
 								<span className="tr-text-eyebrow text-text-muted">
-									{entry.state} · cell {current.index + 1} · {current.type}
+									{entry.state} {t("· cell")} {current.index + 1} · {current.type}
 								</span>
 								{review ? (
 									<span className="ml-auto flex gap-2">

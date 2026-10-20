@@ -1,4 +1,5 @@
 import { RunningIcon } from "@/components/RunningIcon";
+import { t } from "@/i18n";
 import type { ChatTurn } from "./types";
 
 export const CHAT_STATUS_SLOT_HEIGHT = 40;
@@ -31,15 +32,15 @@ export function streamStatus(turns: ChatTurn[], currentAssistantId: string | nul
 export function phaseLabel({ phase, toolName }: StreamStatus): string {
 	switch (phase) {
 		case "thinking":
-			return "Thinking…";
+			return t("Thinking…");
 		case "writing":
-			return "Writing…";
+			return t("Writing…");
 		case "running-tool":
 			return toolName ? `Running ${toolName}…` : "Running tool…";
 		case "compacting":
-			return "Compacting context…";
+			return t("Compacting context…");
 		default:
-			return "Working…";
+			return t("Working…");
 	}
 }
 

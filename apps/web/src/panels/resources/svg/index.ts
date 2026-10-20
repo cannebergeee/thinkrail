@@ -1,8 +1,9 @@
+import { t } from "@/i18n";
 import type { ResourceRenderer } from "@/resources";
 
 export const svgRenderer: ResourceRenderer = {
 	id: "thinkrail/svg",
-	label: "Vector",
+	label: t("Vector"),
 	match: { mime: ["image/svg+xml"], text: true },
 	rank: 130,
 	capabilities: {

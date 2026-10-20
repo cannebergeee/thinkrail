@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { t } from "@/i18n";
 import type { ResourceContent, ResourceDiffProps } from "@/resources";
 import { diffContentStamp } from "../reviewComposerState";
 import { VisualDiff, type VisualDiffSide } from "../VisualDiff";
@@ -26,13 +27,18 @@ function SvgContent({
 	path: string;
 }) {
 	const document = useMemo(() => buildSvgDocument(text, tokens), [text, tokens]);
-	return <SvgFrame title={`Vector diff of ${path}`} document={document} />;
+	return <SvgFrame title={t("Vector diff of {0}", path)} document={document} />;
 }
 
 function caption(label: string, text: string | null): string {
-	if (text === null) return `${label}: No image`;
+	if (text === null) return t("{0}: No image", label);
 	const size = svgIntrinsicSize(text);
-	return `${label}: ${size ? `${size.width} × ${size.height}` : "Flexible size"} · ${svgByteLength(text)} B`;
+	return t(
+		"{0}: {1} · {2} B",
+		label,
+		size ? `${size.width} × ${size.height}` : "Flexible size",
+		svgByteLength(text),
+	);
 }
 
 export default function SvgDiff({

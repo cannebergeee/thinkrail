@@ -15,6 +15,7 @@ import {
 } from "@thinkrail/ui/dropdown-menu";
 import { type ImperativePanelGroupHandle, ResizablePanelGroup } from "@thinkrail/ui/resizable";
 import { memo, type ReactNode, useMemo, useRef } from "react";
+import { t } from "@/i18n";
 import { type LayoutAttention, readLayoutSelection, tupleKey } from "../../lib";
 import { resizeVisibleAuxiliaryGroups, visibleAuxiliaryGroups } from "./auxiliaryPresentation";
 import {
@@ -62,8 +63,8 @@ export function BottomAlignmentMenu({
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
-				aria-label="Bottom panel alignment"
-				title={`Bottom panel alignment: ${BOTTOM_ALIGNMENT_LABELS[alignment]}`}
+				aria-label={t("Bottom panel alignment")}
+				title={t("Bottom panel alignment: {0}", BOTTOM_ALIGNMENT_LABELS[alignment])}
 				className="flex w-panel-header-row shrink-0 items-center justify-center border-border-muted border-l text-text-muted hover:bg-control-bg-hovered hover:text-text-default"
 			>
 				<MoreHorizontal className="size-16" />
@@ -86,7 +87,7 @@ export function BottomAlignmentMenu({
 					))}
 				</DropdownMenuRadioGroup>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem onSelect={onHide}>Hide bottom panel</DropdownMenuItem>
+				<DropdownMenuItem onSelect={onHide}>{t("Hide bottom panel")}</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);
@@ -126,7 +127,7 @@ export function BottomCreationTargets({
 				<DropZone
 					id={tupleKey("dnd-bottom-group", group.id, "left")}
 					target={{ kind: "auxiliary-edge", region: "bottom", index: groupIndex }}
-					label="Create bottom group to the left"
+					label={t("Create bottom group to the left")}
 					className="absolute inset-y-4 left-4 right-1/2"
 				/>
 			) : null}
@@ -134,7 +135,7 @@ export function BottomCreationTargets({
 				<DropZone
 					id={tupleKey("dnd-bottom-group", group.id, "right")}
 					target={{ kind: "auxiliary-edge", region: "bottom", index: groupIndex + 1 }}
-					label="Create bottom group to the right"
+					label={t("Create bottom group to the right")}
 					className="absolute inset-y-4 left-1/2 right-4"
 				/>
 			) : null}
@@ -210,7 +211,7 @@ export const BottomGroupView = memo(function BottomGroupView({
 							onClick={() => shared.onNewTerminal(group.id, "bottom")}
 							className="flex items-center gap-4 rounded-sm border border-border-default bg-container-elevated-bg px-12 py-4 tr-text-ui text-text-default hover:bg-control-bg-hovered"
 						>
-							<SquareTerminal className="size-16" /> New terminal
+							<SquareTerminal className="size-16" /> {t("New terminal")}
 						</button>
 					</div>
 				)}
@@ -266,7 +267,7 @@ export const BottomStack = memo(function BottomStack({
 	return (
 		<aside
 			ref={sizeRef}
-			aria-label="Bottom workbench"
+			aria-label={t("Bottom workbench")}
 			data-testid="bottom-panel"
 			className="relative h-full min-h-0 min-w-0 overflow-hidden"
 		>

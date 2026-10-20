@@ -9,6 +9,7 @@ import {
 	DialogTrigger,
 } from "@thinkrail/ui/dialog";
 import { useState } from "react";
+import { t } from "@/i18n";
 import { type ChatActions, useChatActions } from "../../ChatActions";
 import {
 	type McpCliAction,
@@ -43,10 +44,10 @@ function CliActionButton({ action, onOpen }: { action: McpCliAction; onOpen: () 
 				<RiSettings3Line className="size-12 shrink-0" />
 			)}
 			{action === "provider-sign-in"
-				? "Sign in to provider"
+				? t("Sign in to provider")
 				: action === "sign-in"
-					? "Sign in"
-					: "Open MCP settings"}
+					? t("Sign in")
+					: t("Open MCP settings")}
 		</button>
 	);
 }
@@ -77,7 +78,7 @@ export function McpFullOutputBody({
 	onRetry: () => void;
 }) {
 	if (state.kind === "loading") {
-		return <p className="text-text-muted tr-text-metadata">Loading the full output…</p>;
+		return <p className="text-text-muted tr-text-metadata">{t("Loading the full output…")}</p>;
 	}
 	if (state.kind === "failed") {
 		return (
@@ -89,7 +90,7 @@ export function McpFullOutputBody({
 					onClick={onRetry}
 					className={ACTION_CLASS}
 				>
-					Try again
+					{t("Try again")}
 				</button>
 			</p>
 		);
@@ -104,8 +105,8 @@ export function McpFullOutputBody({
 			>
 				<p className="text-text-default tr-text-ui">
 					{result.reason === "expired"
-						? "The full output has expired."
-						: "This result has no full output to show."}
+						? t("The full output has expired.")
+						: t("This result has no full output to show.")}
 				</p>
 				{result.reason === "expired" ? (
 					<p className="text-text-muted tr-text-metadata">
@@ -119,7 +120,7 @@ export function McpFullOutputBody({
 		<>
 			{result.truncated ? (
 				<p data-testid="mcp-full-output-truncated" className="text-text-muted tr-text-metadata">
-					Truncated — showing the beginning of the full output.
+					{t("Truncated — showing the beginning of the full output.")}
 				</p>
 			) : null}
 			<pre
@@ -162,12 +163,12 @@ function McpFullOutput({
 			<DialogTrigger asChild>
 				<button type="button" data-testid="mcp-full-output" className={ACTION_CLASS}>
 					<RiFileTextLine className="size-12 shrink-0" />
-					Full output
+					{t("Full output")}
 				</button>
 			</DialogTrigger>
 			<DialogContent data-testid="mcp-full-output-dialog" className="max-h-[85vh] max-w-3xl">
 				<DialogHeader className="pr-24">
-					<DialogTitle>Full output</DialogTitle>
+					<DialogTitle>{t("Full output")}</DialogTitle>
 					<DialogDescription className="truncate">{title}</DialogDescription>
 				</DialogHeader>
 				<McpFullOutputBody state={state ?? { kind: "loading" }} onRetry={load} />

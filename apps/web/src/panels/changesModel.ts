@@ -5,6 +5,7 @@ import type {
 	GitFileStatus,
 	TurnChangeSet,
 } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 import { tupleKey } from "../lib";
 import { extendFolderChain, startFolderChain } from "./folderChains";
 import { VIRTUALIZED_DIFF_LINES } from "./largeDiff";
@@ -116,8 +117,8 @@ export function scopeLabel(
 	commits: readonly GitCommit[] = [],
 	turns: readonly TurnChangeSet[] = [],
 ): string {
-	if (scope.kind === "branch") return "All changes";
-	if (scope.kind === "uncommitted") return "Uncommitted";
+	if (scope.kind === "branch") return t("All changes");
+	if (scope.kind === "uncommitted") return t("Uncommitted");
 	if (scope.kind === "pinned") return scope.baseRef.slice(0, 7);
 	if (scope.kind === "turn") {
 		const latest = turns.at(-1);
@@ -136,9 +137,13 @@ export function scopeTitle(
 ): string {
 	if (scope.kind === "turn") {
 		const files = turns.find((turn) => turn.id === scope.id)?.changes.length;
-		return `Agent turn at ${turnTimeLabel(scope.startedAt)}${files === undefined ? "" : ` · ${files} ${files === 1 ? "file" : "files"}`}`;
+		return t(
+			"Agent turn at {0}{1}",
+			turnTimeLabel(scope.startedAt),
+			files === undefined ? "" : ` · ${files} ${files === 1 ? "file" : "files"}`,
+		);
 	}
-	if (scope.kind !== "commit") return `Diff scope: ${scopeLabel(scope)}`;
+	if (scope.kind !== "commit") return t("Diff scope: {0}", scopeLabel(scope));
 	const known = commits.find((c) => c.sha === scope.sha);
 	return known?.subject ? `${known.shortSha} · ${known.subject}` : scopeLabel(scope, commits);
 }

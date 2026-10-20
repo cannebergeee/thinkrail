@@ -6,6 +6,7 @@ import {
 } from "@remixicon/react";
 import type { NativeWindowState } from "@thinkrail/contracts";
 import { cn } from "@thinkrail/ui/utils";
+import { t } from "@/i18n";
 
 const BUTTON_CLASS =
 	"flex h-topbar-row w-46 items-center justify-center text-text-muted outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary";
@@ -33,7 +34,7 @@ export function NativeWindowControls({
 			<button
 				type="button"
 				data-testid="window-minimize"
-				aria-label="Minimize"
+				aria-label={t("Minimize")}
 				onClick={onMinimize}
 				className={cn(BUTTON_CLASS, BUTTON_HOVER_CLASS)}
 			>
@@ -52,7 +53,7 @@ export function NativeWindowControls({
 			<button
 				type="button"
 				data-testid="window-close"
-				aria-label="Close"
+				aria-label={t("Close")}
 				onClick={onClose}
 				className={cn(BUTTON_CLASS, CLOSE_HOVER_CLASS)}
 			>

@@ -12,6 +12,7 @@ import {
 	untrustedNoticeText,
 } from "@/chat/projectTrust";
 import { useProjectTrustSummary } from "@/chat/useProjectTrustSummary";
+import { t } from "@/i18n";
 import { selectSupportsProjectTrust, toast, useAppStore } from "@/store";
 import { errorText, getTransport } from "@/transport";
 import { ConfirmDialog } from "./ConfirmDialog";
@@ -48,14 +49,14 @@ export function ProjectTrustNotice({ projectId }: { projectId: string }) {
 				onClick={() => setConfirmingRevoke(true)}
 				className="shrink-0"
 			>
-				Stop trusting
+				{t("Stop trusting")}
 			</Button>
 			<ConfirmDialog
 				open={confirmingRevoke}
 				onOpenChange={setConfirmingRevoke}
-				title="Stop trusting this project?"
+				title={t("Stop trusting this project?")}
 				description={stopTrustingText(project, supportsProjectTrust)}
-				confirmLabel="Stop trusting"
+				confirmLabel={t("Stop trusting")}
 				destructive
 				confirmTestId="project-untrust-confirm"
 				onConfirm={() =>
@@ -128,7 +129,7 @@ export function ProjectTrustNotice({ projectId }: { projectId: string }) {
 						)
 					}
 				>
-					{pending ? "Review & enable" : "Trust project"}
+					{pending ? t("Review & enable") : t("Trust project")}
 				</Button>
 			</div>
 		</div>

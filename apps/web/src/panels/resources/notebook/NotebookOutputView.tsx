@@ -1,6 +1,7 @@
 import { type ReactNode, useMemo } from "react";
 import type { Components } from "react-markdown";
 import { Markdown } from "@/chat/Markdown";
+import { t } from "@/i18n";
 import { classifyHref, resolveRelativePath } from "../../markdownLinks";
 import { resourceBytesUrl } from "../../resourcePane";
 import type { NotebookCell, NotebookOutput } from "./notebookModel";
@@ -76,7 +77,7 @@ export function notebookMarkdownComponents(
 		}
 		return (
 			<span data-testid="notebook-disabled-image" className="text-text-muted">
-				{alt ? `${alt}: ` : "Image disabled: "}
+				{alt ? `${alt}: ` : t("Image disabled: ")}
 				{src ?? "missing URL"}
 			</span>
 		);
@@ -218,7 +219,7 @@ export function NotebookOutputs({ cell }: { cell: NotebookCell }) {
 				<NotebookOutputItem
 					key={`${output.kind}:${index}`}
 					output={output}
-					title={`Output ${index + 1} of cell ${cell.index + 1}`}
+					title={t("Output {0} of cell {1}", index + 1, cell.index + 1)}
 				/>
 			))}
 		</div>

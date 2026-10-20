@@ -1,5 +1,6 @@
 import { RiPencilLine as Pencil, RiCloseLine as X } from "@remixicon/react";
 import type { QueueLane, SessionQueueState } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 
 export function QueueStrip({
 	queue,
@@ -14,14 +15,14 @@ export function QueueStrip({
 		...queue.steering.map((text, index) => ({
 			kind: "steering" as const,
 			index,
-			label: "Steering",
-			hint: "delivers at the agent's next step",
+			label: t("Steering"),
+			hint: t("delivers at the agent's next step"),
 			text,
 		})),
 		...queue.followUp.map((text, index) => ({
 			kind: "followUp" as const,
 			index,
-			label: "Follow-up",
+			label: t("Follow-up"),
 			hint: "runs after the agent finishes",
 			text,
 		})),
@@ -47,7 +48,7 @@ export function QueueStrip({
 					<button
 						type="button"
 						data-testid="queue-item-edit"
-						aria-label={`Edit queued message: ${item.text}`}
+						aria-label={t("Edit queued message: {0}", item.text)}
 						onClick={() => onEdit(item.kind, item.index)}
 						className="flex size-20 shrink-0 items-center justify-center rounded-xs hover:bg-control-bg-hovered hover:text-text-default"
 					>
@@ -56,7 +57,7 @@ export function QueueStrip({
 					<button
 						type="button"
 						data-testid="queue-item-remove"
-						aria-label={`Remove queued message: ${item.text}`}
+						aria-label={t("Remove queued message: {0}", item.text)}
 						onClick={() => onRemove(item.kind, item.index)}
 						className="flex size-20 shrink-0 items-center justify-center rounded-xs hover:bg-control-bg-hovered hover:text-text-default"
 					>

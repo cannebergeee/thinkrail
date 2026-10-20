@@ -2,6 +2,7 @@ import { RiChatNewLine as MessageSquarePlus } from "@remixicon/react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api.js";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { t } from "@/i18n";
 import type { ReviewThread } from "@/resources";
 
 const ICON_WIDGET_ID = "thinkrail.review.addIcon";
@@ -77,8 +78,8 @@ export function attachReviewCommenting(
 	const iconButton = document.createElement("button");
 	iconButton.type = "button";
 	iconButton.dataset.testid = "review-add-icon";
-	iconButton.title = "Comment on selection";
-	iconButton.ariaLabel = "Comment on selection";
+	iconButton.title = t("Comment on selection");
+	iconButton.ariaLabel = t("Comment on selection");
 	iconButton.className = "review-add-icon";
 	iconButton.innerHTML = ICON_SVG;
 	iconNode.appendChild(iconButton);
@@ -122,7 +123,7 @@ export function attachReviewCommenting(
 
 	const menuAction = codeEditor.addAction({
 		id: `thinkrail.review.commentSelection.${codeEditor.getId()}`,
-		label: "Comment on selection",
+		label: t("Comment on selection"),
 		precondition: "editorHasSelection",
 		contextMenuGroupId: "9_cutcopypaste",
 		contextMenuOrder: 2,

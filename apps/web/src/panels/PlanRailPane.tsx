@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { t } from "@/i18n";
 import { hostSessionGlance, sessionGlance } from "../chat/planView";
 import { TodoAddRow, TodoRows } from "../chat/TodoList";
 import { useChatTodos } from "../chat/useChatTodos";
@@ -30,7 +31,7 @@ export default function PlanRailPane({
 				data-testid="plan-rail-loading"
 				className="flex h-full items-center justify-center p-16 text-text-subtle tr-text-ui"
 			>
-				{plan.failed ? "Couldn't load the TODO list." : "Loading\u2026"}
+				{plan.failed ? t("Couldn't load the TODO list.") : t("Loading…")}
 			</div>
 		);
 	}
@@ -49,7 +50,7 @@ export default function PlanRailPane({
 			<div className="min-h-0 flex-1 overflow-auto p-4">
 				{empty ? (
 					<p className="px-4 py-4 text-text-muted tr-text-metadata">
-						No TODOs yet — the agent adds its plan here, or add one above.
+						{t("No TODOs yet — the agent adds its plan here, or add one above.")}
 					</p>
 				) : (
 					<TodoRows

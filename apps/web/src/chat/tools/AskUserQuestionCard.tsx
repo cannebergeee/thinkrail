@@ -24,6 +24,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { t } from "@/i18n";
 import { AttentionLine } from "../AttentionLine";
 import { readAskResult, useAskFocusScope, useAskState } from "../askState";
 import { useChatActions } from "../ChatActions";
@@ -496,7 +497,7 @@ export function AskUserQuestionCard({
 	if (submitted) {
 		return (
 			<WaitingCard>
-				<span data-testid="ask-sent">Answer sent — continuing…</span>
+				<span data-testid="ask-sent">{t("Answer sent — continuing…")}</span>
 			</WaitingCard>
 		);
 	}
@@ -507,7 +508,7 @@ export function AskUserQuestionCard({
 	const idx = Math.min(tab, questions.length - 1);
 	const q = questions[idx];
 	const state = stateFor(idx);
-	if (!q) return <WaitingCard>Preparing questions…</WaitingCard>;
+	if (!q) return <WaitingCard>{t("Preparing questions…")}</WaitingCard>;
 
 	const showContinue = multipleQuestions && !onReview;
 	const canSubmit =
@@ -569,7 +570,7 @@ export function AskUserQuestionCard({
 				ref={cardRef}
 				data-testid="ask-user-question"
 				data-tone="active"
-				aria-label="Question from agent"
+				aria-label={t("Question from agent")}
 				aria-keyshortcuts="Shift+Escape"
 				onKeyDown={onCardKeyDown}
 				className="overflow-hidden rounded-lg border border-primary bg-clip-padding bg-container-elevated-bg ring-2 ring-primary-soft"
@@ -577,7 +578,7 @@ export function AskUserQuestionCard({
 				{multipleQuestions ? (
 					<div
 						role="tablist"
-						aria-label="Questions"
+						aria-label={t("Questions")}
 						className="flex items-center gap-4 overflow-x-auto border-border-default border-b px-12 py-8"
 					>
 						{questions.map((question, i) => (
@@ -594,7 +595,7 @@ export function AskUserQuestionCard({
 						<TabChip
 							id={tabDomId(toolCallId, "review")}
 							controls={panelDomId(toolCallId)}
-							label="Review & submit"
+							label={t("Review & submit")}
 							active={onReview}
 							answered={false}
 							onClick={() => setTab(reviewTab)}
@@ -657,11 +658,11 @@ export function AskUserQuestionCard({
 									data-testid="ask-needs-choice"
 									className="shrink-0 whitespace-nowrap text-feedback-warning tr-text-metadata"
 								>
-									Choose an option first
+									{t("Choose an option first")}
 								</span>
 							) : null}
 							<span role="status" aria-live="polite" className="sr-only">
-								{nudgeVisible && nudgeSpoken ? "Choose an option first." : ""}
+								{nudgeVisible && nudgeSpoken ? t("Choose an option first.") : ""}
 							</span>
 							<button
 								type="button"
@@ -670,7 +671,7 @@ export function AskUserQuestionCard({
 								disabled={!actions}
 								className="shrink-0 rounded-sm px-4 text-text-muted tr-text-ui outline-none hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary disabled:text-control-disabled-text"
 							>
-								Skip
+								{t("Skip")}
 							</button>
 							{showContinue ? (
 								<button
@@ -679,7 +680,7 @@ export function AskUserQuestionCard({
 									onClick={() => setTab(Math.min(tab + 1, reviewTab))}
 									className="shrink-0 whitespace-nowrap rounded-sm bg-control-primary-bg px-12 py-8 tr-text-action text-control-primary-text outline-none hover:bg-control-primary-bg-hovered focus-visible:ring-2 focus-visible:ring-primary"
 								>
-									Next →
+									{t("Next →")}
 								</button>
 							) : (
 								<button
@@ -689,7 +690,7 @@ export function AskUserQuestionCard({
 									disabled={!canSubmit}
 									className="shrink-0 whitespace-nowrap rounded-sm bg-control-primary-bg px-12 py-8 tr-text-action text-control-primary-text outline-none hover:bg-control-primary-bg-hovered focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-control-primary-disabled-bg disabled:text-control-primary-disabled-text"
 								>
-									Submit
+									{t("Submit")}
 								</button>
 							)}
 						</div>
@@ -709,7 +710,7 @@ function SupersededRecord({ questions }: { questions: AskUserQuestionItem[] }) {
 		>
 			<div className="flex items-center gap-4">
 				<SkipForward className="size-14 shrink-0" />
-				Superseded — you replied in chat instead of answering these.
+				{t("Superseded — you replied in chat instead of answering these.")}
 			</div>
 			{questions.map((q) => (
 				<div key={q.question} className="pl-[calc(0.875rem+var(--space-8))] text-text-muted">
@@ -737,7 +738,7 @@ function WaitingCard({ children }: { children: React.ReactNode }) {
 function ComposingCard({ count }: { count: number }) {
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="text-text-muted tr-text-metadata">Agent is preparing questions…</div>
+			<div className="text-text-muted tr-text-metadata">{t("Agent is preparing questions…")}</div>
 			<div
 				data-testid="ask-user-question"
 				data-tone="pending"
@@ -745,7 +746,8 @@ function ComposingCard({ count }: { count: number }) {
 			>
 				<div className="flex items-center gap-4 text-text-muted tr-text-metadata">
 					<MessageCircleQuestion className="size-14 shrink-0" />
-					Preparing questions…{count > 0 ? ` (${count} ready)` : ""}
+					{t("Preparing questions…")}
+					{count > 0 ? t("({0} ready)", count) : ""}
 				</div>
 				<div className="flex animate-pulse flex-col gap-4" aria-hidden="true">
 					<div className="h-32 rounded-sm bg-control-bg-selected" />
@@ -819,7 +821,7 @@ function ModeHint({
 				className="flex items-center gap-4 text-text-muted tr-text-metadata"
 			>
 				<ListChecks className="size-14 shrink-0" />
-				Review · ←→ questions · Tab actions · Shift+Esc skip
+				{t("Review · ←→ questions · Tab actions · Shift+Esc skip")}
 			</span>
 		);
 	}
@@ -834,12 +836,16 @@ function ModeHint({
 			) : (
 				<CircleDot className="size-14 shrink-0" />
 			)}
-			<span>{multiSelect ? "↑↓ move incl. Other" : "↑↓ move & select"}</span>
-			<span>· Space {multiSelect ? "toggle" : "select"}</span>
-			<span>· Enter confirm</span>
-			<span>· Tab {noteAvailable ? "note/actions" : "actions"}</span>
-			<span>· Shift+Esc skip</span>
-			{multipleQuestions ? <span>· ←→ questions</span> : null}
+			<span>{multiSelect ? t("↑↓ move incl. Other") : t("↑↓ move & select")}</span>
+			<span>
+				{t("· Space")} {multiSelect ? "toggle" : "select"}
+			</span>
+			<span>{t("· Enter confirm")}</span>
+			<span>
+				{t("· Tab")} {noteAvailable ? "note/actions" : "actions"}
+			</span>
+			<span>{t("· Shift+Esc skip")}</span>
+			{multipleQuestions ? <span>{t("· ←→ questions")}</span> : null}
 		</span>
 	);
 }
@@ -984,11 +990,11 @@ function QuestionBody({
 												<textarea
 													ref={noteRef}
 													data-testid="ask-note"
-													aria-label={`Note for ${optionText}`}
+													aria-label={t("Note for {0}", optionText)}
 													aria-keyshortcuts="Enter Shift+Enter Escape"
 													rows={2}
 													value={state.notes[option.label] ?? ""}
-													placeholder="Add a note for the model…"
+													placeholder={t("Add a note for the model…")}
 													onChange={(event) => onNote(option.label, event.target.value)}
 													onKeyDown={(event) => {
 														const action = noteKeyAction(
@@ -1013,7 +1019,7 @@ function QuestionBody({
 													className="flex items-center gap-4 rounded-sm text-text-muted tr-text-metadata outline-none hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary"
 												>
 													<Pencil className="size-12" />
-													{noteText ? "Edit note" : "Add note"}
+													{noteText ? t("Edit note") : t("Add note")}
 												</button>
 											)}
 										</div>
@@ -1047,7 +1053,7 @@ function QuestionBody({
 						className="min-w-0 overflow-auto rounded-sm border border-border-default bg-control-bg px-8 py-4 tr-text-metadata"
 					>
 						<div className="mb-4 text-text-muted tr-text-metadata">
-							Preview · {previewSource.label}
+							{t("Preview ·")} {previewSource.label}
 						</div>
 						<Markdown text={previewSource.preview} />
 					</div>
@@ -1124,7 +1130,7 @@ function OptionRow({
 						data-testid="ask-recommended-reason"
 						className="mt-2 text-text-muted tr-text-metadata"
 					>
-						<span className="tr-text-emphasis text-primary">Why:</span> {reason}
+						<span className="tr-text-emphasis text-primary">{t("Why:")}</span> {reason}
 					</span>
 				) : null}
 			</span>
@@ -1182,16 +1188,16 @@ function OtherOptionRow({
 			) : (
 				<Indicator selected={active} multi={false} className="mt-0" />
 			)}
-			<span className="tr-text-ui text-text-default">Other</span>
+			<span className="tr-text-ui text-text-default">{t("Other")}</span>
 			<input
 				ref={inputRef}
 				id={inputId}
 				data-testid="ask-custom"
 				data-ask-page-focus={pageFocus || undefined}
-				aria-label="Other answer"
+				aria-label={t("Other answer")}
 				aria-keyshortcuts="ArrowUp ArrowDown Enter Shift+Escape"
 				value={text}
-				placeholder="type your own answer…"
+				placeholder={t("type your own answer…")}
 				onChange={(event) => onText(event.target.value)}
 				onKeyDown={(event) => {
 					if (
@@ -1220,7 +1226,7 @@ const RECOMMENDED_PILL =
 	"inline-flex items-center rounded-full bg-primary-subtle px-4 py-0 tr-text-label-pill text-primary";
 
 function RecommendedBadge() {
-	return <span className={RECOMMENDED_PILL}>Recommended</span>;
+	return <span className={RECOMMENDED_PILL}>{t("Recommended")}</span>;
 }
 
 function Indicator({
@@ -1280,7 +1286,7 @@ function ReviewView({
 					data-ask-page-focus="true"
 					className="rounded-sm tr-title-dialog text-text-default outline-none focus-visible:ring-2 focus-visible:ring-primary"
 				>
-					Review your answers
+					{t("Review your answers")}
 				</p>
 			</div>
 			<ul className="flex flex-col gap-12">
@@ -1298,7 +1304,7 @@ function ReviewView({
 					onClick={() => onJump(unanswered[0]?.i ?? 0)}
 					className="self-start rounded-sm text-feedback-warning tr-text-metadata outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
 				>
-					⚠ Unanswered: {unanswered.map(({ q, i }) => q.header || `Q${i + 1}`).join(", ")}
+					{t("⚠ Unanswered:")} {unanswered.map(({ q, i }) => q.header || `Q${i + 1}`).join(", ")}
 				</button>
 			) : null}
 		</div>
@@ -1390,7 +1396,7 @@ function QuestionRecap({
 										/>
 									)}
 									<span data-testid="ask-selection-status" className="sr-only">
-										{isSel ? "Selected: " : "Not selected: "}
+										{isSel ? t("Selected: ") : t("Not selected: ")}
 									</span>
 									<span>{splitRecommended(opt.label).text}</span>
 								</li>
@@ -1403,7 +1409,7 @@ function QuestionRecap({
 							>
 								<Check aria-hidden="true" className="size-14 shrink-0 text-feedback-success" />
 								<span data-testid="ask-selection-status" className="sr-only">
-									Selected custom answer:{" "}
+									{t("Selected custom answer:")}{" "}
 								</span>
 								<span>“{customAnswer}”</span>
 							</li>
@@ -1414,26 +1420,26 @@ function QuestionRecap({
 							data-testid="ask-review-unanswered"
 							className="flex items-center gap-4 pl-[calc(0.875rem+var(--space-8))] text-text-muted tr-text-metadata italic"
 						>
-							<SkipForward className="size-12 shrink-0" /> Not answered
+							<SkipForward className="size-12 shrink-0" /> {t("Not answered")}
 						</div>
 					) : null}
 				</>
 			) : !answer ? (
 				<div className="flex items-center gap-4 pl-[calc(0.875rem+var(--space-8))] text-text-muted tr-text-metadata italic">
-					<SkipForward className="size-12 shrink-0" /> No answer (skipped).
+					<SkipForward className="size-12 shrink-0" /> {t("No answer (skipped).")}
 				</div>
 			) : (
 				<div className="flex items-center gap-4 border-border-default border-l-2 pl-8">
 					<Check aria-hidden="true" className="size-14 shrink-0 text-feedback-success" />
 					<span data-testid="ask-selection-status" className="sr-only">
-						Selected custom answer:{" "}
+						{t("Selected custom answer:")}{" "}
 					</span>
 					<span className="tr-text-ui text-text-default">“{answer.answer}”</span>
 				</div>
 			)}
 			{answer?.notes ? (
 				<div className="pl-[calc(0.875rem+var(--space-8))] text-text-muted tr-text-metadata">
-					Note: {answer.notes}
+					{t("Note:")} {answer.notes}
 				</div>
 			) : null}
 		</div>

@@ -1,6 +1,7 @@
 import { RiChatNewLine as MessageSquarePlus } from "@remixicon/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { t } from "@/i18n";
 import type { ReviewThread, SurfaceReview } from "@/resources";
 import { mapPreviewSelection } from "./previewAnchor";
 import { ReviewComposer } from "./ReviewComposer";
@@ -197,8 +198,8 @@ export function PreviewCommenting({
 					ref={iconRef}
 					type="button"
 					data-testid="review-add-icon"
-					title="Comment on selection"
-					aria-label="Comment on selection"
+					title={t("Comment on selection")}
+					aria-label={t("Comment on selection")}
 					onMouseDown={(e) => e.preventDefault()}
 					onClick={openComposer}
 					className="review-add-icon review-add-icon-float"

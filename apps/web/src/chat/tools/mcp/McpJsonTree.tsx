@@ -1,6 +1,7 @@
 import { RiArrowRightSLine as ChevronRight } from "@remixicon/react";
 import type { McpResultSummary } from "@thinkrail/contracts";
 import { cn } from "@thinkrail/ui/utils";
+import { t } from "@/i18n";
 import { useFold } from "../../foldState";
 import { isRecord } from "./mcpResult";
 
@@ -105,7 +106,7 @@ function JsonEntries({
 					className={cn(toggleClass, "self-start text-primary hover:underline")}
 				>
 					<Indent />
-					{all ? "Show fewer" : `Show all ${entries.length}`}
+					{all ? t("Show fewer") : t("Show all {0}", entries.length)}
 				</button>
 			) : null}
 		</div>
@@ -178,7 +179,7 @@ export function McpStructuredContent({
 				data-testid="mcp-structured-truncated"
 				className="text-text-muted tr-text-metadata italic"
 			>
-				Structured content too large to keep.
+				{t("Structured content too large to keep.")}
 			</span>
 		);
 	}
@@ -201,7 +202,7 @@ export function McpStructuredContent({
 				<ChevronRight
 					className={cn("size-16 shrink-0 transition-transform", open && "rotate-90")}
 				/>
-				Structured content
+				{t("Structured content")}
 			</button>
 			{open ? <McpJsonTree id={`${id}:tree`} value={summary.structuredContent} /> : null}
 		</div>

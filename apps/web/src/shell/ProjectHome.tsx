@@ -1,4 +1,5 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@thinkrail/ui/resizable";
+import { t } from "@/i18n";
 import { QuietScrollArea } from "../components/QuietScrollArea";
 import { ProjectTree } from "../panels/ProjectTree";
 import { WelcomePanel } from "../panels/WelcomePanel";
@@ -82,13 +83,13 @@ export function ProjectHome({ projects }: { projects: CollapsibleRegion<HTMLDivE
 					<section
 						ref={regionRef}
 						id={PROJECTS_PANE_ID}
-						aria-label="Projects"
+						aria-label={t("Projects")}
 						aria-hidden={collapsed || undefined}
 						inert={collapsed ? true : undefined}
 						className="flex h-full min-h-0 flex-col bg-container-sidebar-bg"
 					>
 						<AuxiliaryPaneHeader
-							title="Projects"
+							title={t("Projects")}
 							actions={
 								<AuxiliaryPaneHideButton
 									testId="side-group-fold"

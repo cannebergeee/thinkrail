@@ -30,6 +30,7 @@ import {
 	useState,
 } from "react";
 import { CustomIcon } from "@/components/CustomIcon";
+import { t } from "@/i18n";
 import { parseSkillInvocation, projectRelativePath, type SkillInvocation, userText } from "@/lib";
 import { ActivityGroup } from "./ActivityGroup";
 import { AssistantMarkdown } from "./assistantLinks";
@@ -212,7 +213,7 @@ function AttachmentChip({ label, img }: { label: string; img: ImageContent }) {
 			<FileChip
 				data-testid="chat-attachment-chip"
 				title={label}
-				aria-label={`View attachment ${label}`}
+				aria-label={t("View attachment {0}", label)}
 				onClick={() => setOpen(true)}
 				label={label}
 			/>
@@ -381,7 +382,7 @@ function PlainUserTurn({
 							) : (
 								<ChevronDown className="size-16 shrink-0" />
 							)}
-							{expanded ? "Show less" : "Show more"}
+							{expanded ? t("Show less") : t("Show more")}
 						</button>
 					) : null}
 				</div>
@@ -415,7 +416,7 @@ function SkillInvocationCard({
 				className="flex w-full items-center gap-4 px-12 py-8 text-left outline-none transition-colors hover:bg-control-bg-hovered focus-visible:ring-2 focus-visible:ring-primary"
 			>
 				<BookOpen className="size-14 shrink-0 text-text-muted" aria-hidden="true" />
-				<span className="shrink-0 tr-text-ui text-text-muted">Skill</span>
+				<span className="shrink-0 tr-text-ui text-text-muted">{t("Skill")}</span>
 				<span className="shrink-0 text-text-subtle" aria-hidden="true">
 					·
 				</span>
@@ -583,7 +584,7 @@ function ErrorTurn({ text, onTryAgain }: { text: string; onTryAgain?: (() => voi
 				<div className="flex justify-end">
 					<Button variant="outline" size="sm" data-testid="agent-try-again" onClick={onTryAgain}>
 						<RotateCw className="size-12" />
-						Try again
+						{t("Try again")}
 					</Button>
 				</div>
 			) : null}
@@ -666,7 +667,7 @@ function RetryIndicator({
 		>
 			<span className="flex items-center gap-4">
 				<RotateCw className="size-12 shrink-0" />
-				{source === "summarization" ? "Retrying summarization" : "Retrying"} ({attempt}/
+				{source === "summarization" ? t("Retrying summarization") : t("Retrying")} ({attempt}/
 				{maxAttempts})…
 			</span>
 			<div className="h-4 w-full overflow-hidden rounded-full bg-border-default">
@@ -892,7 +893,7 @@ export function TurnDivider({
 						className="flex items-center gap-4 rounded-sm px-4 text-primary hover:bg-control-bg-hovered"
 					>
 						<Eye className="size-12 shrink-0" />
-						Review turn
+						{t("Review turn")}
 					</button>
 				) : null}
 				{elapsedMs != null && elapsedMs >= 1000 ? (

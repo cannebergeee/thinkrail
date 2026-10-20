@@ -10,6 +10,7 @@ import { ModelSelector } from "@/chat/ModelSelector";
 import { ThinkingSelector } from "@/chat/ThinkingSelector";
 import { useModelCatalog } from "@/chat/useModelCatalog";
 import { useModelPreferences } from "@/chat/useModelPreferences";
+import { t } from "@/i18n";
 import { selectCatalogModel, selectPickerModels, toast, useAppStore } from "@/store";
 import { getTransport } from "@/transport";
 import { ModelContextSettings } from "./ModelContextSettings";
@@ -93,29 +94,29 @@ export function ModelsSettings() {
 	}) => {
 		getTransport()
 			.request("settings.update", { config })
-			.catch(() => toast.error("Couldn't change the review model"));
+			.catch(() => toast.error(t("Couldn't change the review model")));
 	};
 
 	const setAutoFix = (reviewAutoFix: boolean) => {
 		getTransport()
 			.request("settings.update", { config: { reviewAutoFix } })
-			.catch(() => toast.error("Couldn't change the auto-fix setting"));
+			.catch(() => toast.error(t("Couldn't change the auto-fix setting")));
 	};
 
 	const setAgentReviewEnabled = (value: boolean) => {
 		getTransport()
 			.request("settings.update", { config: { agentReviewEnabled: value } })
-			.catch(() => toast.error("Couldn't change the agent-review setting"));
+			.catch(() => toast.error(t("Couldn't change the agent-review setting")));
 	};
 
 	return (
 		<SettingsPageContainer testId="settings-models">
-			<SettingsGroup title="Default model">
+			<SettingsGroup title={t("Default model")}>
 				{loadFailed ? (
 					<div className="flex items-center gap-8 border-border-muted border-b py-12">
-						<p className="text-text-muted tr-text-ui">Couldn't load your default model.</p>
+						<p className="text-text-muted tr-text-ui">{t("Couldn't load your default model.")}</p>
 						<Button variant="ghost" size="sm" onClick={() => void readDefault()}>
-							Retry
+							{t("Retry")}
 						</Button>
 					</div>
 				) : resolvedDefault || !reading ? (
@@ -123,7 +124,7 @@ export function ModelsSettings() {
 						data-testid="default-model-row"
 						className="flex flex-wrap items-center justify-between gap-12 border-border-muted border-b py-12"
 					>
-						<span className="tr-text-ui text-text-default">Chat model</span>
+						<span className="tr-text-ui text-text-default">{t("Chat model")}</span>
 						<div className="flex flex-wrap items-center gap-8">
 							<ModelSelector
 								models={chatPickerModels}
@@ -133,7 +134,7 @@ export function ModelsSettings() {
 								onSelect={(selected) =>
 									void saveConfig({ defaultModel: selected }, "Couldn't save the default model")
 								}
-								placeholder="First available"
+								placeholder={t("First available")}
 								disabled={saving || reading}
 								preferences={preferences}
 							/>
@@ -151,12 +152,12 @@ export function ModelsSettings() {
 				<VisibleModelsSettings models={allModels} />
 			</SettingsGroup>
 
-			<SettingsGroup title="Review" testId="models-review-group">
+			<SettingsGroup title={t("Review")} testId="models-review-group">
 				<div
 					data-testid="review-model-row"
 					className="flex flex-wrap items-center justify-between gap-12 border-border-muted border-b py-12"
 				>
-					<span className="tr-text-ui text-text-default">Review model</span>
+					<span className="tr-text-ui text-text-default">{t("Review model")}</span>
 					<div className="flex flex-wrap items-center gap-8">
 						<ModelSelector
 							models={reviewPickerModels}
@@ -179,12 +180,12 @@ export function ModelsSettings() {
 				{protocolVersion !== null && protocolVersion >= AGENT_REVIEW_SETTING_PROTOCOL_VERSION && (
 					<SettingsRow
 						testId="agent-review-row"
-						label="Agent-triggered review"
-						description="Allow the agent to review completed work."
+						label={t("Agent-triggered review")}
+						description={t("Allow the agent to review completed work.")}
 						control={
 							<SettingsSwitch
 								checked={agentReviewEnabled}
-								label="Agent-triggered review"
+								label={t("Agent-triggered review")}
 								testId="agent-review-toggle"
 								onChange={setAgentReviewEnabled}
 							/>
@@ -193,12 +194,12 @@ export function ModelsSettings() {
 				)}
 				<SettingsRow
 					testId="review-autofix-row"
-					label="Automatic fix cycle"
-					description="Send requested changes back to the agent once."
+					label={t("Automatic fix cycle")}
+					description={t("Send requested changes back to the agent once.")}
 					control={
 						<SettingsSwitch
 							checked={autoFix}
-							label="Automatic fix cycle"
+							label={t("Automatic fix cycle")}
 							testId="review-autofix-toggle"
 							onChange={setAutoFix}
 						/>

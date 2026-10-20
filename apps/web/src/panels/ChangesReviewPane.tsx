@@ -10,6 +10,7 @@ import {
 import type { GitFileChange, GitStatus } from "@thinkrail/contracts";
 import { useCallback, useEffect, useInsertionEffect, useMemo, useRef, useState } from "react";
 import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { t } from "@/i18n";
 import { usePhoneViewport } from "@/lib";
 import { LoadingRegion } from "../components/Skeleton";
 import {
@@ -48,7 +49,8 @@ function ReviewListFooter({ context }: { context?: ReviewListContext }) {
 			style={{ minHeight: context?.tailHeight ?? 0 }}
 			className="px-12 py-16 text-center tr-text-metadata text-text-subtle"
 		>
-			End of changes · {context?.fileCount ?? 0} {context?.fileCount === 1 ? "file" : "files"}
+			{t("End of changes ·")} {context?.fileCount ?? 0}{" "}
+			{context?.fileCount === 1 ? "file" : "files"}
 		</div>
 	);
 }
@@ -110,7 +112,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 				}
 				if (status && !warnedRef.current) {
 					warnedRef.current = true;
-					toast.error(`Could not refresh the changes: ${errorText(failure)}`);
+					toast.error(t("Could not refresh the changes: {0}", errorText(failure)));
 				}
 				setError(errorText(failure));
 			},
@@ -374,7 +376,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 			<div
 				data-testid="changes-review-toolbar"
 				role="toolbar"
-				aria-label="Changes review"
+				aria-label={t("Changes review")}
 				className="flex h-32 shrink-0 items-center gap-4 border-border-default border-b bg-container-header-bg px-12"
 			>
 				<span
@@ -408,7 +410,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 						<>
 							<HeaderIconButton
 								testid="changes-review-collapse-all"
-								label="Collapse all files"
+								label={t("Collapse all files")}
 								onClick={() =>
 									setCollapsed(
 										workspaceId,
@@ -421,7 +423,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 							</HeaderIconButton>
 							<HeaderIconButton
 								testid="changes-review-expand-all"
-								label="Expand all files"
+								label={t("Expand all files")}
 								onClick={() =>
 									setCollapsed(
 										workspaceId,
@@ -446,7 +448,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 					) : null}
 					<HeaderIconButton
 						testid="changes-review-toggle-whitespace"
-						label="Hide whitespace changes"
+						label={t("Hide whitespace changes")}
 						active={ignoreWhitespace}
 						onClick={() => setIgnoreWhitespace(workspaceId, tab.id, !ignoreWhitespace)}
 					>
@@ -456,13 +458,13 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 						<>
 							<ToggleSegment
 								testid="changes-review-toggle-split"
-								label="Split"
+								label={t("Split")}
 								active={view === "split"}
 								onClick={() => setView(workspaceId, tab.id, "split")}
 							/>
 							<ToggleSegment
 								testid="changes-review-toggle-inline"
-								label="Inline"
+								label={t("Inline")}
 								active={view === "inline"}
 								onClick={() => setView(workspaceId, tab.id, "inline")}
 							/>
@@ -471,13 +473,13 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 					) : null}
 					<ToggleSegment
 						testid="changes-review-layout-stacked"
-						label="Stacked"
+						label={t("Stacked")}
 						active={layout === "stacked"}
 						onClick={() => setLayout("stacked")}
 					/>
 					<ToggleSegment
 						testid="changes-review-layout-single"
-						label="One file"
+						label={t("One file")}
 						active={layout === "single"}
 						onClick={() => setLayout("single")}
 					/>
@@ -486,7 +488,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 			{status === null && error !== null ? (
 				<div data-testid="changes-review-error" className="flex flex-col items-start gap-4 p-12">
 					<p className="tr-text-metadata text-feedback-error">
-						{scopeGone ? error : `Could not read the changes: ${error}`}
+						{scopeGone ? error : t("Could not read the changes: {0}", error)}
 					</p>
 					{scopeGone ? (
 						<button
@@ -497,7 +499,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 							}
 							className="rounded-sm px-4 py-2 tr-text-metadata text-text-muted transition-colors hover:bg-control-bg-hovered hover:text-text-default"
 						>
-							Review all changes
+							{t("Review all changes")}
 						</button>
 					) : (
 						<button
@@ -506,7 +508,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 							onClick={reload}
 							className="rounded-sm px-4 py-2 tr-text-metadata text-text-muted transition-colors hover:bg-control-bg-hovered hover:text-text-default"
 						>
-							Retry
+							{t("Retry")}
 						</button>
 					)}
 				</div>
@@ -514,7 +516,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 				<LoadingRegion rows={8} className="p-12" />
 			) : files.length === 0 ? (
 				<p data-testid="changes-review-empty" className="p-12 tr-text-metadata text-text-muted">
-					No changes in this scope.
+					{t("No changes in this scope.")}
 				</p>
 			) : layout === "single" && current ? (
 				<>
@@ -524,7 +526,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 					>
 						<HeaderIconButton
 							testid="changes-review-prev"
-							label="Previous file (Alt+↑)"
+							label={t("Previous file (Alt+↑)")}
 							disabled={currentIndex === 0}
 							onClick={() => step(-1)}
 						>
@@ -538,7 +540,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 						</span>
 						<HeaderIconButton
 							testid="changes-review-next"
-							label="Next file (Alt+↓)"
+							label={t("Next file (Alt+↓)")}
 							disabled={currentIndex >= files.length - 1}
 							onClick={() => step(1)}
 						>
@@ -556,7 +558,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 							}`}
 						>
 							<Check className="size-14" />
-							{viewedSet.has(current.path) ? "Viewed" : "Mark viewed"}
+							{viewedSet.has(current.path) ? t("Viewed") : t("Mark viewed")}
 							<kbd className="rounded-xs border border-control-border-default px-4 tr-code-text text-text-subtle">
 								V
 							</kbd>
@@ -601,21 +603,22 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 								className="flex items-center gap-8 border-border-default border-b bg-feedback-info-subtle px-12 py-4 tr-text-metadata text-text-muted"
 							>
 								<span>
-									{files.length} files in this scope — reviewing one file at a time may be easier.
+									{files.length}{" "}
+									{t("files in this scope — reviewing one file at a time may be easier.")}
 								</span>
 								<button
 									type="button"
 									onClick={() => setLayout("single")}
 									className="text-text-default underline-offset-2 hover:underline"
 								>
-									Switch to One file
+									{t("Switch to One file")}
 								</button>
 								<button
 									type="button"
 									onClick={() => setLargeNoticeDismissed(true)}
 									className="ml-auto text-text-subtle hover:text-text-default"
 								>
-									Dismiss
+									{t("Dismiss")}
 								</button>
 							</div>
 						) : null}
@@ -669,7 +672,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 							</span>
 							<progress
 								data-testid="changes-review-progress"
-								aria-label="Files reviewed"
+								aria-label={t("Files reviewed")}
 								max={Math.max(files.length, 1)}
 								value={viewedCount}
 								className="h-4 w-120 min-w-0 shrink appearance-none overflow-hidden rounded-xs bg-control-bg-hovered accent-primary [&::-moz-progress-bar]:bg-primary [&::-webkit-progress-bar]:bg-control-bg-hovered [&::-webkit-progress-value]:bg-primary"
@@ -682,7 +685,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 									onClick={nextUnreviewed}
 									className="flex h-24 items-center gap-4 rounded-sm border border-control-border-default px-8 tr-text-metadata text-text-muted outline-none hover:bg-control-bg-hovered hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary disabled:text-control-disabled-text disabled:hover:bg-transparent"
 								>
-									Next unreviewed
+									{t("Next unreviewed")}
 									<kbd className="rounded-xs border border-control-border-default px-4 tr-code-text text-text-subtle">
 										J
 									</kbd>
@@ -695,7 +698,7 @@ export function ChangesReviewPane({ tab }: { tab: ChangesTab }) {
 									className="flex h-24 items-center gap-4 rounded-sm border border-control-border-default px-8 tr-text-metadata text-text-muted outline-none hover:bg-control-bg-hovered hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary disabled:text-control-disabled-text disabled:hover:bg-transparent"
 								>
 									<Check className="size-14" />
-									Mark all viewed
+									{t("Mark all viewed")}
 								</button>
 							</span>
 						</div>

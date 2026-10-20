@@ -12,6 +12,7 @@ import {
 } from "@thinkrail/ui/dropdown-menu";
 import type { MouseEvent, ReactNode } from "react";
 import { useState } from "react";
+import { t } from "@/i18n";
 import { copyText } from "@/lib";
 
 export const ROW_MENU_SLOT = "mr-4 size-20 shrink-0";
@@ -46,7 +47,7 @@ export function ChangeRowActions({
 				{children({ onContextMenu })}
 				<DropdownMenuTrigger
 					data-testid="change-row-menu"
-					aria-label={`Actions for ${path}`}
+					aria-label={t("Actions for {0}", path)}
 					className={`${ROW_MENU_SLOT} flex items-center justify-center rounded-sm text-text-muted opacity-0 outline-none transition hover:bg-container-elevated-bg hover:text-text-default focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary group-hover:opacity-100 data-[state=open]:opacity-100`}
 				>
 					<ChevronDown className="size-16" />
@@ -55,11 +56,11 @@ export function ChangeRowActions({
 			<DropdownMenuContent align="end" data-testid="change-row-actions">
 				<DropdownMenuItem data-testid="change-action-view" onSelect={onView}>
 					<FileDiff />
-					Review
+					{t("Review")}
 				</DropdownMenuItem>
 				<DropdownMenuItem data-testid="change-action-open-tab" onSelect={onOpenTab}>
 					<OpenAsTab />
-					Open as tab
+					{t("Open as tab")}
 				</DropdownMenuItem>
 				<DropdownMenuItem
 					data-testid="change-action-copy-path"
@@ -68,7 +69,7 @@ export function ChangeRowActions({
 					}}
 				>
 					<Copy />
-					Copy path
+					{t("Copy path")}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

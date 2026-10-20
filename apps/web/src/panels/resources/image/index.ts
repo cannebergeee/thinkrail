@@ -1,8 +1,9 @@
+import { t } from "@/i18n";
 import type { ResourceRenderer } from "@/resources";
 
 export const imageRenderer: ResourceRenderer = {
 	id: "thinkrail/image",
-	label: "Image",
+	label: t("Image"),
 	match: { mime: ["image/*"], text: false },
 	rank: 120,
 	capabilities: {

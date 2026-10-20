@@ -5,6 +5,7 @@ import {
 	RiArrowGoBackLine as Revert,
 } from "@remixicon/react";
 import { useMemo, useState } from "react";
+import { t } from "@/i18n";
 import { copyText, isPhoneViewport } from "@/lib";
 import type { DiffTab } from "../store";
 import { selectDiffTabTargetRef, useAppStore } from "../store";
@@ -114,7 +115,7 @@ export function DiffPane({ tab }: { tab: DiffTab }) {
 			<div
 				data-testid="diff-view-toggle"
 				role="toolbar"
-				aria-label="Diff view mode"
+				aria-label={t("Diff view mode")}
 				className="flex h-32 shrink-0 items-center gap-4 border-border-default border-b bg-container-header-bg px-12"
 			>
 				<span
@@ -138,7 +139,7 @@ export function DiffPane({ tab }: { tab: DiffTab }) {
 				{hunkActions ? (
 					<HeaderIconButton
 						testid="diff-revert-file"
-						label="Revert file"
+						label={t("Revert file")}
 						onClick={() => void hunkActions.revertFile()}
 					>
 						<Revert className="size-14" />
@@ -147,7 +148,7 @@ export function DiffPane({ tab }: { tab: DiffTab }) {
 				{renderer.capabilities.whitespace ? (
 					<HeaderIconButton
 						testid="diff-toggle-whitespace"
-						label="Hide whitespace changes"
+						label={t("Hide whitespace changes")}
 						active={ignoreWhitespace}
 						onClick={() => setDiffTabIgnoreWhitespace(tab.id, !ignoreWhitespace)}
 					>
@@ -157,7 +158,7 @@ export function DiffPane({ tab }: { tab: DiffTab }) {
 				{renderer.capabilities.copy ? (
 					<HeaderIconButton
 						testid="diff-copy"
-						label="Copy file contents"
+						label={t("Copy file contents")}
 						onClick={() => void copy()}
 					>
 						{copied ? (
@@ -182,13 +183,13 @@ export function DiffPane({ tab }: { tab: DiffTab }) {
 					<>
 						<ToggleSegment
 							testid="diff-toggle-split"
-							label="Split"
+							label={t("Split")}
 							active={view === "split"}
 							onClick={() => setDiffTabView(tab.id, "split")}
 						/>
 						<ToggleSegment
 							testid="diff-toggle-inline"
-							label="Inline"
+							label={t("Inline")}
 							active={view === "inline"}
 							onClick={() => setDiffTabView(tab.id, "inline")}
 						/>

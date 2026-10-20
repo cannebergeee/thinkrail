@@ -3,6 +3,7 @@ import { Button } from "@thinkrail/ui/button";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
 import type { ComponentProps } from "react";
+import { t } from "@/i18n";
 
 export function ResourcesButton({
 	activeCount,
@@ -33,12 +34,12 @@ export function ResourcesButton({
 				data-testid="resources-trigger"
 				data-active-count={activeCount ?? "unknown"}
 				data-live={live || undefined}
-				aria-label={`Resources, ${countLabel}`}
+				aria-label={t("Resources, {0}", countLabel)}
 				aria-expanded={open}
 				{...props}
 			>
 				<Icon className={cn("size-14", live && "motion-safe:animate-working")} />
-				<span className="hidden @[480px]:inline">Resources</span>
+				<span className="hidden @[480px]:inline">{t("Resources")}</span>
 				<span className="tabular-nums">{activeCount ?? "—"}</span>
 			</Button>
 		</IconTooltip>

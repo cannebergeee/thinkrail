@@ -5,6 +5,7 @@ import {
 import { isPlanReviewResult, type PlanReviewResult } from "@thinkrail/contracts";
 import type { ToolRenderProps } from "@thinkrail/extension-api/web";
 import type { ReactNode } from "react";
+import { t } from "@/i18n";
 import { ReviewPackageComments } from "../ReviewPackageComments";
 import { reviewFixCommentsToItems } from "../reviewPackage";
 
@@ -29,7 +30,12 @@ export function requestReviewSummary({ result }: ToolRenderProps): string {
 			: `Approved “${review.itemTitle}”`;
 	}
 	const n = review.findings.length;
-	return `Changes requested on “${review.itemTitle}” · ${n} ${n === 1 ? "finding" : "findings"}`;
+	return t(
+		"Changes requested on “{0}” · {1} {2}",
+		review.itemTitle,
+		n,
+		n === 1 ? "finding" : "findings",
+	);
 }
 
 export function RequestReviewCard({ toolCallId, result, status }: ToolRenderProps): ReactNode {
@@ -37,7 +43,7 @@ export function RequestReviewCard({ toolCallId, result, status }: ToolRenderProp
 	if (!review) {
 		return (
 			<span className="tr-text-ui text-text-muted">
-				{status === "running" ? "Reviewing the change set…" : "No review verdict."}
+				{status === "running" ? t("Reviewing the change set…") : t("No review verdict.")}
 			</span>
 		);
 	}
@@ -54,12 +60,12 @@ export function RequestReviewCard({ toolCallId, result, status }: ToolRenderProp
 				)}
 				<div className="min-w-0 flex-1">
 					<span data-testid="request-review-verdict" className="block text-text-default">
-						{review.verdict === "approve" ? "Approved" : "Changes requested"}
+						{review.verdict === "approve" ? t("Approved") : t("Changes requested")}
 						<span className="text-text-muted"> — “{review.itemTitle}”</span>
 						{blocked > 0 ? (
 							<span data-testid="request-review-blocked" className="text-feedback-warning">
 								{" "}
-								· not settled, {blocked} finding{blocked === 1 ? "" : "s"} still open
+								{t("· not settled,")} {blocked} finding{blocked === 1 ? "" : "s"} still open
 							</span>
 						) : null}
 					</span>

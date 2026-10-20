@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 export const HTML_PREVIEW_CSP =
 	"default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; font-src data:; base-uri 'none'; form-action 'none'; object-src 'none'; frame-src 'none'; child-src 'none'";
 

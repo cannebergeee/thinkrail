@@ -9,6 +9,7 @@ import {
 import type { ToolRenderProps, ToolStatus } from "@thinkrail/extension-api/web";
 import { cn } from "@thinkrail/ui/utils";
 import { useContext } from "react";
+import { t } from "@/i18n";
 import type { ActivityBreadcrumbKind } from "./activityBreadcrumbs";
 import { PendingExtUiContext, ToolPromptSlot } from "./ExtUiPrompt";
 import { useFold } from "./foldState";
@@ -126,7 +127,7 @@ export function ThinkingGroup({
 			live={live}
 			stepCount={tools.length}
 			icon={<Brain className="size-12 shrink-0" />}
-			label="Thinking"
+			label={t("Thinking")}
 			headline={extractThinkingHeading(thought.text)}
 			breadcrumbLabel="Thinking"
 			breadcrumbMeta={summary}
@@ -324,8 +325,8 @@ export function summarizeSteps(steps: ActivityStep[]): string {
 function liveActivityTicker(steps: ActivityStep[], workspaceRoot: string | undefined): string {
 	const flatSteps = flattenActivitySteps(steps);
 	const current = flatSteps[flatSteps.length - 1];
-	if (!current) return "Working…";
-	if (current.kind === "thinking") return "Thinking…";
+	if (!current) return t("Working…");
+	if (current.kind === "thinking") return t("Thinking…");
 	const summary = getToolSummary(current.toolName, toolRenderProps(current, workspaceRoot));
 	return summary ? `${current.toolName} · ${summary}` : `${current.toolName}…`;
 }

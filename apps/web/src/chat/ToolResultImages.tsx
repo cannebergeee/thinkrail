@@ -8,6 +8,7 @@ import {
 	DialogTrigger,
 } from "@thinkrail/ui/dialog";
 import { useState } from "react";
+import { t } from "@/i18n";
 
 function ToolResultImage({ image, label }: { image: ImageContent; label: string }) {
 	const [open, setOpen] = useState(false);
@@ -30,8 +31,8 @@ function ToolResultImage({ image, label }: { image: ImageContent; label: string 
 					<button
 						type="button"
 						data-testid="tool-result-image-fullscreen"
-						aria-label={`View ${label} full screen`}
-						title="Full screen"
+						aria-label={t("View {0} full screen", label)}
+						title={t("Full screen")}
 						className="absolute top-4 right-4 rounded-sm border border-border-default bg-container-elevated-bg p-4 text-text-muted transition-colors hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary"
 					>
 						<Maximize2 className="size-14" />

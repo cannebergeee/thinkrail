@@ -1,4 +1,5 @@
 import type { Workspace } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 import { isExternalWorkspace } from "../store";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { removeWorkspace } from "./workspaceActions";
@@ -26,13 +27,15 @@ export function RemoveWorkspaceDialog({
 			description={
 				isExternal ? (
 					<>
-						Removes this workspace's ThinkRail chats and terminals. The existing checkout, files,
-						and branch {branch} stay untouched.
+						{t(
+							"Removes this workspace's ThinkRail chats and terminals. The existing checkout, files, and branch",
+						)}{" "}
+						{branch} stay untouched.
 					</>
 				) : (
 					<>
-						Deletes this workspace's chats, terminals, and its worktree. The git branch {branch} is
-						kept.
+						{t("Deletes this workspace's chats, terminals, and its worktree. The git branch")}{" "}
+						{branch} is kept.
 					</>
 				)
 			}

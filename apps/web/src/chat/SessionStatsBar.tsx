@@ -1,4 +1,5 @@
 import type { ContextUsage, SessionStats } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 
 export function formatTokens(count: number): string {
 	if (count < 1_000) return count.toString();
@@ -52,7 +53,7 @@ export function SessionStatsBar({ stats }: { stats: SessionStats | null }) {
 		<div
 			data-testid="session-stats"
 			className="flex min-w-0 flex-nowrap items-center justify-end gap-x-4 overflow-hidden text-text-muted tr-text-metadata"
-			title="Cumulative usage: ↑ input · ↓ output · R cache read · W cache write"
+			title={t("Cumulative usage: ↑ input · ↓ output · R cache read · W cache write")}
 		>
 			{parts.map((part, index) => (
 				<span key={part} className="flex items-center gap-4 whitespace-nowrap">
@@ -61,7 +62,10 @@ export function SessionStatsBar({ stats }: { stats: SessionStats | null }) {
 				</span>
 			))}
 			{context ? (
-				<span className="flex items-center gap-4 whitespace-nowrap" title="Context window used">
+				<span
+					className="flex items-center gap-4 whitespace-nowrap"
+					title={t("Context window used")}
+				>
 					{parts.length > 0 ? <span aria-hidden="true">·</span> : null}
 					<span aria-hidden="true" className="text-primary">
 						{context.bar}

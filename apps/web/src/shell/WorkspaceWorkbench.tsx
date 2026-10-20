@@ -29,6 +29,7 @@ import { startChatInTab } from "../panels/openChat";
 import { openFileInTab } from "../panels/openTabs";
 import { ProjectTree } from "../panels/ProjectTree";
 import "../panels/resources/register";
+import { t } from "@/i18n";
 import { ReviewPanel, selectActiveReviewedPath } from "../panels/ReviewPanel";
 import { reviewFlags } from "../panels/reviewModel";
 import { SpecsPanel } from "../panels/SpecsPanel";
@@ -109,7 +110,11 @@ const NO_EDITOR_TABS: EditorTab[] = [];
 
 function MissingResource({ label }: { label: string }) {
 	return (
-		<LoadingRegion rows={12} label={`Restoring ${label}`} className="h-full overflow-hidden p-16" />
+		<LoadingRegion
+			rows={12}
+			label={t("Restoring {0}", label)}
+			className="h-full overflow-hidden p-16"
+		/>
 	);
 }
 
@@ -198,7 +203,7 @@ function ChatResourceBody({
 					!state.removedWorkspaceIds[workspaceId] &&
 					!state.deletedSessionsByWorkspace[workspaceId]?.[tab.sessionId]
 				) {
-					toast.error("The chat could not be restored.", "Couldn't restore the chat");
+					toast.error(t("The chat could not be restored."), t("Couldn't restore the chat"));
 				}
 			})
 			.catch((error) => {
@@ -208,20 +213,20 @@ function ChatResourceBody({
 					!state.removedWorkspaceIds[workspaceId] &&
 					!state.deletedSessionsByWorkspace[workspaceId]?.[tab.sessionId]
 				) {
-					toast.error(errorText(error), "Couldn't restore the chat");
+					toast.error(errorText(error), t("Couldn't restore the chat"));
 				}
 			});
 	};
 	if (!stalled) return <MissingResource label="chat" />;
 	return (
 		<div className="flex h-full flex-col items-center justify-center gap-8 text-text-muted">
-			<span className="tr-text-ui">The chat is taking longer than usual to restore.</span>
+			<span className="tr-text-ui">{t("The chat is taking longer than usual to restore.")}</span>
 			<button
 				type="button"
 				onClick={retry}
 				className="rounded-sm border border-border-default px-8 py-4 tr-text-ui hover:bg-control-bg-hovered"
 			>
-				Retry
+				{t("Retry")}
 			</button>
 		</div>
 	);
@@ -275,7 +280,7 @@ function useTerminalReservation(workspaceId: string): void {
 				);
 				if (!stillPending) return;
 				state.rejectTerminalReservation(workspaceId, pendingIntent.tabKey);
-				toast.error(errorText(error), "Couldn't create the terminal");
+				toast.error(errorText(error), t("Couldn't create the terminal"));
 			});
 		return () => {
 			current = false;
@@ -320,7 +325,7 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 			if ("reason" in prepared || prepared.title === currentTitle) return;
 			void getTransport()
 				.request("session.rename", { workspaceId, sessionId, title: prepared.title })
-				.catch((error) => toast.error(errorText(error), "Couldn't rename the chat"));
+				.catch((error) => toast.error(errorText(error), t("Couldn't rename the chat")));
 		},
 		[workspaceId],
 	);
@@ -602,7 +607,7 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 					data-testid="plan-rail-empty"
 					className="flex h-full items-center justify-center p-16 text-text-subtle tr-text-ui"
 				>
-					Open a chat to see its plan here.
+					{t("Open a chat to see its plan here.")}
 				</div>
 			),
 		};
@@ -654,7 +659,7 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 							: "shrink-0 tr-text-eyebrow text-text-subtle"
 					}
 				>
-					Review
+					{t("Review")}
 				</span>
 			) : null;
 		},
@@ -668,7 +673,11 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 				className="flex h-full flex-col items-center justify-center gap-4 px-16 text-center"
 			>
 				<span className="tr-text-eyebrow text-text-muted">
-					{isDefault ? "Default workspace" : isExternal ? "Existing worktree" : "Workspace ready"}
+					{isDefault
+						? t("Default workspace")
+						: isExternal
+							? t("Existing worktree")
+							: t("Workspace ready")}
 				</span>
 				{workspace ? (
 					<>
@@ -682,7 +691,9 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 							) : (
 								<>
 									<span className="truncate">{workspace.branch}</span>
-									<span className="shrink-0 text-text-muted">· from {workspace.baseBranch}</span>
+									<span className="shrink-0 text-text-muted">
+										{t("· from")} {workspace.baseBranch}
+									</span>
 								</>
 							)}
 						</p>
@@ -690,8 +701,8 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 				) : null}
 				<p className="mt-4 tr-text-ui text-text-muted">
 					{isDefault
-						? "Chats, changes, and terminals run directly in your project folder."
-						: "Files, chats, changes, and terminals are scoped to this workspace."}
+						? t("Chats, changes, and terminals run directly in your project folder.")
+						: t("Files, chats, changes, and terminals are scoped to this workspace.")}
 				</p>
 				<button
 					type="button"
@@ -703,11 +714,12 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 				>
 					{chatStarting ? (
 						<>
-							<Loader2 className="size-14 animate-spin motion-reduce:animate-none" /> Starting chat…
+							<Loader2 className="size-14 animate-spin motion-reduce:animate-none" />{" "}
+							{t("Starting chat…")}
 						</>
 					) : (
 						<>
-							<MessageSquarePlus className="size-14" /> New chat
+							<MessageSquarePlus className="size-14" /> {t("New chat")}
 						</>
 					)}
 				</button>
@@ -725,11 +737,11 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 					targetGroupId={groupId}
 					{...(canRenameChat ? { onRenameChat: requestRenameChat } : {})}
 				/>
-				<IconTooltip label="New terminal in this group">
+				<IconTooltip label={t("New terminal in this group")}>
 					<button
 						type="button"
 						data-testid="new-terminal"
-						aria-label="New terminal in this group"
+						aria-label={t("New terminal in this group")}
 						onClick={() => useAppStore.getState().addTerminal(workspaceId, undefined, groupId)}
 						className="flex w-panel-header-row shrink-0 items-center justify-center border-border-default border-l text-text-muted hover:bg-control-bg-hovered hover:text-text-default"
 					>
@@ -744,7 +756,7 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 	if (!rendered) {
 		return (
 			<div className="flex h-full items-center justify-center bg-container-content-bg tr-text-ui text-text-muted">
-				Restoring workspace layout…
+				{t("Restoring workspace layout…")}
 			</div>
 		);
 	}
@@ -861,7 +873,7 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 							options?.newPaneBelow === true,
 						)
 				}
-				onGestureCanceled={() => toast.info("The layout changed. Your drag was canceled.")}
+				onGestureCanceled={() => toast.info(t("The layout changed. Your drag was canceled."))}
 			/>
 			{terminalClose.confirmation}
 		</div>

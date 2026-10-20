@@ -1,5 +1,6 @@
 import { RiDownloadCloud2Line as DownloadCloud } from "@remixicon/react";
 import { Button } from "@thinkrail/ui/button";
+import { t } from "@/i18n";
 import type { UpdatesController } from "./useUpdates";
 
 export function UpdateReadyButton({
@@ -31,20 +32,20 @@ export function UpdateReadyButton({
 		: "A ThinkRail update needs attention";
 	if (hostUpdate) {
 		if (hostRequestFailed || hostStatus === "failed") {
-			label = "Update failed";
-			ariaLabel = "The ThinkRail host update failed";
+			label = t("Update failed");
+			ariaLabel = t("The ThinkRail host update failed");
 		} else if (hostStatus === "running") {
-			label = "Updating host";
+			label = t("Updating host");
 			ariaLabel = availableVersion
 				? `Updating the ThinkRail host to ${availableVersion}`
 				: "Updating the ThinkRail host";
 		} else if (hostStatus === "succeeded") {
-			label = "Restart host";
+			label = t("Restart host");
 			ariaLabel = availableVersion
 				? `Restart the ThinkRail host to use ${availableVersion}`
 				: "Restart the ThinkRail host to use the update";
 		} else {
-			label = "Update available";
+			label = t("Update available");
 			ariaLabel = availableVersion
 				? `ThinkRail ${availableVersion} is available`
 				: "A ThinkRail update is available";
@@ -52,7 +53,7 @@ export function UpdateReadyButton({
 	} else if (!nativeNeedsAttention && nativeState) {
 		switch (nativeState.status) {
 			case "available":
-				label = "Update available";
+				label = t("Update available");
 				ariaLabel = availableVersion
 					? `ThinkRail ${availableVersion} is available to download`
 					: "A ThinkRail update is available to download";
@@ -65,17 +66,17 @@ export function UpdateReadyButton({
 				ariaLabel = label;
 				break;
 			case "preparing":
-				label = "Preparing update";
+				label = t("Preparing update");
 				ariaLabel = label;
 				break;
 			case "ready":
-				label = "Update ready";
+				label = t("Update ready");
 				ariaLabel = availableVersion
 					? `ThinkRail ${availableVersion} is ready to install`
 					: "An update is ready to install";
 				break;
 			case "installing":
-				label = "Installing update";
+				label = t("Installing update");
 				ariaLabel = label;
 				break;
 		}

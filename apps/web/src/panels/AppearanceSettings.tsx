@@ -22,6 +22,7 @@ import {
 } from "@thinkrail/ui/dropdown-menu";
 import { cn } from "@thinkrail/ui/utils";
 import { type ReactNode, useState, useSyncExternalStore } from "react";
+import { t } from "@/i18n";
 import { toast, useAppStore } from "@/store";
 import {
 	deriveSystemThemePair,
@@ -247,20 +248,20 @@ export function AppearanceSettings() {
 
 	const modeOptions: SegmentedControlOption<ThemeModeOption>[] = [
 		...(systemSupported
-			? [{ id: "system" as const, label: "System", testId: "theme-mode-system" }]
+			? [{ id: "system" as const, label: t("System"), testId: "theme-mode-system" }]
 			: []),
-		{ id: "light", label: "Light", testId: "theme-mode-light", disabled: !modeTarget("light") },
-		{ id: "dark", label: "Dark", testId: "theme-mode-dark", disabled: !modeTarget("dark") },
+		{ id: "light", label: t("Light"), testId: "theme-mode-light", disabled: !modeTarget("light") },
+		{ id: "dark", label: t("Dark"), testId: "theme-mode-dark", disabled: !modeTarget("dark") },
 	];
 
 	const contrastOptions: SegmentedControlOption<Contrast>[] = [
 		{
 			id: "normal",
-			label: "Default",
+			label: t("Default"),
 			testId: "contrast-default",
 			disabled: !contrastAvailable("normal"),
 		},
-		{ id: "high", label: "High", testId: "contrast-high", disabled: !contrastAvailable("high") },
+		{ id: "high", label: t("High"), testId: "contrast-high", disabled: !contrastAvailable("high") },
 	];
 
 	const update = (config: AppConfigUpdate) => {
@@ -268,7 +269,7 @@ export function AppearanceSettings() {
 		setPending(true);
 		getTransport()
 			.request("settings.update", { config })
-			.catch((err: unknown) => toast.error(errorText(err), "Couldn't change theme"))
+			.catch((err: unknown) => toast.error(errorText(err), t("Couldn't change theme")))
 			.finally(() => setPending(false));
 	};
 
@@ -318,13 +319,13 @@ export function AppearanceSettings() {
 
 	return (
 		<SettingsPageContainer testId="settings-appearance">
-			<SettingsGroup title="Theme">
+			<SettingsGroup title={t("Theme")}>
 				<SettingsRow
-					label="Theme mode"
+					label={t("Theme mode")}
 					control={
 						<SegmentedControl
 							name="theme-mode"
-							label="Theme mode"
+							label={t("Theme mode")}
 							options={modeOptions}
 							value={effectiveMode}
 							disabled={pending}
@@ -341,20 +342,20 @@ export function AppearanceSettings() {
 								variant="warning"
 								testId="theme-fallback-warning"
 							>
-								Configured {appearance ? `${appearance} ` : ""}theme unavailable in this app
-								version. Using {resolution.theme.label}.
+								{t("Configured")} {appearance ? `${appearance} ` : ""}
+								{t("theme unavailable in this app version. Using")} {resolution.theme.label}.
 							</SettingsNotice>
 						))}
 					</div>
 				) : null}
 				{systemMode ? (
 					<SettingsRow
-						label="Current on this device"
+						label={t("Current on this device")}
 						testId="system-theme-current"
 						control={
 							<span className="flex items-center gap-4 tr-text-ui text-text-default">
 								<Device className="size-14 shrink-0 text-text-muted" />
-								{systemAppearance === "light" ? "Light" : "Dark"}
+								{systemAppearance === "light" ? t("Light") : t("Dark")}
 								<ArrowRight className="size-14 shrink-0 text-text-muted" />
 								<Palette className="size-14 shrink-0 text-text-muted" />
 								{currentResolution.theme.label}
@@ -364,7 +365,7 @@ export function AppearanceSettings() {
 				) : null}
 				{systemMode ? (
 					<Disclosure
-						label="Theme pair"
+						label={t("Theme pair")}
 						summary={`${lightResolution.theme.label} / ${darkResolution.theme.label}`}
 						expanded={expanded}
 						testId="theme-pair-toggle"
@@ -372,7 +373,7 @@ export function AppearanceSettings() {
 					>
 						<div className={cn(SETTINGS_ROWS_CONTAINER, "pb-12")}>
 							<SettingsRow
-								label="Light theme"
+								label={t("Light theme")}
 								control={
 									<ThemeDropdown
 										appearance="light"
@@ -384,7 +385,7 @@ export function AppearanceSettings() {
 								}
 							/>
 							<SettingsRow
-								label="Dark theme"
+								label={t("Dark theme")}
 								control={
 									<ThemeDropdown
 										appearance="dark"
@@ -399,7 +400,7 @@ export function AppearanceSettings() {
 					</Disclosure>
 				) : (
 					<Disclosure
-						label="Theme"
+						label={t("Theme")}
 						summary={activeTheme.label}
 						expanded={expanded}
 						testId="theme-toggle"
@@ -416,11 +417,11 @@ export function AppearanceSettings() {
 					</Disclosure>
 				)}
 				<SettingsRow
-					label="Contrast level"
+					label={t("Contrast level")}
 					control={
 						<SegmentedControl
 							name="contrast-level"
-							label="Contrast level"
+							label={t("Contrast level")}
 							options={contrastOptions}
 							value={currentContrast}
 							disabled={pending}
@@ -430,7 +431,7 @@ export function AppearanceSettings() {
 					}
 				/>
 			</SettingsGroup>
-			<SettingsGroup title="Editor">
+			<SettingsGroup title={t("Editor")}>
 				<LineWidthControl kind="file" />
 			</SettingsGroup>
 		</SettingsPageContainer>

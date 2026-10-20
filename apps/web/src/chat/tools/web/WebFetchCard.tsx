@@ -1,5 +1,6 @@
 import { RiLinksLine as LinkIcon } from "@remixicon/react";
 import { resultText, strArg, type ToolRenderProps } from "@thinkrail/extension-api/web";
+import { t } from "@/i18n";
 import { ToolFileLink } from "../ToolFileLink";
 import { WebResultBody } from "./WebResultBody";
 
@@ -66,8 +67,8 @@ export function WebFetchCard({
 				id={`${toolCallId}:content`}
 				output={output}
 				status={status}
-				runningLabel="Fetching…"
-				emptyLabel="(no content)"
+				runningLabel={t("Fetching…")}
+				emptyLabel={t("(no content)")}
 			/>
 		</div>
 	);

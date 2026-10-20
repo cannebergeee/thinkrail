@@ -5,6 +5,7 @@ import {
 } from "@remixicon/react";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { useEffect, useState } from "react";
+import { t } from "@/i18n";
 import { NotificationPermissionPrompt, useAttentionNotifications } from "../notifications";
 import { AnalyticsConsentDialog } from "../panels/AnalyticsConsentDialog";
 import { InterviewPromptDialog } from "../panels/InterviewPromptDialog";
@@ -43,9 +44,9 @@ import { useNativeWindowControls } from "./useNativeWindowControls";
 import { WorkspaceWorkbench } from "./WorkspaceWorkbench";
 
 const STATUS_LABEL: Record<ConnectionStatus, string> = {
-	connected: "Connected",
-	connecting: "Connecting…",
-	disconnected: "Disconnected",
+	connected: t("Connected"),
+	connecting: t("Connecting…"),
+	disconnected: t("Disconnected"),
 };
 
 const STATUS_DOT: Record<ConnectionStatus, string> = {
@@ -178,7 +179,7 @@ export function Shell() {
 						<button
 							type="button"
 							data-testid="open-settings"
-							aria-label="Settings"
+							aria-label={t("Settings")}
 							onClick={() => useAppStore.getState().openSettings()}
 							className="flex size-28 items-center justify-center rounded-sm text-text-muted outline-none transition-colors hover:bg-control-bg-hovered hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary"
 						>

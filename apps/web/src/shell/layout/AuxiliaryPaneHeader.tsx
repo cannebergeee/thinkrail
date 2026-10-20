@@ -3,6 +3,7 @@ import { RiCloseLine as X } from "@remixicon/react";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
 import { type ComponentPropsWithoutRef, forwardRef, type ReactNode } from "react";
+import { t } from "@/i18n";
 import { tupleKey } from "../../lib";
 import type { LayoutTab } from "./types";
 
@@ -67,11 +68,11 @@ export function AuxiliaryPaneHideButton({
 	onClick: () => void;
 }) {
 	return (
-		<IconTooltip label="Hide pane">
+		<IconTooltip label={t("Hide pane")}>
 			<button
 				type="button"
 				data-testid={testId}
-				aria-label="Hide pane"
+				aria-label={t("Hide pane")}
 				aria-controls={controls}
 				aria-expanded="true"
 				onClick={onClick}

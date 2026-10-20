@@ -19,6 +19,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@thinkrail/ui/popover";
 import { cn } from "@thinkrail/ui/utils";
 import { useState } from "react";
+import { t } from "@/i18n";
 import { formatContext } from "./modelPicker";
 import { ProviderGlyph } from "./ProviderGlyph";
 import {
@@ -199,9 +200,11 @@ export function ModelSelector({
 			</PopoverTrigger>
 			<PopoverContent align="start" container={container} className="w-340 p-0">
 				<Command className="min-h-0 flex-1 bg-transparent" filter={pickerFilter(groups, groupRow)}>
-					<CommandInput placeholder="Search models…" value={query} onValueChange={setQuery} />
+					<CommandInput placeholder={t("Search models…")} value={query} onValueChange={setQuery} />
 					<CommandList className="max-h-340 min-h-0 flex-1 pb-24">
-						{emptyState === "no-match" ? <CommandEmpty>No models found.</CommandEmpty> : null}
+						{emptyState === "no-match" ? (
+							<CommandEmpty>{t("No models found.")}</CommandEmpty>
+						) : null}
 						{emptyState === "no-models" ? (
 							<p className="px-8 py-12 text-center text-text-muted tr-text-ui">{NO_MODELS_HINT}</p>
 						) : null}
@@ -232,7 +235,7 @@ export function ModelSelector({
 							</CommandGroup>
 						)}
 						{pinnedModels.length > 0 && (
-							<CommandGroup heading="Pinned">
+							<CommandGroup heading={t("Pinned")}>
 								{pinnedModels.map((m) => renderModel(m, "pinned"))}
 							</CommandGroup>
 						)}
@@ -254,7 +257,7 @@ export function ModelSelector({
 						className="pointer-events-auto inline-flex items-center gap-4 rounded-sm border border-control-border-default bg-control-bg px-8 py-4 tr-text-metadata text-text-default shadow-sm outline-none transition-colors hover:bg-control-bg-hovered focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-default disabled:border-control-disabled-border disabled:bg-control-disabled-bg disabled:text-control-disabled-text"
 					>
 						<RefreshCw className={cn("size-12 shrink-0", refreshing && "animate-spin")} />
-						{refreshing ? "Updating…" : "Refresh"}
+						{refreshing ? t("Updating…") : t("Refresh")}
 					</button>
 				</div>
 			</PopoverContent>

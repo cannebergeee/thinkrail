@@ -7,6 +7,7 @@ import {
 } from "@thinkrail/ui/resizable";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { memo, useMemo, useRef } from "react";
+import { t } from "@/i18n";
 import { type LayoutAttention, readLayoutSelection, tupleKey } from "../../lib";
 import {
 	canPlaceLayoutTab,
@@ -100,7 +101,7 @@ export const CenterGroupView = memo(function CenterGroupView({
 								<button
 									type="button"
 									data-testid="remove-layout-group"
-									aria-label="Remove group"
+									aria-label={t("Remove group")}
 									disabled={isLayoutUnavailable(groupRemoval)}
 									onClick={() => {
 										if (!isLayoutUnavailable(groupRemoval)) shared.onApply(groupRemoval);
@@ -111,11 +112,11 @@ export const CenterGroupView = memo(function CenterGroupView({
 								</button>
 							</IconTooltip>
 						) : null}
-						<IconTooltip label="New chat">
+						<IconTooltip label={t("New chat")}>
 							<button
 								type="button"
 								data-testid="new-chat"
-								aria-label="New chat"
+								aria-label={t("New chat")}
 								onClick={() => onNewChat(group.id)}
 								className="flex w-panel-header-row shrink-0 items-center justify-center text-text-muted hover:bg-control-bg-hovered hover:text-text-default"
 							>
@@ -152,14 +153,14 @@ export const CenterGroupView = memo(function CenterGroupView({
 							<CenterSplitTarget
 								groupId={group.id}
 								direction="left"
-								label="Split left"
+								label={t("Split left")}
 								edgeClassName="inset-y-1/4 left-4 w-1/5"
 								halfClassName="inset-y-0 left-0 w-1/2"
 							/>
 							<CenterSplitTarget
 								groupId={group.id}
 								direction="right"
-								label="Split right"
+								label={t("Split right")}
 								edgeClassName="inset-y-1/4 right-4 w-1/5"
 								halfClassName="inset-y-0 right-0 w-1/2"
 							/>
@@ -170,14 +171,14 @@ export const CenterGroupView = memo(function CenterGroupView({
 							<CenterSplitTarget
 								groupId={group.id}
 								direction="up"
-								label="Split up"
+								label={t("Split up")}
 								edgeClassName="inset-x-1/4 top-32 h-1/5"
 								halfClassName="inset-x-0 top-0 h-1/2"
 							/>
 							<CenterSplitTarget
 								groupId={group.id}
 								direction="down"
-								label="Split down"
+								label={t("Split down")}
 								edgeClassName="inset-x-1/4 bottom-4 h-1/5"
 								halfClassName="inset-x-0 bottom-0 h-1/2"
 							/>

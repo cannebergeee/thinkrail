@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { t } from "@/i18n";
 import type { ResourceContent, ResourceDiffProps } from "@/resources";
 import { diffContentStamp } from "../reviewComposerState";
 import { VisualDiff, type VisualDiffSide } from "../VisualDiff";
@@ -21,7 +22,7 @@ export default function HtmlDiff({ resource, original, modified }: ResourceDiffP
 		present: originalText !== null,
 		content:
 			originalText === null ? null : (
-				<HtmlSide text={originalText} title={`Original preview of ${resource.path}`} />
+				<HtmlSide text={originalText} title={t("Original preview of {0}", resource.path)} />
 			),
 		caption: originalText === null ? "Old: No document" : "Old document",
 		intrinsicSize: null,
@@ -30,7 +31,7 @@ export default function HtmlDiff({ resource, original, modified }: ResourceDiffP
 		present: modifiedText !== null,
 		content:
 			modifiedText === null ? null : (
-				<HtmlSide text={modifiedText} title={`Modified preview of ${resource.path}`} />
+				<HtmlSide text={modifiedText} title={t("Modified preview of {0}", resource.path)} />
 			),
 		caption: modifiedText === null ? "New: No document" : "New document",
 		intrinsicSize: null,
@@ -38,7 +39,7 @@ export default function HtmlDiff({ resource, original, modified }: ResourceDiffP
 	return (
 		<div className="flex h-full min-h-0 flex-col">
 			<div className="shrink-0 border-border-default border-b bg-feedback-info-subtle px-12 py-8 tr-text-metadata text-feedback-info">
-				Scripts and external resources are disabled.
+				{t("Scripts and external resources are disabled.")}
 			</div>
 			<div className="min-h-0 flex-1">
 				<VisualDiff
@@ -50,7 +51,7 @@ export default function HtmlDiff({ resource, original, modified }: ResourceDiffP
 					contentStamp={diffContentStamp(original, modified)}
 					initialMode="2-up"
 					modes={["2-up"]}
-					emptyLabel="No document"
+					emptyLabel={t("No document")}
 				/>
 			</div>
 		</div>
