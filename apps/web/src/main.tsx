@@ -6,6 +6,7 @@ import { initChatPreferencesPersistence } from "./chat/chatPreferences";
 import { initModelVisibilityPersistence } from "./chat/modelVisibility";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { initNavigation } from "./navigation";
+import { initFilesTreePersistence } from "./panels/filesTreeState";
 import { initProjectExpansionPersistence } from "./panels/projectExpansion";
 import { Shell } from "./shell/Shell";
 import { applyThemePreference, initializeBundledThemes, readThemeHint } from "./themes";
@@ -17,6 +18,7 @@ initTransport();
 initChatPreferencesPersistence();
 initModelVisibilityPersistence();
 initProjectExpansionPersistence();
+initFilesTreePersistence();
 initNavigation();
 
 const root = document.getElementById("root");

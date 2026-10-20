@@ -21,10 +21,9 @@ import { ErrorBoundary } from "../components/ErrorBoundary";
 import { QuietScrollArea } from "../components/QuietScrollArea";
 import { LoadingRegion } from "../components/Skeleton";
 import { type LayoutAttention, layoutResourceIdentity } from "../lib";
-import { ChangesPanel } from "../panels/ChangesPanel";
 import { DiffPane } from "../panels/DiffPane";
 import { FilePane } from "../panels/FilePane";
-import { FileTree } from "../panels/FileTree";
+import { FilesPanel } from "../panels/FilesPanel";
 import { startChatInTab } from "../panels/openChat";
 import { openFileInTab } from "../panels/openTabs";
 import { ProjectTree } from "../panels/ProjectTree";
@@ -584,12 +583,7 @@ export function WorkspaceWorkbench({ workspaceId }: { workspaceId: string }) {
 					<SpecsPanel workspaceId={workspaceId} failed={specs.failed} onRetry={specs.reload} />
 				</QuietScrollArea>
 			),
-			files: (
-				<QuietScrollArea className="h-full" viewportClassName="p-panel-inset">
-					<FileTree key={workspaceId} workspaceId={workspaceId} />
-				</QuietScrollArea>
-			),
-			changes: <ChangesPanel key={workspaceId} workspaceId={workspaceId} />,
+			files: <FilesPanel key={workspaceId} workspaceId={workspaceId} />,
 			review: <ReviewPanel key={workspaceId} workspaceId={workspaceId} failed={review.failed} />,
 			plan: railPlanSessionId ? (
 				<ErrorBoundary label="plan rail" resetKeys={[workspaceId, railPlanSessionId]}>
