@@ -1,0 +1,173 @@
+name: Release (Chinese build)
+
+# Builds the installable single-file binaries on GitHub-hosted runners and attaches them to a GitHub
+# Release, so nobody needs a local toolchain. `install.ps1` / `install.sh` download exactly these
+# asset names (`thinkrail-<os>-<arch>[.exe]` + `SHA256SUMS`) from the latest release.
+#
+# Trigger it by hand (Actions -> Run workflow), or by pushing a `v*` tag. A tag build verifies the tag
+# matches package.json's version; a manual run can target any version for a preview build.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to label the release, e.g. 0.1.0. Leave empty to use package.json."
+        required: false
+        type: string
+      prerelease:
+        description: "Mark the release as a prerelease (not picked up by `channel=stable`)."
+        required: false
+        default: false
+        type: boolean
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  version:
+    name: Resolve version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+      tag: ${{ steps.resolve.outputs.tag }}
+      prerelease: ${{ steps.resolve.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@v5
+      - id: resolve
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+          INPUT_PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          set -euo pipefail
+          if [ -n "${INPUT_VERSION:-}" ]; then
+            version="$INPUT_VERSION"
+          elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            version="${GITHUB_REF_NAME#v}"
+          else
+            version="$(bun -e 'console.log(require("./package.json").version)')"
+          fi
+          # The installer and `thinkrail update` only understand X.Y.Z or X.Y.Z-nightly.N.
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-nightly\.[0-9]+)?$ ]]; then
+            echo "::error::Version '$version' does not match X.Y.Z or X.Y.Z-nightly.N"
+            exit 1
+          fi
+          if [[ "${GITHUB_REF}" == refs/tags/v* && "${GITHUB_REF_NAME#v}" != "$version" ]]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match the released version $version"
+            exit 1
+          fi
+          prerelease="${INPUT_PRERELEASE:-false}"
+          [[ "$version" == *-nightly.* ]] && prerelease=true
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$prerelease" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build ${{ matrix.target }}
+    needs: version
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: bun-windows-x64
+            asset: thinkrail-windows-x64.exe
+          - os: ubuntu-24.04
+            target: bun-linux-x64
+            asset: thinkrail-linux-x64
+          - os: macos-14
+            target: bun-darwin-arm64
+            asset: thinkrail-darwin-arm64
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+      - name: Cache bun install
+        uses: actions/cache@v5
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
+      - run: bun install --frozen-lockfile
+      # The web build runs first and carries the i18n coverage gate; the CLI script then embeds the
+      # built UI, the bundled skills and the native runtime helpers into one executable.
+      - name: Build the web client
+        run: bun run build:web
+      - name: Build the single-file binary
+        shell: bash
+        run: bun apps/cli/scripts/build-binary.ts --target=${{ matrix.target }}
+      - name: Collect the artifact under its install name
+        shell: bash
+        run: |
+          set -euo pipefail
+          built="apps/cli/dist/$(bun -e 'import {binaryArtifactName} from "./apps/cli/scripts/artifactName"; console.log(binaryArtifactName(process.argv[1]))' '${{ matrix.target }}')"
+          test -f "$built"
+          mkdir -p out
+          cp "$built" "out/${{ matrix.asset }}"
+      # Prove the release artifact actually boots and serves the localized UI before publishing it.
+      # The probe adapter stages macOS/Windows trash helpers, so it only runs on those two runners.
+      - name: Smoke the artifact
+        if: ${{ matrix.target != 'bun-linux-x64' }}
+        run: bun packages/artifact-tests/smoke-binary.ts "out/${{ matrix.asset }}"
+      - uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.asset }}
+          path: out/${{ matrix.asset }}
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish release
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Write SHA256SUMS
+        run: |
+          set -euo pipefail
+          cd dist
+          ls -l
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.version.outputs.tag }}
+          VERSION: ${{ needs.version.outputs.version }}
+          PRERELEASE: ${{ needs.version.outputs.prerelease }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          title="ThinkRail $VERSION (简体中文)"
+          notes=$(cat <<EOF
+          Chinese-localized build: the interface ships in Simplified Chinese with an English switch under
+          Settings → Language. Install with the usual script:
+
+          \`\`\`powershell
+          irm https://raw.githubusercontent.com/$REPO/main/install.ps1 | iex
+          \`\`\`
+
+          \`\`\`bash
+          curl -fsSL https://raw.githubusercontent.com/$REPO/main/install.sh | bash
+          \`\`\`
+          EOF
+          )
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+            gh release edit "$TAG" --title "$title" --notes "$notes"
+          elif [ "$PRERELEASE" = "true" ]; then
+            gh release create "$TAG" dist/* --title "$title" --notes "$notes" --prerelease
+          else
+            gh release create "$TAG" dist/* --title "$title" --notes "$notes"
+          fi
