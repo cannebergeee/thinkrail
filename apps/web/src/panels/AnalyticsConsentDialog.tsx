@@ -8,6 +8,7 @@ import {
 	DialogTitle,
 } from "@thinkrail/ui/dialog";
 import { useEffect, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { ANALYTICS_DESCRIPTION, AnalyticsSharingSwitch } from "./AnalyticsPreferences";
 import { useAnalyticsConsent } from "./useAnalyticsConsent";
 
@@ -31,7 +32,7 @@ export function AnalyticsConsentDialog() {
 		>
 			<DialogContent data-testid="analytics-consent-dialog">
 				<DialogHeader>
-					<DialogTitle>Help improve ThinkRail</DialogTitle>
+					<DialogTitle>{t("Help improve ThinkRail")}</DialogTitle>
 					<DialogDescription>{ANALYTICS_DESCRIPTION}</DialogDescription>
 				</DialogHeader>
 				<AnalyticsSharingSwitch
@@ -53,7 +54,7 @@ export function AnalyticsConsentDialog() {
 						data-testid="analytics-consent-confirm"
 						onClick={() => save(draft)}
 					>
-						{pending ? "Saving…" : "Done"}
+						{pending ? t("Saving…") : t("Done")}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

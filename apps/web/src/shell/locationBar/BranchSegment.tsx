@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@thinkrail/ui/popover";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
 import { type ReactNode, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { copyText } from "../../lib";
 import { BranchPicker } from "../../panels/BranchPicker";
 import { useBranchList } from "../../panels/branches";
@@ -70,15 +71,15 @@ export function BranchSegment({
 
 	const copyBranch = () => {
 		void copyText(workspace.branch).then((ok) => {
-			if (ok) toast.success(`Copied ${workspace.branch}`);
-			else toast.error("Couldn't write to the clipboard.");
+			if (ok) toast.success(t("Copied {0}", workspace.branch));
+			else toast.error(t("Couldn't write to the clipboard."));
 		});
 	};
 	const pointDiffBaseAt = async (ref: string) => {
 		try {
 			await getTransport().request("workspace.setDiffBase", { id: workspace.id, ref });
 		} catch (error) {
-			toast.error(`Could not change the compare target: ${errorText(error)}`);
+			toast.error(t("Could not change the compare target: {0}", errorText(error)));
 		}
 	};
 
@@ -89,10 +90,10 @@ export function BranchSegment({
 				className="hidden max-w-[440px] shrink-[4] md:flex"
 				caption={
 					<>
-						Branch
+						{t("Branch")}
 						{userOwned ? null : (
 							<span className="truncate">
-								· from <span data-testid="scope-base">{workspace.baseBranch}</span>
+								{t("· from")} <span data-testid="scope-base">{workspace.baseBranch}</span>
 							</span>
 						)}
 					</>
@@ -100,7 +101,7 @@ export function BranchSegment({
 			>
 				<PopoverTrigger
 					data-testid="scope-branch-trigger"
-					aria-label={`Branch ${workspace.branch}`}
+					aria-label={t("Branch {0}", workspace.branch)}
 					className={pillClass}
 				>
 					<GitBranch aria-hidden="true" className="size-14 shrink-0" />
@@ -111,7 +112,11 @@ export function BranchSegment({
 				</PopoverTrigger>
 			</Segment>
 			{remote ? (
-				<Segment testid="scope-remote-segment" caption="Remote" className="hidden shrink-0 md:flex">
+				<Segment
+					testid="scope-remote-segment"
+					caption={t("Remote")}
+					className="hidden shrink-0 md:flex"
+				>
 					{remote.unpushed > 0 ? (
 						<button
 							type="button"
@@ -147,13 +152,13 @@ export function BranchSegment({
 				ref={contentRef}
 			>
 				<Row
-					label="Branch"
+					label={t("Branch")}
 					action={
-						<IconTooltip label="Copy branch name">
+						<IconTooltip label={t("Copy branch name")}>
 							<button
 								type="button"
 								data-testid="scope-branch-copy"
-								aria-label="Copy branch name"
+								aria-label={t("Copy branch name")}
 								className={rowActionClass}
 								onClick={copyBranch}
 							>
@@ -165,11 +170,11 @@ export function BranchSegment({
 					<span className="truncate tr-code-text">{workspace.branch}</span>
 				</Row>
 				{userOwned ? null : (
-					<Row label="Based on">
+					<Row label={t("Based on")}>
 						<span className="truncate tr-code-text">{workspace.baseBranch}</span>
 					</Row>
 				)}
-				<Row label="Compare to">
+				<Row label={t("Compare to")}>
 					<BranchPicker
 						branches={branches}
 						selected={diffBase}
@@ -184,7 +189,7 @@ export function BranchSegment({
 				{review ? (
 					<>
 						{isOpenBranchReview(review) && remoteStatus !== "unknown" ? (
-							<Row label="Remote">
+							<Row label={t("Remote")}>
 								<span
 									data-testid="scope-remote-summary"
 									className={cn(
@@ -199,7 +204,7 @@ export function BranchSegment({
 											]
 												.filter(Boolean)
 												.join(" · ")
-										: "In sync with origin"}
+										: t("In sync with origin")}
 								</span>
 							</Row>
 						) : null}
@@ -207,10 +212,10 @@ export function BranchSegment({
 							label={review.kind === "pull-request" ? "Pull request" : "Merge request"}
 							action={
 								review.url ? (
-									<IconTooltip label={`Open ${openReviewLabel(review)}`}>
+									<IconTooltip label={t("Open {0}", openReviewLabel(review))}>
 										<a
 											data-testid="scope-review-open"
-											aria-label={`Open ${openReviewLabel(review)}`}
+											aria-label={t("Open {0}", openReviewLabel(review))}
 											href={review.url}
 											target="_blank"
 											rel="noreferrer"
@@ -267,7 +272,7 @@ export function ReviewSegment({ review }: { review: OpenBranchReview }) {
 					href={review.url}
 					target="_blank"
 					rel="noreferrer"
-					aria-label={`Open ${label}`}
+					aria-label={t("Open {0}", label)}
 					data-state-tone={tone}
 					className={chipClass(tone, true)}
 				>

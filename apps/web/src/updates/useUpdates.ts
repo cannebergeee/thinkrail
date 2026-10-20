@@ -5,6 +5,7 @@ import type {
 	NativeUpdateState,
 } from "@thinkrail/contracts";
 import { useEffect, useState } from "react";
+import { t } from "@/i18n";
 import { useAppStore } from "../store";
 
 const NATIVE_UPDATES_GLOBAL = "__THINKRAIL_NATIVE_UPDATES__";
@@ -51,7 +52,7 @@ export function getNativeUpdateBridge(value: unknown): NativeUpdateBridge | null
 function nativeUpdateErrorText(error: unknown): string {
 	if (error instanceof Error && error.message.trim()) return error.message;
 	if (typeof error === "string" && error.trim()) return error;
-	return "The native update request failed";
+	return t("The native update request failed");
 }
 
 export function runNativeUpdateRequest(

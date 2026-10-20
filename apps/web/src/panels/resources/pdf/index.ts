@@ -1,8 +1,9 @@
+import { t } from "@/i18n";
 import type { ResourceRenderer } from "@/resources";
 
 export const pdfRenderer: ResourceRenderer = {
 	id: "thinkrail/pdf",
-	label: "PDF",
+	label: t("PDF"),
 	match: { mime: ["application/pdf"], text: false },
 	rank: 120,
 	capabilities: {

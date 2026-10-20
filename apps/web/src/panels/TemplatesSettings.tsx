@@ -12,6 +12,7 @@ import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { useEffect, useState } from "react";
 import { TemplateEditorDialog } from "@/chat/TemplateEditorDialog";
 import { SkeletonRows } from "@/components/Skeleton";
+import { t } from "@/i18n";
 import { assembleTemplate } from "@/prompt";
 import { toast, useAppStore } from "@/store";
 import { errorText, getTransport } from "@/transport";
@@ -28,31 +29,31 @@ const STARTER_TEMPLATES: ReadonlyArray<{
 }> = [
 	{
 		name: "review",
-		description: "Code review of a file or directory",
+		description: t("Code review of a file or directory"),
 		argumentHint: "[path] [focus]",
 		body: `Review $1 for correctness, clarity, and maintainability, focusing on \${2:-the riskiest parts}.\nList concrete findings with \`file:line\` references, ordered by severity, and propose a fix for each.`,
 	},
 	{
 		name: "explain",
-		description: "Explain how something works in this codebase",
+		description: t("Explain how something works in this codebase"),
 		argumentHint: "[path-or-topic]",
 		body: "Explain how $1 works in this codebase: its purpose, the key control and data flow, and what depends on it.\nKeep it concise and point to the load-bearing files and `file:line` locations.",
 	},
 	{
 		name: "tests",
-		description: "Write tests for a target",
+		description: t("Write tests for a target"),
 		argumentHint: "[path]",
 		body: "Write tests for $1. Cover the main behavior, the important edge cases, and one failure path.\nMatch the project's existing test conventions and runner, then run them and report the result.",
 	},
 	{
 		name: "commit",
-		description: "Write a Conventional Commit message from the staged diff",
+		description: t("Write a Conventional Commit message from the staged diff"),
 		argumentHint: "[scope]",
 		body: `Read the staged changes (\`git diff --cached\`) and write a Conventional Commits message.\nUse the type that fits (feat/fix/refactor/docs/test/chore) with scope \${1:-infer it from the files},\nan imperative subject under 72 chars, and a short body explaining the why when it isn't obvious.\nReply with only the commit message.`,
 	},
 	{
 		name: "rename",
-		description: "Rename a symbol everywhere (demoes repeated-slot mirroring)",
+		description: t("Rename a symbol everywhere (demoes repeated-slot mirroring)"),
 		argumentHint: "[old] [new]",
 		body: "Rename `$1` to `$2` across the codebase: update every definition, reference, and import of `$1`,\nplus any docs or comments that mention `$1`. Keep `$2` consistent everywhere and run the type-checker after.",
 	},
@@ -143,7 +144,7 @@ export function TemplatesSettings() {
 		return (
 			<div data-testid="settings-templates">
 				<p data-testid="templates-error" className="text-text-muted tr-text-ui">
-					Couldn't read templates from the host — reopen Settings to retry.
+					{t("Couldn't read templates from the host — reopen Settings to retry.")}
 				</p>
 			</div>
 		);
@@ -193,29 +194,31 @@ function ProjectTemplatesSection({
 	return (
 		<section className="flex flex-col gap-12">
 			<div className="flex items-center justify-between">
-				<h4 className="tr-text-label-pill text-text-subtle">Project templates</h4>
+				<h4 className="tr-text-label-pill text-text-subtle">{t("Project templates")}</h4>
 				{hasProject ? (
 					<Button variant="soft" size="sm" data-testid="template-new-project" onClick={onNew}>
 						<Plus className="size-14" />
-						New
+						{t("New")}
 					</Button>
 				) : null}
 			</div>
 
 			{!hasProject ? (
 				<SettingsNotice variant="info" testId="project-templates-unavailable">
-					<p className="tr-text-ui text-text-default">Open a project to manage its templates</p>
+					<p className="tr-text-ui text-text-default">
+						{t("Open a project to manage its templates")}
+					</p>
 					<p className="tr-text-metadata text-text-muted">
-						Project templates are stored in the project's{" "}
+						{t("Project templates are stored in the project's")}{" "}
 						<code className="tr-code-text">.pi/prompts/</code> directory and are available in that
 						project.
 					</p>
 				</SettingsNotice>
 			) : templates && templates.length === 0 ? (
 				<SettingsNotice variant="neutral" hideIcon testId="project-templates-empty">
-					<p className="tr-text-ui text-text-default">No project templates yet</p>
+					<p className="tr-text-ui text-text-default">{t("No project templates yet")}</p>
 					<p className="tr-text-metadata text-text-muted">
-						Templates you create here are stored in this project's{" "}
+						{t("Templates you create here are stored in this project's")}{" "}
 						<code className="tr-code-text">.pi/prompts/</code> directory.
 					</p>
 				</SettingsNotice>
@@ -246,7 +249,7 @@ async function addStarterTemplates() {
 			});
 		}
 	} catch (err) {
-		toast.error(errorText(err), "Couldn't add starter templates");
+		toast.error(errorText(err), t("Couldn't add starter templates"));
 	} finally {
 		useAppStore.getState().bumpTemplatesVersion();
 	}
@@ -272,10 +275,10 @@ function GlobalTemplatesSection({
 	return (
 		<section className="flex flex-col gap-12">
 			<div className="flex items-center justify-between">
-				<h4 className="tr-text-label-pill text-text-subtle">Global templates</h4>
+				<h4 className="tr-text-label-pill text-text-subtle">{t("Global templates")}</h4>
 				<Button variant="soft" size="sm" data-testid="template-new-global" onClick={onNew}>
 					<Plus className="size-14" />
-					New
+					{t("New")}
 				</Button>
 			</div>
 
@@ -293,13 +296,13 @@ function GlobalTemplatesSection({
 							onClick={addStarters}
 						>
 							<MagicWand className="size-14" />
-							Add starter templates
+							{t("Add starter templates")}
 						</Button>
 					}
 				>
-					<p className="tr-text-ui text-text-default">No global templates yet</p>
+					<p className="tr-text-ui text-text-default">{t("No global templates yet")}</p>
 					<p className="tr-text-metadata text-text-muted">
-						Create your own templates, or try a set of starter templates to get started.
+						{t("Create your own templates, or try a set of starter templates to get started.")}
 					</p>
 				</SettingsNotice>
 			) : (
@@ -341,7 +344,7 @@ function TemplateRow({
 			});
 			useAppStore.getState().bumpTemplatesVersion();
 		} catch (err) {
-			toast.error(errorText(err), "Couldn't delete the template");
+			toast.error(errorText(err), t("Couldn't delete the template"));
 		}
 	};
 
@@ -355,9 +358,9 @@ function TemplateRow({
 		<ConfirmPopover
 			open={confirmOpen}
 			onOpenChange={setConfirmOpen}
-			title={`Delete ${template.name}?`}
-			description="Removes the template file. This can't be undone."
-			confirmLabel="Delete"
+			title={t("Delete {0}?", template.name)}
+			description={t("Removes the template file. This can't be undone.")}
+			confirmLabel={t("Delete")}
 			destructive
 			confirmTestId="template-confirm-delete"
 			onConfirm={() => void del()}
@@ -379,11 +382,11 @@ function TemplateRow({
 				</div>
 				<div className="flex shrink-0 items-center gap-4">
 					{showOpenAsFile ? (
-						<IconTooltip label="Open as file">
+						<IconTooltip label={t("Open as file")}>
 							<button
 								type="button"
 								data-testid="template-open-file"
-								aria-label="Open as file"
+								aria-label={t("Open as file")}
 								onClick={openAsFile}
 								className="flex size-24 items-center justify-center rounded-sm text-text-muted transition hover:bg-control-bg-hovered hover:text-text-default"
 							>
@@ -391,23 +394,23 @@ function TemplateRow({
 							</button>
 						</IconTooltip>
 					) : null}
-					<IconTooltip label="Edit">
+					<IconTooltip label={t("Edit")}>
 						<button
 							type="button"
 							data-testid="template-edit"
-							aria-label="Edit"
+							aria-label={t("Edit")}
 							onClick={onEdit}
 							className="flex size-24 items-center justify-center rounded-sm text-text-muted transition hover:bg-control-bg-hovered hover:text-text-default"
 						>
 							<Pencil className="size-14" />
 						</button>
 					</IconTooltip>
-					<IconTooltip label="Delete" wrapTrigger>
+					<IconTooltip label={t("Delete")} wrapTrigger>
 						<PopoverTrigger asChild>
 							<button
 								type="button"
 								data-testid="template-delete"
-								aria-label="Delete"
+								aria-label={t("Delete")}
 								className="flex size-24 items-center justify-center rounded-sm text-text-muted transition hover:bg-control-bg-hovered hover:text-feedback-error"
 							>
 								<Trash2 className="size-14" />

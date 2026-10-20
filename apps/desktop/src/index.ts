@@ -17,9 +17,11 @@ import {
 	readMenuAction,
 } from "./applicationMenu";
 import { attributionClaimOnFirstReadiness } from "./attributionReadiness";
+import { createDesktopLocaleSwitch } from "./desktopLocale";
 import { installExternalNavigation } from "./externalNavigation";
 import { preferNativeHostBridge, usesNativeHostBridge } from "./hostTransport";
 import { createKeyStateReader } from "./keyState";
+import { LOCALE_PREFERENCE_KEY, type MenuLocale, menuLabel, resolveMenuLocale } from "./menuLocale";
 import { createPageZoomGestureHandler, nextPageZoom } from "./pageZoom";
 import {
 	injectInitialDesktopPreferences,
@@ -99,6 +101,8 @@ function windowControlsProbeScript(target: { testId: string; label: string }): s
 })();`;
 }
 let startupQuitCoordinator: ReturnType<typeof createElectrobunQuitCoordinator> | undefined;
+/** Set once `start` reads the preference, so the startup-failure dialog can speak the same language. */
+let startupLocale: MenuLocale | null = null;
 
 function writeReady(path: string, payload: unknown): void {
 	mkdirSync(dirname(path), { recursive: true });
@@ -106,7 +110,25 @@ function writeReady(path: string, payload: unknown): void {
 }
 
 async function start(): Promise<void> {
-	const applicationMenuInstalled = installDesktopApplicationMenu(ApplicationMenu, process.platform);
+	const userData = process.env.THINKRAIL_DESKTOP_USER_DATA ?? Utils.paths.userData;
+	const routes = new RouteStore(join(userData, "routes.json"));
+	const preferences = new PreferenceStore(join(userData, "preferences.json"));
+	// The menu is built before the window exists, so it reads the same persisted preference the client
+	// writes — not a value the client could have sent after loading.
+	const initialMenuLocale = resolveMenuLocale(join(userData, "preferences.json"));
+	startupLocale = initialMenuLocale;
+	const applicationMenuInstalled = installDesktopApplicationMenu(
+		ApplicationMenu,
+		process.platform,
+		initialMenuLocale,
+	);
+	const localeSwitch = createDesktopLocaleSwitch(initialMenuLocale, {
+		writePreference: (key, value) => preferences.write(BACKEND_PROFILE_ID, WINDOW_ID, key, value),
+		installMenu: (locale) => {
+			startupLocale = locale;
+			return installDesktopApplicationMenu(ApplicationMenu, process.platform, locale);
+		},
+	});
 	let menuTarget: {
 		hintVisible(): boolean;
 		showHint(hint: NativeQuitHint): void;
@@ -159,9 +181,6 @@ async function start(): Promise<void> {
 		quitCoordinator.handleBeforeQuit(event);
 	});
 	const origin = `http://127.0.0.1:${host.port}`;
-	const userData = process.env.THINKRAIL_DESKTOP_USER_DATA ?? Utils.paths.userData;
-	const routes = new RouteStore(join(userData, "routes.json"));
-	const preferences = new PreferenceStore(join(userData, "preferences.json"));
 	const initialRoute = routes.read(BACKEND_PROFILE_ID, WINDOW_ID);
 	const initialPreferences = preferences.read(BACKEND_PROFILE_ID, WINDOW_ID);
 	const neutral = process.env.THINKRAIL_DESKTOP_E2E_HOST === "1";
@@ -234,6 +253,17 @@ async function start(): Promise<void> {
 					await updateController.restartToUpdate();
 					return undefined;
 				},
+				/**
+				 * Persist the interface language and rebuild the menu before answering, so the client can
+				 * reload knowing the desktop side already agrees. Answers `false` when the locale is one
+				 * this build does not speak, which leaves the stored preference untouched.
+				 */
+				applyLocale: ({ locale }): boolean => {
+					if (neutral) return false;
+					if (localeSwitch.apply(locale)) return true;
+					console.error("[desktop] could not save the interface language");
+					return false;
+				},
 				showNotification: (input): undefined => {
 					Utils.showNotification({
 						title: input.title,
@@ -267,6 +297,8 @@ async function start(): Promise<void> {
 					) {
 						console.error("[desktop] could not save a local preference");
 					}
+					// The menu reads the same key, so a write to it is also a menu change.
+					if (preference?.key === LOCALE_PREFERENCE_KEY) localeSwitch.follow(preference.value);
 				},
 				preferenceRemove: (payload) => {
 					if (neutral) return;
@@ -445,12 +477,18 @@ try {
 	const message = error instanceof Error ? error.message : String(error);
 	console.error(message);
 	try {
+		// This dialog is drawn before any window exists, so it reads the menu locale directly.
+		const locale =
+			startupLocale ??
+			resolveMenuLocale(
+				join(process.env.THINKRAIL_DESKTOP_USER_DATA ?? Utils.paths.userData, "preferences.json"),
+			);
 		await Utils.showMessageBox({
 			type: "error",
-			title: "ThinkRail could not start",
-			message: "ThinkRail could not start",
+			title: menuLabel(locale, "Could not start"),
+			message: menuLabel(locale, "Could not start"),
 			detail: message,
-			buttons: ["Quit"],
+			buttons: [menuLabel(locale, "QuitApp")],
 		});
 	} finally {
 		if (startupQuitCoordinator) await startupQuitCoordinator.quit();

@@ -5,6 +5,7 @@ import type {
 } from "@thinkrail/contracts";
 import { cn } from "@thinkrail/ui/utils";
 import type { MouseEvent, ReactNode } from "react";
+import { t } from "@/i18n";
 import {
 	commandState,
 	ExitBadge,
@@ -108,7 +109,7 @@ export function ResultRow({
 				<span className="size-16 shrink-0" />
 			)}
 			<KindGlyph kind={source.kind} state={state} dotRingClassName="ring-container-workspace-bg" />
-			<span className="shrink-0 text-text-subtle">{command ? "Background" : "Subagent"}</span>
+			<span className="shrink-0 text-text-subtle">{command ? t("Background") : t("Subagent")}</span>
 			<span className="min-w-0 shrink truncate text-text-default" title={name}>
 				{name}
 			</span>
@@ -166,7 +167,7 @@ export function ResultRow({
 						className="flex shrink-0 items-center gap-4 rounded-sm px-4 py-2 text-primary outline-none hover:bg-control-bg-hovered focus-visible:ring-2 focus-visible:ring-primary"
 					>
 						<RiFileList3Line className="size-12 shrink-0" />
-						{command ? "Open log" : "Transcript"}
+						{command ? t("Open log") : t("Transcript")}
 					</button>
 				) : null}
 			</div>

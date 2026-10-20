@@ -14,6 +14,7 @@ import {
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNow } from "@/components/useNow";
+import { t } from "@/i18n";
 import { platformShortcutLabel, relativeTime } from "@/lib";
 import {
 	type ChatLocationRequest,
@@ -84,11 +85,11 @@ function DeleteChatButton({
 }) {
 	if (!workspaceId) return null;
 	return (
-		<IconTooltip label="Move chat to trash">
+		<IconTooltip label={t("Move chat to trash")}>
 			<button
 				type="button"
 				data-testid="history-delete-chat"
-				aria-label="Move chat to trash"
+				aria-label={t("Move chat to trash")}
 				onClick={(event) => {
 					event.stopPropagation();
 					onDeleteChat(workspaceId, sessionId);
@@ -164,11 +165,11 @@ function PromptRow({
 					{SAVE_SHORTCUT_LABEL}
 				</span>
 			) : null}
-			<IconTooltip label={`Save as template (${SAVE_SHORTCUT_LABEL})`}>
+			<IconTooltip label={t("Save as template ({0})", SAVE_SHORTCUT_LABEL)}>
 				<button
 					type="button"
 					data-testid="history-save-template"
-					aria-label="Save as template"
+					aria-label={t("Save as template")}
 					onClick={(e) => {
 						e.stopPropagation();
 						onSaveAsTemplate();
@@ -190,11 +191,11 @@ function PromptRow({
 							⇧⏎
 						</span>
 					) : null}
-					<IconTooltip label="⇧⏎ go to chat">
+					<IconTooltip label={t("⇧⏎ go to chat")}>
 						<button
 							type="button"
 							data-testid="history-jump"
-							aria-label="Go to chat"
+							aria-label={t("Go to chat")}
 							onClick={(e) => {
 								e.stopPropagation();
 								onOpenMessage(target);
@@ -258,7 +259,7 @@ function MessageRow({
 					<span>{hit.role}</span>
 					<span>·</span>
 					<span>{relativeTime(hit.timestamp, now)}</span>
-					{unmapped ? <span>· not a ThinkRail workspace</span> : null}
+					{unmapped ? <span>{t("· not a ThinkRail workspace")}</span> : null}
 				</span>
 				<span className="overflow-hidden whitespace-nowrap text-ellipsis">
 					<Highlight text={hit.snippet} query={query} />
@@ -455,7 +456,7 @@ export function HistoryOverlay({
 					data-testid="history-indexing"
 					className="px-8 py-4 text-center text-text-muted tr-text-metadata"
 				>
-					indexing history…
+					{t("indexing history…")}
 				</div>
 			) : null}
 			{hasResults ? (
@@ -463,7 +464,7 @@ export function HistoryOverlay({
 					{result.prompts.length > 0 ? (
 						<div className="flex flex-col gap-2">
 							<div className="flex items-center justify-between px-8 py-2 tr-text-eyebrow text-text-muted">
-								<span>Prompts</span>
+								<span>{t("Prompts")}</span>
 								<span data-testid="history-counts">
 									{promptCount}/{result.promptTotal}
 								</span>
@@ -487,7 +488,7 @@ export function HistoryOverlay({
 					{stage === "zoomed" && result.messages.length > 0 ? (
 						<div className="flex flex-col gap-2">
 							<div className="flex items-center justify-between px-8 py-2 tr-text-eyebrow text-text-muted">
-								<span>Messages</span>
+								<span>{t("Messages")}</span>
 								<span data-testid="history-counts">
 									{messageCount}/{result.messageTotal}
 								</span>
@@ -509,7 +510,7 @@ export function HistoryOverlay({
 					) : null}
 				</div>
 			) : isEmpty ? (
-				<div className="p-12 text-center text-text-muted tr-text-ui">no matches</div>
+				<div className="p-12 text-center text-text-muted tr-text-ui">{t("no matches")}</div>
 			) : null}
 		</>
 	);
@@ -527,7 +528,7 @@ export function HistoryOverlay({
 					value={query}
 					onChange={(e) => onQueryChange(e.target.value)}
 					onKeyDown={onKeyDown}
-					placeholder="Search prompts and conversations…"
+					placeholder={t("Search prompts and conversations…")}
 					className="min-w-0 flex-1 bg-transparent tr-text-ui text-text-default outline-none placeholder:text-text-muted"
 				/>
 				<DropdownMenu open={scopeMenuOpen} onOpenChange={setScopeMenuOpen}>
@@ -592,7 +593,7 @@ export function HistoryOverlay({
 					onClick={onToggleStage}
 					className="border-t border-border-default p-4 text-center text-text-muted tr-text-metadata hover:bg-control-bg-hovered"
 				>
-					{result.messageTotal} matches in conversations · ⇥ expand
+					{result.messageTotal} {t("matches in conversations · ⇥ expand")}
 				</button>
 			) : null}
 		</div>

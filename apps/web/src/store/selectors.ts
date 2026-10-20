@@ -23,6 +23,7 @@ import {
 	WORKSPACE_SETTLE_PROTOCOL_VERSION,
 	type Workspace,
 } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 import type { LoginState } from "../auth";
 import {
 	compactAge,
@@ -307,7 +308,7 @@ export function settledReasonTitle(reason: SettledReason, now: number): string {
 		case "review":
 			return reason.state === "merged" ? "Pull request merged" : "Pull request closed";
 		case "idle":
-			return `Idle for ${compactAge(reason.since, now)}`;
+			return t("Idle for {0}", compactAge(reason.since, now));
 	}
 }
 

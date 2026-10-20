@@ -6,6 +6,7 @@ import {
 	strArg,
 	type ToolRenderProps,
 } from "@thinkrail/extension-api/web";
+import { t } from "@/i18n";
 import { CodeBlock } from "./CodeBlock";
 import { Collapsible, countLines } from "./Collapsible";
 import { ToolFileLink } from "./ToolFileLink";
@@ -45,7 +46,7 @@ export function ReadCard({
 				{range ? <span className="shrink-0 text-text-muted">{range}</span> : null}
 			</div>
 			{status === "running" ? (
-				<span className="text-text-muted tr-text-metadata">Reading…</span>
+				<span className="text-text-muted tr-text-metadata">{t("Reading…")}</span>
 			) : status === "error" ? (
 				<pre className="overflow-auto px-8 py-4 text-feedback-error tr-code-text">{output}</pre>
 			) : output ? (
@@ -53,7 +54,7 @@ export function ReadCard({
 					<CodeBlock code={output} lang={lang} />
 				</Collapsible>
 			) : (
-				<span className="text-text-muted tr-text-metadata italic">(empty file)</span>
+				<span className="text-text-muted tr-text-metadata italic">{t("(empty file)")}</span>
 			)}
 		</div>
 	);

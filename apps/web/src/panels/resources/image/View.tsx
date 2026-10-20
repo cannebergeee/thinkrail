@@ -5,6 +5,7 @@ import {
 } from "@remixicon/react";
 import { Button } from "@thinkrail/ui/button";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import type { ResourceViewProps } from "@/resources";
 import { RegionReviewSurface } from "../RegionReviewSurface";
 import { placedRegionThreadIds, type Size } from "../regionReview";
@@ -58,7 +59,7 @@ export default function ImageView({
 				data-testid="image-view"
 				className="flex h-full items-center justify-center bg-container-workspace-bg tr-text-ui text-text-muted"
 			>
-				No image
+				{t("No image")}
 			</div>
 		);
 	}
@@ -85,7 +86,7 @@ export default function ImageView({
 				<Button
 					variant="ghost"
 					size="icon"
-					aria-label="Fit image"
+					aria-label={t("Fit image")}
 					data-testid="image-fit"
 					onClick={() => updateView("fit", zoom)}
 				>
@@ -94,19 +95,24 @@ export default function ImageView({
 				<Button
 					variant="ghost"
 					size="icon"
-					aria-label="Show image at actual size"
+					aria-label={t("Show image at actual size")}
 					data-testid="image-actual-size"
 					onClick={() => updateView("zoom", 1)}
 				>
 					<span className="tr-text-action">1:1</span>
 				</Button>
-				<Button variant="ghost" size="icon" aria-label="Zoom out" onClick={() => zoomBy(1 / 1.2)}>
+				<Button
+					variant="ghost"
+					size="icon"
+					aria-label={t("Zoom out")}
+					onClick={() => zoomBy(1 / 1.2)}
+				>
 					<ZoomOut className="size-14" />
 				</Button>
 				<span className="min-w-40 text-center tr-text-metadata text-text-muted">
 					{Math.round(zoom * 100)}%
 				</span>
-				<Button variant="ghost" size="icon" aria-label="Zoom in" onClick={() => zoomBy(1.2)}>
+				<Button variant="ghost" size="icon" aria-label={t("Zoom in")} onClick={() => zoomBy(1.2)}>
 					<ZoomIn className="size-14" />
 				</Button>
 				<span className="ml-auto tr-text-metadata text-text-muted">

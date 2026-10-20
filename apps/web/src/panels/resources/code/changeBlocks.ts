@@ -1,5 +1,6 @@
 import type { LineSpan } from "@thinkrail/contracts";
 import { structuredPatch } from "diff";
+import { t } from "@/i18n";
 import type { AnchorDraft } from "@/resources";
 
 export interface ChangeBlock {
@@ -109,8 +110,8 @@ export function createAskAgentRequest(block: ChangeBlock, modifiedText: string):
 					: `L${lineRange.startLine}–${lineRange.endLine}`
 				: "file",
 		},
-		initialText: "Please revise this change: ",
-		...(block.modified.count === 0 ? { notice: "This comment refers to removed lines." } : {}),
+		initialText: t("Please revise this change: "),
+		...(block.modified.count === 0 ? { notice: t("This comment refers to removed lines.") } : {}),
 	};
 }
 

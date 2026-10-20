@@ -8,6 +8,7 @@ import {
 } from "@remixicon/react";
 import type { ReactNode } from "react";
 import type { Components } from "react-markdown";
+import { t } from "@/i18n";
 
 export type AlertVariant = "note" | "tip" | "important" | "warning" | "caution";
 
@@ -68,35 +69,35 @@ const ALERTS: Record<
 	}
 > = {
 	note: {
-		label: "Note",
+		label: t("Note"),
 		icon: Info,
 		border: "border-feedback-info",
 		bg: "bg-feedback-info-subtle",
 		text: "text-feedback-info",
 	},
 	tip: {
-		label: "Tip",
+		label: t("Tip"),
 		icon: Lightbulb,
 		border: "border-feedback-success",
 		bg: "bg-feedback-success-subtle",
 		text: "text-feedback-success",
 	},
 	important: {
-		label: "Important",
+		label: t("Important"),
 		icon: CircleAlert,
 		border: "border-primary",
 		bg: "bg-primary-subtle",
 		text: "text-primary",
 	},
 	warning: {
-		label: "Warning",
+		label: t("Warning"),
 		icon: TriangleAlert,
 		border: "border-feedback-warning",
 		bg: "bg-feedback-warning-subtle",
 		text: "text-feedback-warning",
 	},
 	caution: {
-		label: "Caution",
+		label: t("Caution"),
 		icon: OctagonAlert,
 		border: "border-feedback-error",
 		bg: "bg-feedback-error-subtle",

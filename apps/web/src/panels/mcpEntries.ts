@@ -4,6 +4,7 @@ import type {
 	McpServerScope,
 	McpServerSummary,
 } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 
 export type McpEditableExposure = Exclude<McpExposure, "codemode">;
 
@@ -299,10 +300,14 @@ export function mcpNameIssue(
 	existing: readonly Pick<McpServerSummary, "name" | "scope">[],
 	siblings: readonly string[] = [],
 ): string | undefined {
-	if (!name) return "Name the server.";
-	if (!SERVER_NAME.test(name)) return "Use letters, digits, - and _ only.";
+	if (!name) return t("Name the server.");
+	if (!SERVER_NAME.test(name)) return t("Use letters, digits, - and _ only.");
 	if (existing.some((server) => server.scope === scope && server.name === name)) {
-		return `"${name}" already exists in ${scope === "user" ? "your user servers" : "this project"}.`;
+		return t(
+			'"{0}" already exists in {1}.',
+			name,
+			scope === "user" ? "your user servers" : "this project",
+		);
 	}
 	const twin = [...existing.map((server) => server.name), ...siblings].find(
 		(other) => other !== name && namespaceOf(other) === namespaceOf(name),
@@ -399,10 +404,10 @@ export function validateMcpDraft(
 export function mcpDraftWarnings(draft: McpFormDraft): string[] {
 	const warnings: string[] = [];
 	if (draft.transport === "stdio" && /\s/.test(draft.command.trim())) {
-		warnings.push("The command is one executable — put each argument on its own line below.");
+		warnings.push(t("The command is one executable — put each argument on its own line below."));
 	}
 	if (draft.transport === "http" && /\/sse\/?$/.test(draft.url.trim())) {
-		warnings.push("SSE is not supported — use the server's streamable HTTP URL (often /mcp).");
+		warnings.push(t("SSE is not supported — use the server's streamable HTTP URL (often /mcp)."));
 	}
 	return warnings;
 }
@@ -419,24 +424,24 @@ export function mcpEntryErrors(entry: unknown): string[] {
 	if (!isRecord(entry)) return ["The entry must be an object."];
 	const errors: string[] = [];
 	const type = entry.type;
-	if (type === "sse") errors.push("SSE is not supported — use the streamable HTTP URL.");
+	if (type === "sse") errors.push(t("SSE is not supported — use the streamable HTTP URL."));
 	else if (type !== undefined && (typeof type !== "string" || !TYPES.has(type))) {
-		errors.push('"type" must be stdio, http or streamable-http.');
+		errors.push(t('"type" must be stdio, http or streamable-http.'));
 	}
 	const hasUrl = typeof entry.url === "string";
 	if (hasUrl) {
 		const url = entry.url as string;
 		if (!URL.canParse(url) || !/^https?:$/.test(new URL(url).protocol)) {
-			errors.push('"url" must be an http or https URL.');
+			errors.push(t('"url" must be an http or https URL.'));
 		}
 	} else if (typeof entry.command !== "string" || entry.command === "") {
-		errors.push('Needs "command" (stdio) or "url" (HTTP).');
+		errors.push(t('Needs "command" (stdio) or "url" (HTTP).'));
 	}
 	if (
 		entry.args !== undefined &&
 		!(Array.isArray(entry.args) && entry.args.every((arg) => typeof arg === "string"))
 	) {
-		errors.push('"args" must be a list of strings.');
+		errors.push(t('"args" must be a list of strings.'));
 	}
 	for (const key of ["env", "headers"] as const) {
 		const value = entry[key];
@@ -444,17 +449,17 @@ export function mcpEntryErrors(entry: unknown): string[] {
 			value !== undefined &&
 			(!isRecord(value) || stringEntries(value).length !== Object.keys(value).length)
 		) {
-			errors.push(`"${key}" must map names to strings.`);
+			errors.push(t('"{0}" must map names to strings.', key));
 		}
 	}
 	if (
 		entry.exposure !== undefined &&
 		!["codemode", "codemode-deferred", ...MCP_EXPOSURES].includes(String(entry.exposure))
 	) {
-		errors.push('"exposure" must be deferred, direct or hidden.');
+		errors.push(t('"exposure" must be deferred, direct or hidden.'));
 	}
 	if (entry.enabled !== undefined && typeof entry.enabled !== "boolean") {
-		errors.push('"enabled" must be true or false.');
+		errors.push(t('"enabled" must be true or false.'));
 	}
 	return errors;
 }

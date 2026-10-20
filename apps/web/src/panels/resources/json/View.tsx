@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
+import { t } from "@/i18n";
 import type { ResourceViewProps, ReviewThread } from "@/resources";
 import { ReviewComposer } from "../../ReviewComposer";
 import { ReviewThreadCard } from "../../ReviewThreadCard";
@@ -81,7 +82,7 @@ export default function JsonView({
 				data-testid="json-invalid"
 				className="h-full overflow-auto bg-container-workspace-bg p-12 tr-text-ui text-text-muted"
 			>
-				Not valid JSON or JSONC — switch to Source to inspect the file.
+				{t("Not valid JSON or JSONC — switch to Source to inspect the file.")}
 			</div>
 		);
 	}

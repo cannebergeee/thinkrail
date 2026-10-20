@@ -1,4 +1,5 @@
 import type { McpServerEntryInput, McpServerScope } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 
 export interface McpPreset {
 	id: string;
@@ -16,7 +17,7 @@ export const MCP_PRESETS: readonly McpPreset[] = [
 		id: "context7",
 		name: "context7",
 		title: "Context7",
-		description: "Current library and framework documentation. No sign-in.",
+		description: t("Current library and framework documentation. No sign-in."),
 		entry: { url: "https://mcp.context7.com/mcp", exposure: "direct" },
 		scope: "user",
 	},
@@ -24,24 +25,25 @@ export const MCP_PRESETS: readonly McpPreset[] = [
 		id: "deepwiki",
 		name: "deepwiki",
 		title: "DeepWiki",
-		description: "Ask about any public GitHub repository. No sign-in.",
+		description: t("Ask about any public GitHub repository. No sign-in."),
 		entry: { url: "https://mcp.deepwiki.com/mcp", exposure: "direct" },
 		scope: "user",
 	},
 	{
 		id: "linear",
 		name: "linear",
-		title: "Linear (read-only)",
-		description:
+		title: t("Linear (read-only)"),
+		description: t(
 			"Issues, projects and comments through Linear's read-only endpoint. Sign in after adding.",
+		),
 		entry: { url: "https://mcp.linear.app/mcp/readonly" },
 		scope: "user",
 	},
 	{
 		id: "sentry",
 		name: "sentry",
-		title: "Sentry",
-		description: "Issues, events and releases. Sign in after adding.",
+		title: t("Sentry"),
+		description: t("Issues, events and releases. Sign in after adding."),
 		entry: { url: "https://mcp.sentry.dev/mcp" },
 		scope: "user",
 		modifiesData: "Sentry",
@@ -49,8 +51,8 @@ export const MCP_PRESETS: readonly McpPreset[] = [
 	{
 		id: "playwright",
 		name: "playwright",
-		title: "Playwright",
-		description: "Drives a browser on this host. Enabled for this project only.",
+		title: t("Playwright"),
+		description: t("Drives a browser on this host. Enabled for this project only."),
 		entry: { command: "npx", args: ["-y", "@playwright/mcp@0.0.83"], enabled: false },
 		scope: "user",
 		modifiesData: "the websites its browser opens",

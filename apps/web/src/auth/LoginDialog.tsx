@@ -15,6 +15,7 @@ import {
 	DialogTitle,
 } from "@thinkrail/ui/dialog";
 import { useEffect, useId, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { copyText } from "@/lib";
 import type { LoginState } from "./loginState";
 import { redirectsToLoopback, uiServedFromLoopback } from "./uiOrigin";
@@ -99,7 +100,7 @@ export function LoginDialog({
 						{state.status === "success"
 							? `${providerName} connected`
 							: state.status === "error"
-								? "Couldn't connect"
+								? t("Couldn't connect")
 								: `Connect ${providerName}`}
 					</DialogTitle>
 					{state.instructions && state.status === "active" ? (
@@ -135,7 +136,7 @@ export function LoginDialog({
 									className={buttonVariants({ className: "flex-1" })}
 								>
 									<ExternalLink className="size-16" />
-									Open sign-in page
+									{t("Open sign-in page")}
 								</a>
 								<Button
 									variant="outline"
@@ -146,7 +147,7 @@ export function LoginDialog({
 									}}
 								>
 									{copied ? <Check className="size-16" /> : <Copy className="size-16" />}
-									{copied ? "Copied" : "Copy link"}
+									{copied ? t("Copied") : t("Copy link")}
 								</Button>
 							</div>
 						) : null}
@@ -154,7 +155,7 @@ export function LoginDialog({
 						{state.url && copyFailed ? (
 							<div className="flex flex-col gap-4">
 								<label htmlFor={urlFieldId} className="text-text-muted tr-text-metadata">
-									Copy this link manually
+									{t("Copy this link manually")}
 								</label>
 								<input
 									id={urlFieldId}
@@ -173,7 +174,7 @@ export function LoginDialog({
 								data-testid="login-device-code"
 							>
 								<span className="text-text-muted tr-text-metadata">
-									Enter this code at{" "}
+									{t("Enter this code at")}{" "}
 									<a
 										href={state.deviceCode.verificationUri}
 										target="_blank"
@@ -218,7 +219,7 @@ export function LoginDialog({
 								onClick={() => setPasteOpen(true)}
 								className="self-start rounded-sm text-text-muted tr-text-metadata underline underline-offset-2 outline-none hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary"
 							>
-								Sign-in didn't finish? Paste the final URL
+								{t("Sign-in didn't finish? Paste the final URL")}
 							</button>
 						) : null}
 
@@ -226,8 +227,9 @@ export function LoginDialog({
 							<div className="flex flex-col gap-4">
 								{pasteFallback ? (
 									<p className="text-text-muted tr-text-metadata" data-testid="login-paste-hint">
-										If sign-in doesn't finish automatically, copy the address your browser ends on
-										and paste it here.
+										{t(
+											"If sign-in doesn't finish automatically, copy the address your browser ends on and paste it here.",
+										)}
 									</p>
 								) : state.input.message ? (
 									<p className="text-text-muted tr-text-ui">{state.input.message}</p>
@@ -248,7 +250,7 @@ export function LoginDialog({
 										className="min-w-0 flex-1 rounded-sm border border-control-border-default bg-control-bg px-8 py-4 tr-text-ui text-text-default outline-none placeholder:text-text-muted focus-visible:border-control-border-active"
 									/>
 									<Button data-testid="login-submit" onClick={submitPrompt}>
-										Submit
+										{t("Submit")}
 									</Button>
 								</div>
 							</div>
@@ -270,7 +272,7 @@ export function LoginDialog({
 								data-testid="login-working"
 							>
 								<Loader2 className="size-16 shrink-0 animate-spin" />
-								Working…
+								{t("Working…")}
 							</p>
 						) : null}
 					</div>
@@ -279,11 +281,11 @@ export function LoginDialog({
 				<DialogFooter>
 					{terminal ? (
 						<Button variant="outline" data-testid="login-close" onClick={onClose}>
-							Done
+							{t("Done")}
 						</Button>
 					) : (
 						<Button variant="outline" data-testid="login-cancel" onClick={onCancel}>
-							Cancel
+							{t("Cancel")}
 						</Button>
 					)}
 				</DialogFooter>

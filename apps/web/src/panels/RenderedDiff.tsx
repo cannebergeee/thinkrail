@@ -2,6 +2,7 @@ import { RiExpandUpDownLine as Expand } from "@remixicon/react";
 import { diffArrays } from "diff";
 import { createElement, type ReactNode, useEffect, useMemo, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { t } from "@/i18n";
 import type { ResourceDiffProps } from "@/resources";
 import { MarkdownDocument } from "./MarkdownPreview";
 import { focusSegments } from "./renderedDiffFocus";
@@ -286,12 +287,12 @@ export default function RenderedDiff({
 	if (merge.state === "failed") {
 		return (
 			<Placeholder testid="rendered-diff-error">
-				Rendered diff failed — use the Source view.
+				{t("Rendered diff failed — use the Source view.")}
 			</Placeholder>
 		);
 	}
 	if (view === null) {
-		return <Placeholder testid="rendered-diff-loading">Rendering diff…</Placeholder>;
+		return <Placeholder testid="rendered-diff-loading">{t("Rendering diff…")}</Placeholder>;
 	}
 
 	return (
@@ -302,8 +303,9 @@ export default function RenderedDiff({
 		>
 			{view.empty ? (
 				<p data-testid="rendered-diff-empty" className="px-12 py-8 tr-text-ui text-text-muted">
-					The rendered preview is identical on both sides — the change is in front matter,
-					whitespace, or markup that does not render. Compare in Source.
+					{t(
+						"The rendered preview is identical on both sides — the change is in front matter, whitespace, or markup that does not render. Compare in Source.",
+					)}
 				</p>
 			) : null}
 			<article className={`mx-auto max-w-[78ch] px-24 py-16 ${DIFF_MARKS}`}>

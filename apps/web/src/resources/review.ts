@@ -1,4 +1,5 @@
 import type { ReviewAnchor } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 import type { ResourceIntent, ResourceRenderer } from "./types";
 
 export function anchorLabel(
@@ -9,7 +10,7 @@ export function anchorLabel(
 	if (structural?.kind === "structural") {
 		if (structural.scheme === "table-cell") {
 			const cell = /^(\d+):(\d+)$/.exec(structural.ref);
-			if (cell) return `R${cell[1]}C${cell[2]}`;
+			if (cell) return t("R{0}C{1}", cell[1], cell[2]);
 		}
 		if (structural.scheme === "json-pointer") return structural.ref;
 		if (structural.scheme === "ipynb-cell") {

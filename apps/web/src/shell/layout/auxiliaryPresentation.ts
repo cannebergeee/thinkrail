@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type LayoutAttention, readLayoutSelection, tupleKey } from "../../lib";
 import {
 	findAuxiliaryGroup,
@@ -221,9 +222,9 @@ export function activateAuxiliaryRailEntry(
 		if (!placed) return revealTool(document, entry.tool, maxSideGroups, maxBottomGroups);
 		const location = findTabLocation(document, placed.id);
 		if (!location || location.area === "center")
-			return { reason: "The tool window is unavailable." };
+			return { reason: t("The tool window is unavailable.") };
 		const group = findAuxiliaryGroup(document, location.area, location.groupId);
-		if (!group) return { reason: "The tool window is unavailable." };
+		if (!group) return { reason: t("The tool window is unavailable.") };
 		return activateGroup(
 			document,
 			location.area,
@@ -237,14 +238,14 @@ export function activateAuxiliaryRailEntry(
 	if (!entry.groupId) {
 		return entry.region === "bottom"
 			? showBottom(document, maxSideGroups, maxBottomGroups, attention)
-			: { reason: "The tool window is unavailable." };
+			: { reason: t("The tool window is unavailable.") };
 	}
 	const group = findAuxiliaryGroup(document, entry.region, entry.groupId);
-	if (!group) return { reason: "The tool window no longer exists." };
+	if (!group) return { reason: t("The tool window no longer exists.") };
 	const current = selectedTab(group, attention);
 	const tab = entry.kind === "terminals" ? preferredTerminal(group, attention) : current;
 	if (entry.kind === "terminals" && !tab)
-		return { reason: "This pane no longer contains terminals." };
+		return { reason: t("This pane no longer contains terminals.") };
 	const hide =
 		document[entry.region].visible &&
 		!group.folded &&

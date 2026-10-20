@@ -9,6 +9,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { t } from "@/i18n";
 import { FileChip } from "./FileChip";
 import { type AttachedImage, fileToAttachedImage } from "./imageAttachment";
 import type { ChatAttachment } from "./types";
@@ -177,13 +178,13 @@ export function PromptImageChips({
 					data-testid="composer-image-error"
 					tone="error"
 					icon={false}
-					title={`Couldn't attach ${err.name} — ${err.reason}`}
-					label={`Couldn't attach ${err.name}`}
+					title={t("Couldn't attach {0} — {1}", err.name, err.reason)}
+					label={t("Couldn't attach {0}", err.name)}
 					meta={`— ${err.reason}`}
 					trailing={
 						<button
 							type="button"
-							aria-label="Dismiss"
+							aria-label={t("Dismiss")}
 							onClick={() => dismissError(err.id)}
 							className="hover:opacity-80"
 						>
@@ -205,7 +206,7 @@ export function PromptImageChips({
 					trailing={
 						<button
 							type="button"
-							aria-label="Remove image"
+							aria-label={t("Remove image")}
 							onClick={() => removeImage(img.id)}
 							className="text-text-muted hover:text-text-default"
 						>
@@ -219,7 +220,7 @@ export function PromptImageChips({
 					data-testid="composer-image-pending"
 					label={
 						<span className="text-text-muted">
-							{pending === 1 ? "Attaching…" : `Attaching ${pending}…`}
+							{pending === 1 ? t("Attaching…") : t("Attaching {0}…", pending)}
 						</span>
 					}
 				/>

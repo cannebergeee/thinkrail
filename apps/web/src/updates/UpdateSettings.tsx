@@ -5,6 +5,7 @@ import {
 } from "@remixicon/react";
 import type { HostUpdateNotice, NativeUpdateState } from "@thinkrail/contracts";
 import { Button } from "@thinkrail/ui/button";
+import { t } from "@/i18n";
 import type { NativeUpdateAction, UpdatesController } from "./useUpdates";
 
 interface UpdateSettingsProps {
@@ -15,56 +16,56 @@ function nativeStatusCopy(state: NativeUpdateState | null): { title: string; det
 	switch (state?.status) {
 		case "disabled":
 			return {
-				title: "Updates are unavailable",
-				detail: "This native build is not connected to an update channel.",
+				title: t("Updates are unavailable"),
+				detail: t("This native build is not connected to an update channel."),
 			};
 		case "idle":
 			return {
-				title: "ThinkRail is up to date",
-				detail: "ThinkRail checks for new releases in the background.",
+				title: t("ThinkRail is up to date"),
+				detail: t("ThinkRail checks for new releases in the background."),
 			};
 		case "checking":
-			return { title: "Checking for updates", detail: "Looking for a newer release…" };
+			return { title: t("Checking for updates"), detail: t("Looking for a newer release…") };
 		case "available":
 			return {
 				title: state.availableVersion
 					? `ThinkRail ${state.availableVersion} is available`
 					: "An update is available",
-				detail: "Download the update when you're ready.",
+				detail: t("Download the update when you're ready."),
 			};
 		case "downloading":
 			return {
 				title: state.availableVersion
 					? `Downloading ThinkRail ${state.availableVersion}`
 					: "Downloading an update",
-				detail: "You can keep working while the download finishes.",
+				detail: t("You can keep working while the download finishes."),
 			};
 		case "preparing":
 			return {
-				title: "Preparing update",
-				detail: "ThinkRail is preparing the downloaded package for installation.",
+				title: t("Preparing update"),
+				detail: t("ThinkRail is preparing the downloaded package for installation."),
 			};
 		case "ready":
 			return {
 				title: state.availableVersion
 					? `ThinkRail ${state.availableVersion} is ready`
 					: "An update is ready",
-				detail: "Install and restart when you're ready.",
+				detail: t("Install and restart when you're ready."),
 			};
 		case "installing":
 			return {
-				title: "Installing update",
-				detail: "ThinkRail will restart to finish installing the update.",
+				title: t("Installing update"),
+				detail: t("ThinkRail will restart to finish installing the update."),
 			};
 		case "error":
 			return {
-				title: "The update couldn't be completed",
-				detail: "Try the failed action again when you're ready.",
+				title: t("The update couldn't be completed"),
+				detail: t("Try the failed action again when you're ready."),
 			};
 		default:
 			return {
-				title: "Loading update status",
-				detail: "Reading this installation's update channel…",
+				title: t("Loading update status"),
+				detail: t("Reading this installation's update channel…"),
 			};
 	}
 }
@@ -75,24 +76,24 @@ function hostNoticeCopy(
 ): { title: string; detail: string } {
 	if (requestFailed || state.status === "failed") {
 		return {
-			title: "The host update couldn't be completed",
-			detail: "Retry the update or use the manual command below.",
+			title: t("The host update couldn't be completed"),
+			detail: t("Retry the update or use the manual command below."),
 		};
 	}
 	switch (state.status) {
 		case "running":
 			return {
-				title: `Updating ThinkRail to ${state.availableVersion}`,
-				detail: "The host remains available while the update runs.",
+				title: t("Updating ThinkRail to {0}", state.availableVersion),
+				detail: t("The host remains available while the update runs."),
 			};
 		case "succeeded":
 			return {
-				title: `ThinkRail ${state.availableVersion} was installed`,
-				detail: "Restart the host manually when you're ready to use the new version.",
+				title: t("ThinkRail {0} was installed", state.availableVersion),
+				detail: t("Restart the host manually when you're ready to use the new version."),
 			};
 		default:
 			return {
-				title: `ThinkRail ${state.availableVersion} is available`,
+				title: t("ThinkRail {0} is available", state.availableVersion),
 				detail:
 					state.status === "available"
 						? "Run the update when you're ready. The host will keep running afterward."
@@ -170,11 +171,15 @@ export function UpdateSettings({ updates }: UpdateSettingsProps) {
 	return (
 		<section data-testid="settings-updates" className="flex flex-col gap-16">
 			<div className="flex flex-col gap-4">
-				<h3 className="tr-title-section text-text-default">Software updates</h3>
+				<h3 className="tr-title-section text-text-default">{t("Software updates")}</h3>
 				<p className="text-text-muted tr-text-metadata">
 					{updates.source === "native"
-						? "ThinkRail checks for updates in the background. Downloads and installation begin only when you choose them."
-						: "ThinkRail checks this host for new releases. Updates run on the machine hosting ThinkRail."}
+						? t(
+								"ThinkRail checks for updates in the background. Downloads and installation begin only when you choose them.",
+							)
+						: t(
+								"ThinkRail checks this host for new releases. Updates run on the machine hosting ThinkRail.",
+							)}
 				</p>
 			</div>
 
@@ -188,10 +193,10 @@ export function UpdateSettings({ updates }: UpdateSettingsProps) {
 					<DownloadCloud aria-hidden="true" className={`mt-2 size-16 shrink-0 ${toneClass}`} />
 					<div className="min-w-0 flex-1">
 						<p className="tr-title-compact text-text-default">
-							{nativeRequestError ? "The update request failed" : copy.title}
+							{nativeRequestError ? t("The update request failed") : copy.title}
 						</p>
 						<p className="text-text-muted tr-text-metadata">
-							{nativeRequestError ? "Try the action again." : copy.detail}
+							{nativeRequestError ? t("Try the action again.") : copy.detail}
 						</p>
 					</div>
 				</div>
@@ -219,8 +224,8 @@ export function UpdateSettings({ updates }: UpdateSettingsProps) {
 						data-testid="update-command-guidance"
 						className="rounded-sm border border-border-default bg-container-elevated-bg p-8 text-text-default tr-text-ui"
 					>
-						Run <code className="tr-code-text text-primary">thinkrail update</code> on the machine
-						running the host, then restart ThinkRail.
+						{t("Run")} <code className="tr-code-text text-primary">thinkrail update</code>{" "}
+						{t("on the machine running the host, then restart ThinkRail.")}
 					</p>
 				) : null}
 
@@ -229,7 +234,7 @@ export function UpdateSettings({ updates }: UpdateSettingsProps) {
 						data-testid="update-host-restart-guidance"
 						className="rounded-sm border border-border-default bg-container-elevated-bg p-8 text-text-default tr-text-ui"
 					>
-						Restart the ThinkRail host manually to start using version {availableVersion}.
+						{t("Restart the ThinkRail host manually to start using version")} {availableVersion}.
 					</p>
 				) : null}
 
@@ -239,10 +244,12 @@ export function UpdateSettings({ updates }: UpdateSettingsProps) {
 							? updates.source === "host"
 								? `Current: ${currentVersion} · ${channel} channel`
 								: `Version ${currentVersion} · ${channel} channel`
-							: "Version and channel unavailable"}
+							: t("Version and channel unavailable")}
 					</span>
 					{availableVersion ? (
-						<span className="text-text-muted tr-text-metadata">Available: {availableVersion}</span>
+						<span className="text-text-muted tr-text-metadata">
+							{t("Available:")} {availableVersion}
+						</span>
 					) : null}
 				</div>
 			</div>
@@ -257,25 +264,25 @@ export function UpdateSettings({ updates }: UpdateSettingsProps) {
 							onClick={updates.checkForUpdates}
 						>
 							<Refresh className="size-14" />
-							{checking ? "Checking…" : "Check for Updates"}
+							{checking ? t("Checking…") : t("Check for Updates")}
 						</Button>
 					) : null}
 					{retry ? (
 						<Button variant="outline" data-testid="update-retry" onClick={retry}>
 							<Refresh className="size-14" />
-							Retry
+							{t("Retry")}
 						</Button>
 					) : null}
 					{nativeAvailable && failedAction !== "download" ? (
 						<Button data-testid="update-download" onClick={updates.downloadUpdate}>
 							<DownloadCloud className="size-14" />
-							Download
+							{t("Download")}
 						</Button>
 					) : null}
 					{ready && failedAction !== "install" ? (
 						<Button data-testid="update-restart" onClick={updates.restartToUpdate}>
 							<Restart className="size-14" />
-							Install &amp; Restart
+							{t("Install & Restart")}
 						</Button>
 					) : null}
 				</div>
@@ -287,14 +294,16 @@ export function UpdateSettings({ updates }: UpdateSettingsProps) {
 						onClick={updates.runUpdate}
 					>
 						{hostFailed ? <Refresh className="size-14" /> : <DownloadCloud className="size-14" />}
-						{hostFailed ? "Retry" : "Run Update"}
+						{hostFailed ? t("Retry") : t("Run Update")}
 					</Button>
 				</div>
 			) : null}
 
 			{ready ? (
 				<p className="text-text-muted tr-text-metadata">
-					Close Settings to install later. Quitting ThinkRail normally does not install the update.
+					{t(
+						"Close Settings to install later. Quitting ThinkRail normally does not install the update.",
+					)}
 				</p>
 			) : null}
 		</section>

@@ -1,5 +1,6 @@
 import { RiSendPlaneLine as Send } from "@remixicon/react";
 import { useMemo, useState } from "react";
+import { t } from "@/i18n";
 import { useAppStore } from "../store";
 import { allDraftIds, fileDraftIds } from "./reviewModel";
 import { sendReviewBatch } from "./reviewSend";
@@ -18,7 +19,7 @@ export function SendReviewButton({
 	return (
 		<SendButtonBase
 			testid={testid}
-			label={`Send review (${draftIds.length})`}
+			label={t("Send review ({0})", draftIds.length)}
 			count={draftIds.length}
 			send={() => sendReviewBatch(workspaceId, draftIds)}
 		/>

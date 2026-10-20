@@ -18,6 +18,7 @@ import type { TodoGroupItem, TodoItem, TodoPlan, TodoStatus } from "@thinkrail/c
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
 import { useState } from "react";
+import { t } from "@/i18n";
 import { PlanStatusIcon, SectionLabel } from "./planKit";
 import {
 	groupProgress,
@@ -45,11 +46,11 @@ export function glanceIcon(glance: PlanGlance): {
 	if (glance === "waiting_question")
 		return {
 			Icon: MessageCircleQuestion,
-			label: "Needs your answer",
+			label: t("Needs your answer"),
 			className: "text-primary",
 		};
 	if (glance === "waiting")
-		return { Icon: CirclePause, label: "Paused", className: "text-text-muted" };
+		return { Icon: CirclePause, label: t("Paused"), className: "text-text-muted" };
 	return { Icon: CircleDot, label: STATUS_LABEL.in_progress, className: "text-primary" };
 }
 
@@ -116,16 +117,16 @@ export function TodoAddRow({
 				onKeyDown={(e) => {
 					if (e.key === "Enter") void submit();
 				}}
-				placeholder="Queue a task for the agent"
+				placeholder={t("Queue a task for the agent")}
 				className="min-w-0 flex-1 bg-transparent tr-text-ui text-text-default outline-none placeholder:text-text-muted"
 			/>
 			{onOpenPlan ? (
-				<IconTooltip label="Open the plan as a page — review each step's changes">
+				<IconTooltip label={t("Open the plan as a page — review each step's changes")}>
 					<button
 						type="button"
 						data-testid="todo-open-plan"
 						onClick={onOpenPlan}
-						aria-label="Open the plan page"
+						aria-label={t("Open the plan page")}
 						className="flex size-24 shrink-0 items-center justify-center rounded-sm text-text-muted hover:bg-control-bg-hovered hover:text-text-default focus-visible:opacity-100"
 					>
 						<FileText className="size-14" />
@@ -186,7 +187,7 @@ function GroupBlock({
 					className="ml-12 flex items-center gap-8 border-border-default border-l pl-8 py-4 tr-text-metadata text-text-subtle"
 				>
 					<LoaderCircle className="size-12 shrink-0 animate-spin text-primary" />
-					The plan for this task is forming
+					{t("The plan for this task is forming")}
 				</p>
 			) : null}
 			<ul className="ml-12 flex flex-col border-border-default border-l pl-8">
@@ -252,12 +253,12 @@ export function TodoRows({
 				<GroupBlock key={group.id} group={group} {...rowProps} />
 			))}
 			<LooseList items={s.activeLoose} {...rowProps} />
-			{hasTodo ? <SectionLabel label="Up next" /> : null}
+			{hasTodo ? <SectionLabel label={t("Up next")} /> : null}
 			{s.pendingGroups.map((group) => (
 				<GroupBlock key={group.id} group={group} {...rowProps} />
 			))}
 			<LooseList items={s.pendingLoose} {...rowProps} />
-			{hasDone ? <SectionLabel label="Done" /> : null}
+			{hasDone ? <SectionLabel label={t("Done")} /> : null}
 			{s.doneGroups.map((group) => (
 				<DoneGroup key={group.id} group={group} {...rowProps} />
 			))}
@@ -416,18 +417,18 @@ function TodoRow({
 			{todo.origin === "user" ? (
 				<span
 					data-testid="todo-origin-user"
-					title="Added by you — the agent won't drop it"
+					title={t("Added by you — the agent won't drop it")}
 					className="shrink-0 text-text-muted"
 				>
 					<UserRound className="size-14" />
 				</span>
 			) : null}
 			{onRemove && todo.status !== "done" && !reviewing ? (
-				<IconTooltip label="Remove from the queue">
+				<IconTooltip label={t("Remove from the queue")}>
 					<button
 						type="button"
 						data-testid="todo-remove"
-						aria-label="Remove from the queue"
+						aria-label={t("Remove from the queue")}
 						onClick={() => {
 							void onRemove(todo.id);
 						}}

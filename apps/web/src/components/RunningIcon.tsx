@@ -1,5 +1,6 @@
 import { cn } from "@thinkrail/ui/utils";
 import { useId } from "react";
+import { t } from "@/i18n";
 import { BRAND_MARK_SEGMENTS } from "../constants/branding";
 
 const FRAME_HALVES = [
@@ -67,7 +68,7 @@ export function RunningIcon({ className }: { className?: string | undefined }) {
 			data-testid="running-icon"
 			data-running="true"
 			role="img"
-			aria-label="Agent working"
+			aria-label={t("Agent working")}
 			className={cn("inline-flex shrink-0 items-center justify-center", className)}
 		>
 			<svg aria-hidden="true" viewBox="0 0 760 760" className="size-full">

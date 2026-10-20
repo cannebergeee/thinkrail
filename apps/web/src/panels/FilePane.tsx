@@ -7,6 +7,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { t } from "@/i18n";
 import { LoadingRegion } from "../components/Skeleton";
 import { isPhoneViewport, usePhoneViewport } from "../lib";
 import {
@@ -146,7 +147,7 @@ export function FilePane({ tab }: { tab: FileTab }) {
 				<div
 					data-testid="resource-view-toggle"
 					role="toolbar"
-					aria-label="Resource view"
+					aria-label={t("Resource view")}
 					className="flex h-32 shrink-0 items-center justify-end gap-4 border-border-default border-b bg-container-header-bg px-12"
 				>
 					<SendReviewButton workspaceId={tab.workspaceId} path={tab.path} />

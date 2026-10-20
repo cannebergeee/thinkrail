@@ -6,6 +6,7 @@ import {
 	RiFileList3Line as ScrollText,
 } from "@remixicon/react";
 import { resultText, strArg, type ToolRenderProps } from "@thinkrail/extension-api/web";
+import { t } from "@/i18n";
 import { useChatActions } from "../../ChatActions";
 import { useFold } from "../../foldState";
 import { Markdown } from "../../Markdown";
@@ -44,7 +45,7 @@ export function AgentCard({ toolCallId, args, result, status }: ToolRenderProps)
 			{status === "running" ? (
 				details?.status === "queued" ? (
 					<span className="text-text-muted tr-text-metadata">
-						Queued — waiting for a delegation slot…
+						{t("Queued — waiting for a delegation slot…")}
 					</span>
 				) : (
 					<span
@@ -65,8 +66,9 @@ export function AgentCard({ toolCallId, args, result, status }: ToolRenderProps)
 				</pre>
 			) : backgroundAck ? (
 				<span className="text-text-muted tr-text-metadata italic">
-					Running in the background — a completion message lands in this chat when it finishes; the
-					transcript below follows it live.
+					{t(
+						"Running in the background — a completion message lands in this chat when it finishes; the transcript below follows it live.",
+					)}
 				</span>
 			) : status === "done" && !terminal ? (
 				<span className="whitespace-pre-wrap text-text-muted tr-text-metadata">{output}</span>
@@ -85,7 +87,7 @@ export function AgentCard({ toolCallId, args, result, status }: ToolRenderProps)
 						) : (
 							<ChevronRight className="size-16 shrink-0" />
 						)}
-						Report
+						{t("Report")}
 					</button>
 					{reportOpen ? (
 						<div data-testid="agent-report">
@@ -102,7 +104,7 @@ export function AgentCard({ toolCallId, args, result, status }: ToolRenderProps)
 					className="flex items-center gap-4 self-start text-primary tr-text-metadata hover:underline"
 				>
 					<ScrollText className="size-12 shrink-0" />
-					Open transcript
+					{t("Open transcript")}
 				</button>
 			) : null}
 		</div>

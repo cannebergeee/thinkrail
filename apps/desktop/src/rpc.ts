@@ -20,6 +20,7 @@ export type DesktopRpc = {
 			checkForUpdates: { params: undefined; response: undefined };
 			downloadUpdate: { params: undefined; response: undefined };
 			restartToUpdate: { params: undefined; response: undefined };
+			applyLocale: { params: { locale: string }; response: boolean };
 			showNotification: { params: NativeNotificationInput; response: undefined };
 		};
 		messages: {

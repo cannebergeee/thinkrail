@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
+import { t } from "@/i18n";
 import type { ResourceDiffProps, ReviewThread, SurfaceReview } from "@/resources";
 import { ReviewComposer } from "../../ReviewComposer";
 import { ReviewThreadCard } from "../../ReviewThreadCard";
@@ -128,7 +129,7 @@ export default function JsonDiff({
 				data-testid="json-invalid"
 				className="h-full overflow-auto bg-container-workspace-bg p-12 tr-text-ui text-text-muted"
 			>
-				One side is not valid JSON or JSONC — switch to Source to compare the text.
+				{t("One side is not valid JSON or JSONC — switch to Source to compare the text.")}
 			</div>
 		);
 	}
@@ -163,7 +164,7 @@ export default function JsonDiff({
 		if (mark?.kind === "moved") {
 			return (
 				<>
-					<span className="mr-4 text-feedback-info">moved</span>
+					<span className="mr-4 text-feedback-info">{t("moved")}</span>
 					{nodeSummary(node)}
 				</>
 			);
@@ -194,7 +195,7 @@ export default function JsonDiff({
 			) : null}
 			{layout.removedNodes.length > 0 ? (
 				<section className="mt-12 border-border-default border-t pt-8">
-					<h2 className="mb-4 tr-text-eyebrow text-feedback-error">Removed</h2>
+					<h2 className="mb-4 tr-text-eyebrow text-feedback-error">{t("Removed")}</h2>
 					{layout.removedNodes.map((node) => (
 						<JsonTree
 							key={node.pointer}

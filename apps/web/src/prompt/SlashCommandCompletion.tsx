@@ -1,6 +1,7 @@
 import type { SlashCommandInfo, TemplateInfo } from "@thinkrail/contracts";
 import { cn } from "@thinkrail/ui/utils";
 import { type ReactNode, useState } from "react";
+import { t } from "@/i18n";
 
 export type SlashCommandItem = Omit<SlashCommandInfo, "source"> & {
 	source: SlashCommandInfo["source"] | "builtin";
@@ -158,7 +159,7 @@ export function TemplateSlotHint({
 				className,
 			)}
 		>
-			slot {activeIndex + 1}/{count} · ⇥ next · esc done
+			slot {activeIndex + 1}/{count} {t("· ⇥ next · esc done")}
 		</button>
 	);
 }
@@ -202,7 +203,7 @@ export function SlashCommandMenu<T extends SlashCommandItem>({
 					) : null}
 					<span className="ml-auto shrink-0 text-text-muted tr-text-metadata">
 						{command.source === "builtin"
-							? "Pi/built-in"
+							? t("Pi/built-in")
 							: `${command.source}/${command.sourceInfo.scope}`}
 					</span>
 				</button>

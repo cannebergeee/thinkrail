@@ -17,6 +17,7 @@ import {
 import { Button } from "@thinkrail/ui/button";
 import { cn } from "@thinkrail/ui/utils";
 import { useEffect, useMemo, useState } from "react";
+import { t } from "@/i18n";
 import { LoadingRegion } from "../components/Skeleton";
 import { selectActiveEditorTab, useAppStore } from "../store";
 import { openFileInTab } from "./openTabs";
@@ -60,7 +61,7 @@ export function SpecsPanel({
 			)
 		) : nodes.length === 0 ? (
 			failed ? null : (
-				<p className="px-4 py-4 tr-text-metadata text-text-muted">No specs</p>
+				<p className="px-4 py-4 tr-text-metadata text-text-muted">{t("No specs")}</p>
 			)
 		) : (
 			<ul className="flex flex-col motion-safe:animate-reveal">
@@ -84,11 +85,11 @@ export function SpecsPanel({
 					className="flex items-center gap-8 rounded-sm border border-feedback-error-muted bg-feedback-error-subtle px-8 py-4 tr-text-metadata text-text-default"
 				>
 					<span className="min-w-0 flex-1">
-						{nodes === null ? "Couldn't load specs." : "Couldn't update specs."}
+						{nodes === null ? t("Couldn't load specs.") : t("Couldn't update specs.")}
 					</span>
 					<Button variant="ghost" size="sm" data-testid="specs-retry" onClick={onRetry}>
 						<RefreshCw className="size-14" />
-						Retry
+						{t("Retry")}
 					</Button>
 				</div>
 			) : null}
@@ -168,7 +169,7 @@ function SpecNodeRow({
 					data-active={isActive}
 					data-depth={depth}
 					aria-current={isActive ? "page" : undefined}
-					aria-label={`Open ${node.title}. ${isMainSpec ? "Main spec" : role}`}
+					aria-label={t("Open {0}. {1}", node.title, isMainSpec ? "Main spec" : role)}
 					title={`${node.title}\n${node.id} · ${node.type}`}
 					onClick={() => void openFileInTab(workspaceId, node.path, "preview")}
 					onDoubleClick={() => void openFileInTab(workspaceId, node.path, "keep")}

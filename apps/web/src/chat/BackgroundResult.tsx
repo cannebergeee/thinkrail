@@ -2,6 +2,7 @@ import type {
 	BackgroundCommandCompletionDetails,
 	DelegationRunDetails,
 } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 import { useChatActions } from "./ChatActions";
 import { useFold } from "./foldState";
 import { Markdown } from "./Markdown";
@@ -41,15 +42,15 @@ export function BackgroundCommandResult({
 					<div className="overflow-hidden rounded-sm border border-border-default bg-container-header-bg">
 						<div className="border-border-default border-b px-8 py-4 text-text-muted tr-text-metadata">
 							{details.output.truncated
-								? "Output truncated — retained tail at completion."
-								: "Output at completion"}
+								? t("Output truncated — retained tail at completion.")
+								: t("Output at completion")}
 						</div>
 						{details.output.text ? (
 							<pre className="whitespace-pre-wrap break-words px-8 py-4 tr-code-text text-text-default">
 								{details.output.text}
 							</pre>
 						) : (
-							<p className="px-8 py-4 text-text-muted tr-text-metadata">No output.</p>
+							<p className="px-8 py-4 text-text-muted tr-text-metadata">{t("No output.")}</p>
 						)}
 					</div>
 				</div>

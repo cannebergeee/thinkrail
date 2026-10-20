@@ -12,6 +12,7 @@ import {
 } from "@thinkrail/ui/dropdown-menu";
 import { useEffect, useRef, useState } from "react";
 import { useNow } from "@/components/useNow";
+import { t } from "@/i18n";
 import { relativeTime } from "@/lib";
 import { getTransport } from "../transport";
 
@@ -50,7 +51,7 @@ export function PlanCommitsMenu({
 			<DropdownMenuTrigger
 				data-testid="plan-commits-trigger"
 				data-open={open}
-				title="Commits on this branch"
+				title={t("Commits on this branch")}
 				className="flex h-24 shrink-0 items-center gap-4 rounded-sm px-4 tr-text-metadata text-text-subtle outline-none transition-colors hover:bg-control-bg-hovered hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary data-[open=true]:bg-control-bg-selected data-[open=true]:text-text-default"
 			>
 				<GitCommitHorizontal className="size-12 shrink-0" />
@@ -60,7 +61,7 @@ export function PlanCommitsMenu({
 				<ChevronDown className="size-14 shrink-0" />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent data-testid="plan-commits-menu" align="start" className="max-w-[24rem]">
-				<DropdownMenuLabel>Commits</DropdownMenuLabel>
+				<DropdownMenuLabel>{t("Commits")}</DropdownMenuLabel>
 				{commits.map((commit) => (
 					<DropdownMenuItem
 						key={commit.sha}

@@ -1,6 +1,7 @@
 import { RiCoinsLine as Coins, RiLoader4Line as Loader } from "@remixicon/react";
 import type { JbcentralQuotaSnapshot } from "@thinkrail/contracts";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
+import { t } from "@/i18n";
 import { formatJbcentralQuota } from "./jbcentralQuota";
 
 export type JbcentralQuotaViewSnapshot = JbcentralQuotaSnapshot | { state: "loading" };
@@ -23,21 +24,21 @@ export function JbcentralQuotaIndicator({
 	if (snapshot.state === "hidden") return null;
 	if (snapshot.state === "loading") {
 		return (
-			<IconTooltip label="Reading recurring JetBrains AI quota">
+			<IconTooltip label={t("Reading recurring JetBrains AI quota")}>
 				<span
 					data-testid="jbcentral-quota"
 					data-state="loading"
 					className="inline-flex shrink-0 items-center gap-4 whitespace-nowrap text-text-muted tr-text-ui"
 				>
 					<Loader className="size-14 animate-spin" aria-hidden="true" />
-					<span>Loading quota…</span>
+					<span>{t("Loading quota…")}</span>
 				</span>
 			</IconTooltip>
 		);
 	}
 	if (snapshot.state === "unavailable") {
 		return (
-			<IconTooltip label="Central is connected, but quota could not be read">
+			<IconTooltip label={t("Central is connected, but quota could not be read")}>
 				<button
 					type="button"
 					data-testid="jbcentral-quota"
@@ -46,8 +47,8 @@ export function JbcentralQuotaIndicator({
 					className="inline-flex shrink-0 items-center gap-4 whitespace-nowrap rounded-sm text-text-muted tr-text-ui outline-none hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary"
 				>
 					<Coins className="size-14" aria-hidden="true" />
-					<span>Quota unavailable</span>
-					<span className="hidden sm:inline">· Retry</span>
+					<span>{t("Quota unavailable")}</span>
+					<span className="hidden sm:inline">{t("· Retry")}</span>
 				</button>
 			</IconTooltip>
 		);
@@ -59,7 +60,7 @@ export function JbcentralQuotaIndicator({
 		<>
 			<Coins className="size-14 text-text-muted" aria-hidden="true" />
 			<span>{value}</span>
-			<span className="hidden sm:inline">credits</span>
+			<span className="hidden sm:inline">{t("credits")}</span>
 			{stale ? (
 				<span
 					data-testid="jbcentral-quota-stale-marker"

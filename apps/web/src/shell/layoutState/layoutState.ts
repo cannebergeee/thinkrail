@@ -1,5 +1,6 @@
 import type { LayoutPreset } from "@thinkrail/contracts";
 import { useEffect, useLayoutEffect } from "react";
+import { t } from "@/i18n";
 import { getStablePreferenceAdapter, type StablePreferenceAdapter } from "../../clientPreferences";
 import { type LayoutAttention, randomId, sameLayoutAttention } from "../../lib";
 import {
@@ -511,7 +512,7 @@ function persistCurrentLayout(): void {
 		if (!storage || !persistenceKey) return;
 		storage.local.setItem(persistenceKey, encoded);
 	} catch (error) {
-		toast.error(errorText(error), "Couldn't save the local layout");
+		toast.error(errorText(error), t("Couldn't save the local layout"));
 	}
 }
 
@@ -867,7 +868,7 @@ export async function commitWorkspaceLayout(
 export function useLocalLayoutState(): void {
 	useEffect(() => {
 		void initializeLocalLayoutState().catch((error) => {
-			toast.error(errorText(error), "Couldn't load the local layout");
+			toast.error(errorText(error), t("Couldn't load the local layout"));
 		});
 	}, []);
 }
@@ -876,7 +877,7 @@ export function useWorkspaceLayoutState(workspaceId: string): void {
 	useLayoutEffect(() => {
 		const report = (error: unknown) => {
 			if (!useAppStore.getState().removedWorkspaceIds[workspaceId]) {
-				toast.error(errorText(error), "Couldn't load the local layout");
+				toast.error(errorText(error), t("Couldn't load the local layout"));
 			}
 		};
 		if (useAppStore.getState().layoutStateReady) {

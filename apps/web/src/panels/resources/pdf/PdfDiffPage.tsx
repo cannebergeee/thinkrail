@@ -1,5 +1,6 @@
 import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import type { SurfaceReview } from "@/resources";
 import type { Size } from "../regionReview";
 import { VisualDiff, type VisualDiffSide } from "../VisualDiff";
@@ -144,7 +145,7 @@ export function PdfDiffPage({
 	const originalSide: VisualDiffSide = {
 		present: originalPresent,
 		content: originalBitmap ? (
-			<BitmapImage bitmap={originalBitmap} title={`Original PDF page ${page}`} />
+			<BitmapImage bitmap={originalBitmap} title={t("Original PDF page {0}", page)} />
 		) : null,
 		caption: originalPresent ? `Old: page ${page}` : "Old: No page",
 		intrinsicSize: originalBitmap?.size ?? null,
@@ -154,7 +155,7 @@ export function PdfDiffPage({
 	const modifiedSide: VisualDiffSide = {
 		present: modifiedPresent,
 		content: modifiedBitmap ? (
-			<BitmapImage bitmap={modifiedBitmap} title={`Modified PDF page ${page}`} />
+			<BitmapImage bitmap={modifiedBitmap} title={t("Modified PDF page {0}", page)} />
 		) : null,
 		caption: modifiedPresent ? `New: page ${page}` : "New: No page",
 		intrinsicSize: modifiedBitmap?.size ?? null,
@@ -172,7 +173,9 @@ export function PdfDiffPage({
 			data-page={page}
 			className="flex min-h-[680px] flex-col gap-4"
 		>
-			<span className="tr-text-metadata text-text-muted">Page {page}</span>
+			<span className="tr-text-metadata text-text-muted">
+				{t("Page")} {page}
+			</span>
 			{active ? (
 				<VisualDiff
 					prefix="image"
@@ -182,7 +185,7 @@ export function PdfDiffPage({
 					modified={modifiedSide}
 					contentStamp={pdfPageContentStamp(stamp, page)}
 					initialMode="2-up"
-					emptyLabel="No page"
+					emptyLabel={t("No page")}
 				/>
 			) : null}
 		</section>

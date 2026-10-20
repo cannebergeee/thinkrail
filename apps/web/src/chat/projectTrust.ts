@@ -4,6 +4,7 @@ import type {
 	ProjectTrustSummary,
 	WsParams,
 } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 
 export type ProjectTrustNotice =
 	| { kind: "hidden" }
@@ -75,7 +76,7 @@ export function untrustedNoticeText(
 		...(notice.piResources.length > 0 ? ["its own Pi resources"] : []),
 		...(notice.mcpServers > 0 ? [plural(notice.mcpServers, "MCP server")] : []),
 	];
-	return `This project ships ${parts.join(" and ")} — off until you trust it.`;
+	return t("This project ships {0} — off until you trust it.", parts.join(" and "));
 }
 
 export function trustEnablesText(

@@ -7,6 +7,7 @@ import {
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
 import type { ReactNode } from "react";
+import { t } from "@/i18n";
 import { type LayoutAttention, tupleKey } from "../../lib";
 import {
 	AuxiliaryRail,
@@ -210,7 +211,7 @@ export function AuxiliaryRegionRail({
 			<DropZone
 				id={tupleKey("dnd-rail-boundary", region, String(paneIndex))}
 				target={{ kind: "auxiliary-edge", region, index: paneIndex }}
-				label={`New ${region} pane here`}
+				label={t("New {0} pane here", region)}
 				className={cn(
 					"absolute",
 					region === "bottom"
@@ -231,7 +232,7 @@ export function AuxiliaryRegionRail({
 						<DropZone
 							id={tupleKey("dnd-hidden-side-edge", region)}
 							target={{ kind: "auxiliary-edge", region, index: groups.length }}
-							label={`Create ${region} group in hidden side`}
+							label={t("Create {0} group in hidden side", region)}
 							className="relative min-h-32 w-32 flex-1"
 						/>
 					) : (

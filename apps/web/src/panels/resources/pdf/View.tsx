@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import type { ResourceViewProps } from "@/resources";
 import type { Size } from "../regionReview";
 import { PdfPageCanvas } from "./PdfPageCanvas";
@@ -112,14 +113,14 @@ export default function PdfView({
 	if (loaded.error) {
 		return (
 			<div className="flex h-full items-center justify-center bg-container-workspace-bg tr-text-ui text-feedback-error">
-				PDF preview failed.
+				{t("PDF preview failed.")}
 			</div>
 		);
 	}
 	if (!loaded.document) {
 		return (
 			<div className="flex h-full items-center justify-center bg-container-workspace-bg tr-text-ui text-text-muted">
-				Loading PDF…
+				{t("Loading PDF…")}
 			</div>
 		);
 	}

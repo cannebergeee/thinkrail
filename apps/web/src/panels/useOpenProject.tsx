@@ -1,5 +1,6 @@
 import type { Project } from "@thinkrail/contracts";
 import { type ReactNode, useState } from "react";
+import { t } from "@/i18n";
 import { useAppStore } from "../store";
 import { errorText, getTransport } from "../transport";
 import { ConfirmDialog } from "./ConfirmDialog";
@@ -81,7 +82,7 @@ export function useOpenProject(onOpened: (project: Project) => void | Promise<vo
 			));
 		} catch (err) {
 			if (!isCurrent()) return;
-			setPathEntry({ reason: errorText(err, "Couldn't open the folder picker on the host.") });
+			setPathEntry({ reason: errorText(err, t("Couldn't open the folder picker on the host.")) });
 			return;
 		}
 		if (!isCurrent()) return;
@@ -95,15 +96,16 @@ export function useOpenProject(onOpened: (project: Project) => void | Promise<vo
 				onOpenChange={(o) => {
 					if (!o) setInitTarget(null);
 				}}
-				title="Initialize a git repository?"
+				title={t("Initialize a git repository?")}
 				description={
 					<>
-						<span className="tr-text-emphasis text-text-default">{initTarget}</span> isn't a git
-						repository. ThinkRail works on git worktrees, so it needs one. Initialize a repo here
-						and commit the folder's current contents?
+						<span className="tr-text-emphasis text-text-default">{initTarget}</span>{" "}
+						{t(
+							"isn't a git repository. ThinkRail works on git worktrees, so it needs one. Initialize a repo here and commit the folder's current contents?",
+						)}
 					</>
 				}
-				confirmLabel="Initialize & open"
+				confirmLabel={t("Initialize & open")}
 				confirmTestId="confirm-init-repo"
 				onConfirm={() => {
 					if (initTarget) void initProject(initTarget);
@@ -122,7 +124,7 @@ export function useOpenProject(onOpened: (project: Project) => void | Promise<vo
 				onOpenChange={(o) => {
 					if (!o) setOpenError(null);
 				}}
-				title="Couldn't open project"
+				title={t("Couldn't open project")}
 				description={<span className="whitespace-pre-line">{openError}</span>}
 				testId="open-error-dialog"
 			/>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { type SessionRuntime, toast, useAppStore } from "../store";
 import {
 	type ConnectionStatus,
@@ -157,7 +158,7 @@ export function useTranscriptSync({
 				}
 				const state = useAppStore.getState();
 				if (state.status === "connected" && state.connectionGeneration === connectionGeneration) {
-					toast.error(errorText(error), "Couldn't refresh this chat");
+					toast.error(errorText(error), t("Couldn't refresh this chat"));
 				}
 			});
 		return () => {

@@ -16,6 +16,7 @@ import {
 } from "@thinkrail/ui/dialog";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LoadingRegion } from "@/components/Skeleton";
+import { t } from "@/i18n";
 import { errorText, getTransport } from "../transport";
 
 export function ExistingWorktreeDialog({
@@ -49,7 +50,7 @@ export function ExistingWorktreeDialog({
 			})
 			.catch((error) => {
 				if (requestRef.current === request) {
-					setLoadError(errorText(error, "Couldn't list existing worktrees"));
+					setLoadError(errorText(error, t("Couldn't list existing worktrees")));
 				}
 			});
 	}, [projectId]);
@@ -84,7 +85,7 @@ export function ExistingWorktreeDialog({
 			await onOpened(workspace);
 			onOpenChange(false);
 		} catch (error) {
-			setOpenError(errorText(error, "Couldn't finish opening the existing worktree"));
+			setOpenError(errorText(error, t("Couldn't finish opening the existing worktree")));
 			setOpeningPath(null);
 		}
 	};
@@ -100,18 +101,19 @@ export function ExistingWorktreeDialog({
 				<DialogHeader>
 					<div className="flex items-center gap-8">
 						<FolderOpen className="size-16 shrink-0 text-primary" />
-						<DialogTitle>Open existing worktree</DialogTitle>
+						<DialogTitle>{t("Open existing worktree")}</DialogTitle>
 					</div>
 					<DialogDescription>
-						Choose a checkout already registered with this Git repository. ThinkRail will use it in
-						place without moving, renaming, or taking ownership of it.
+						{t(
+							"Choose a checkout already registered with this Git repository. ThinkRail will use it in place without moving, renaming, or taking ownership of it.",
+						)}
 					</DialogDescription>
 				</DialogHeader>
 
 				{candidates === null && loadError === null ? (
 					<LoadingRegion
 						rows={4}
-						label="Reading Git worktrees"
+						label={t("Reading Git worktrees")}
 						className="min-h-112 p-4"
 						testId="existing-worktree-loading"
 					/>
@@ -127,7 +129,7 @@ export function ExistingWorktreeDialog({
 							onClick={loadCandidates}
 						>
 							<RefreshCw className="size-14" />
-							Retry
+							{t("Retry")}
 						</Button>
 					</div>
 				) : null}
@@ -137,7 +139,7 @@ export function ExistingWorktreeDialog({
 						className="rounded-sm border border-border-default bg-control-bg p-12 text-text-muted tr-text-ui"
 						data-testid="existing-worktree-empty"
 					>
-						No unattached worktrees found. Create one with Git, then reopen this chooser.
+						{t("No unattached worktrees found. Create one with Git, then reopen this chooser.")}
 					</div>
 				) : null}
 
@@ -169,14 +171,14 @@ export function ExistingWorktreeDialog({
 									</div>
 									<span className="flex min-w-0 flex-1 flex-col gap-2">
 										<span className="truncate text-text-default tr-text-ui">
-											{available ? candidate.branch : "Detached HEAD"}
+											{available ? candidate.branch : t("Detached HEAD")}
 										</span>
 										<span className="truncate text-text-subtle tr-text-metadata">
 											{candidate.path}
 										</span>
 										{available ? null : (
 											<span className="text-feedback-warning tr-text-metadata">
-												Create a branch in this worktree before opening it.
+												{t("Create a branch in this worktree before opening it.")}
 											</span>
 										)}
 									</span>
@@ -201,7 +203,7 @@ export function ExistingWorktreeDialog({
 						disabled={openingPath !== null}
 						onClick={() => handleOpenChange(false)}
 					>
-						Cancel
+						{t("Cancel")}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

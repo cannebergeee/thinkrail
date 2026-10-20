@@ -1,8 +1,9 @@
+import { t } from "@/i18n";
 import type { ResourceRenderer } from "@/resources";
 
 export const notebookRenderer: ResourceRenderer = {
 	id: "thinkrail/notebook",
-	label: "Notebook",
+	label: t("Notebook"),
 	match: { glob: ["*.ipynb"], text: true },
 	rank: 130,
 	capabilities: {

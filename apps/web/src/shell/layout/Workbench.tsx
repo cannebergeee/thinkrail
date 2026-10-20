@@ -15,6 +15,7 @@ import {
 	ResizablePanelGroup,
 } from "@thinkrail/ui/resizable";
 import { useCallback, useEffect, useInsertionEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { readLayoutNavigationClock, readLayoutSelection, tupleKey } from "../../lib";
 import { projectWorkbenchRatio, restoreWorkbenchRatio } from "./auxiliaryPresentation";
 import { closeRequestTarget } from "./closeRequest";
@@ -413,7 +414,7 @@ export function Workbench({
 			case "split":
 				result =
 					tab.kind === "tool"
-						? { reason: "Tools stay in a side region." }
+						? { reason: t("Tools stay in a side region.") }
 						: splitCenterGroup(document, target.groupId, target.direction, tab);
 				break;
 			case "auxiliary-edge":
@@ -426,7 +427,7 @@ export function Workbench({
 								target.index,
 								target.region === "bottom" ? maxBottomGroups : maxSideGroups,
 							)
-						: { reason: "That tab type cannot move to an auxiliary region." };
+						: { reason: t("That tab type cannot move to an auxiliary region.") };
 				break;
 		}
 		if (isLayoutUnavailable(result)) return;

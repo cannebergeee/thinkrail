@@ -11,6 +11,7 @@ import {
 } from "@thinkrail/ui/dialog";
 import { cn } from "@thinkrail/ui/utils";
 import { type MouseEvent, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { toast, useAppStore } from "@/store";
 import { errorText, getTransport } from "@/transport";
 import { INTERVIEW_BOOKING_URL, INTERVIEW_INVITATION_COPY } from "./interview";
@@ -28,7 +29,7 @@ export function InterviewPromptDialog() {
 		void getTransport()
 			.request("feedback.respond", { action })
 			.then(() => useAppStore.getState().hideInterviewPrompt())
-			.catch((error) => toast.error(errorText(error), "Couldn't save your response"))
+			.catch((error) => toast.error(errorText(error), t("Couldn't save your response")))
 			.finally(() => {
 				pendingRef.current = false;
 				setPendingAction(null);
@@ -59,7 +60,7 @@ export function InterviewPromptDialog() {
 				}}
 			>
 				<DialogHeader>
-					<DialogTitle>Help shape ThinkRail</DialogTitle>
+					<DialogTitle>{t("Help shape ThinkRail")}</DialogTitle>
 					<DialogDescription>{INTERVIEW_INVITATION_COPY}</DialogDescription>
 				</DialogHeader>
 				<DialogFooter className="flex-col gap-8 sm:flex-row sm:justify-between">
@@ -69,7 +70,7 @@ export function InterviewPromptDialog() {
 						data-testid="interview-never"
 						onClick={() => respond("never")}
 					>
-						Never show again
+						{t("Never show again")}
 					</Button>
 					<div className="flex flex-col gap-8 sm:flex-row">
 						<Button
@@ -79,7 +80,7 @@ export function InterviewPromptDialog() {
 							data-testid="interview-postpone"
 							onClick={() => respond("postpone")}
 						>
-							Not now
+							{t("Not now")}
 						</Button>
 						<a
 							href={INTERVIEW_BOOKING_URL}
@@ -95,7 +96,7 @@ export function InterviewPromptDialog() {
 							onAuxClick={book}
 						>
 							<ExternalLink className="size-14" />
-							Schedule an interview
+							{t("Schedule an interview")}
 						</a>
 					</div>
 				</DialogFooter>

@@ -1,6 +1,7 @@
 import { RiBookOpenLine as BookOpen } from "@remixicon/react";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
+import { t } from "@/i18n";
 
 export function SkillsButton({
 	onOpen,
@@ -26,7 +27,7 @@ export function SkillsButton({
 				)}
 			>
 				<BookOpen className="size-14" />
-				Skills
+				{t("Skills")}
 				{stale ? <span className="size-6 rounded-full bg-feedback-warning" aria-hidden /> : null}
 			</button>
 		</IconTooltip>

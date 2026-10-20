@@ -1,5 +1,6 @@
 import { RiSearchLine as Search } from "@remixicon/react";
 import { resultText, strArg, type ToolRenderProps } from "@thinkrail/extension-api/web";
+import { t } from "@/i18n";
 import { WebResultBody } from "./WebResultBody";
 
 function firstQuery(args: Record<string, unknown>): string {
@@ -39,8 +40,8 @@ export function WebSearchCard({ toolCallId, args, result, status }: ToolRenderPr
 				id={`${toolCallId}:content`}
 				output={output}
 				status={status}
-				runningLabel="Searching…"
-				emptyLabel="No results."
+				runningLabel={t("Searching…")}
+				emptyLabel={t("No results.")}
 			/>
 		</div>
 	);

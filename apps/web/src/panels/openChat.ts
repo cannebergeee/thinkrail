@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { messagesToRuntime } from "../chat/hydrate";
 import {
 	type CenterNavigationStamp,
@@ -38,7 +39,7 @@ export async function startChatInTab(
 			layoutOpenOptionsForNavigation(state, workspaceId, navigation).activate !== false &&
 			!state.removedWorkspaceIds[workspaceId]
 		) {
-			toast.error("The agent session could not be created.", "Couldn't start the chat");
+			toast.error(t("The agent session could not be created."), t("Couldn't start the chat"));
 		}
 	} finally {
 		useAppStore.getState().endChatStart(workspaceId);
@@ -118,7 +119,7 @@ export async function openChatInTab(
 			!settled.removedWorkspaceIds[workspaceId] &&
 			!settled.deletedSessionsByWorkspace[workspaceId]?.[sessionId]
 		) {
-			toast.error("The chat could not be restored.", "Couldn't open the chat");
+			toast.error(t("The chat could not be restored."), t("Couldn't open the chat"));
 		}
 	} catch (err) {
 		const current = useAppStore.getState();
@@ -128,7 +129,7 @@ export async function openChatInTab(
 			!current.removedWorkspaceIds[workspaceId] &&
 			!current.deletedSessionsByWorkspace[workspaceId]?.[sessionId]
 		) {
-			toast.error(errorText(err), "Couldn't open the chat");
+			toast.error(errorText(err), t("Couldn't open the chat"));
 		}
 	} finally {
 		useAppStore.getState().endChatStart(workspaceId);

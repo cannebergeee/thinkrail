@@ -17,6 +17,7 @@ import type {
 } from "@thinkrail/contracts";
 import { cn } from "@thinkrail/ui/utils";
 import type { KeyboardEvent, ReactNode } from "react";
+import { t } from "@/i18n";
 
 export type ResourceAction = { pending: boolean; error: string | null };
 export type ResourceActions = Record<string, ResourceAction>;
@@ -117,21 +118,21 @@ export function stateLabel(state: ResourceState, kind: Resource["kind"]): string
 		case "working":
 			return kind === "command" ? "Running" : "Working";
 		case "queued":
-			return "Queued";
+			return t("Queued");
 		case "stopping":
-			return "Stopping…";
+			return t("Stopping…");
 		case "done":
-			return "Done";
+			return t("Done");
 		case "failed":
-			return "Failed";
+			return t("Failed");
 		case "stopped":
-			return "Stopped";
+			return t("Stopped");
 	}
 }
 
 export function formatElapsed(ms: number): string {
 	const minutes = Math.max(0, Math.floor(ms / 60_000));
-	if (minutes < 1) return "<1 min";
+	if (minutes < 1) return t("<1 min");
 	if (minutes < 60) return `${minutes} min`;
 	const hours = Math.floor(minutes / 60);
 	const rest = minutes % 60;
@@ -431,7 +432,7 @@ export function ResourceRow({
 				<button
 					type="button"
 					data-testid="resource-inspect"
-					title={`Inspect ${name}`}
+					title={t("Inspect {0}", name)}
 					onClick={onSelect}
 					className="flex min-w-0 items-baseline gap-8 rounded-xs text-left outline-none focus-visible:ring-2 focus-visible:ring-primary"
 				>

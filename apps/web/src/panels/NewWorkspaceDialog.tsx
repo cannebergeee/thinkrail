@@ -57,6 +57,7 @@ import { SkillsDialog } from "@/chat/SkillsDialog";
 import { useModelCatalog } from "@/chat/useModelCatalog";
 import { useModelPreferences } from "@/chat/useModelPreferences";
 import { useProjectTrustSummary } from "@/chat/useProjectTrustSummary";
+import { t } from "@/i18n";
 import {
 	applyTemplateSlotEdit,
 	beginTemplateSlotSession,
@@ -215,7 +216,7 @@ export function NewWorkspaceDialog({
 		if (!open) return;
 		if (projects.some((p) => p.id === selectedProjectId)) return;
 		onOpenChange(false);
-		toast.info("That project was closed");
+		toast.info(t("That project was closed"));
 	}, [open, projects, selectedProjectId, onOpenChange]);
 
 	useEffect(() => {
@@ -380,7 +381,7 @@ export function NewWorkspaceDialog({
 					...(baseRef ? { baseRef } : {}),
 				});
 			} catch (err) {
-				toast.error(errorText(err), "Couldn't create workspace");
+				toast.error(errorText(err), t("Couldn't create workspace"));
 				setCreating(false);
 				return;
 			} finally {
@@ -422,7 +423,7 @@ export function NewWorkspaceDialog({
 				})
 				.catch((err) => store.appendErrorTurn(session.sessionId, errorText(err)));
 		} catch (err) {
-			toast.error(errorText(err), "Couldn't start the chat");
+			toast.error(errorText(err), t("Couldn't start the chat"));
 		} finally {
 			useAppStore.getState().endChatStart(workspace.id);
 		}
@@ -442,7 +443,7 @@ export function NewWorkspaceDialog({
 			);
 			setSkillCommands(commands);
 		} catch (err) {
-			toast.error(errorText(err), "Couldn't trust project");
+			toast.error(errorText(err), t("Couldn't trust project"));
 		} finally {
 			setTrusting(false);
 		}
@@ -476,11 +477,17 @@ export function NewWorkspaceDialog({
 				}}
 			>
 				<DialogHeader>
-					<DialogTitle>{isolated ? "Create workspace" : "Work in project folder"}</DialogTitle>
+					<DialogTitle>
+						{isolated ? t("Create workspace") : t("Work in project folder")}
+					</DialogTitle>
 					<DialogDescription>
 						{isolated
-							? "A separate checkout on its own new branch. Files, chats, changes, and terminals stay scoped to it."
-							: "Runs directly in your project folder — no isolation. Changes land on the current branch."}
+							? t(
+									"A separate checkout on its own new branch. Files, chats, changes, and terminals stay scoped to it.",
+								)
+							: t(
+									"Runs directly in your project folder — no isolation. Changes land on the current branch.",
+								)}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -488,10 +495,10 @@ export function NewWorkspaceDialog({
 					data-testid="ws-target"
 					className="flex w-fit items-center gap-2 rounded-md border border-control-border-default bg-control-bg p-2"
 				>
-					<legend className="sr-only">Where the work runs</legend>
+					<legend className="sr-only">{t("Where the work runs")}</legend>
 					<TargetOption
 						icon={GitBranch}
-						label="Isolated workspace"
+						label={t("Isolated workspace")}
 						name={targetGroupName}
 						active={isolated}
 						testid="ws-target-worktree"
@@ -499,7 +506,7 @@ export function NewWorkspaceDialog({
 					/>
 					<TargetOption
 						icon={House}
-						label="Project folder"
+						label={t("Project folder")}
 						name={targetGroupName}
 						active={!isolated}
 						testid="ws-target-default"
@@ -518,7 +525,7 @@ export function NewWorkspaceDialog({
 						<BranchPicker
 							branches={branches}
 							selected={baseRef}
-							label="From"
+							label={t("From")}
 							testid="ws-branch-picker"
 							triggerClassName={`${PILL} max-w-[220px]`}
 							refreshing={refreshing}
@@ -543,8 +550,8 @@ export function NewWorkspaceDialog({
 							<TriangleAlert className="mt-2 size-14 shrink-0 text-feedback-warning" aria-hidden />
 							<span className="flex min-w-0 flex-1 flex-col gap-2">
 								<span className="tr-text-ui text-text-default">
-									{untrustedNoticeText(trustNotice)} Your personal and ThinkRail's built-in skills
-									are unaffected.
+									{untrustedNoticeText(trustNotice)}{" "}
+									{t("Your personal and ThinkRail's built-in skills are unaffected.")}
 								</span>
 								{trustEnables ? (
 									<span className="text-text-muted tr-text-metadata">{trustEnables}</span>
@@ -559,7 +566,7 @@ export function NewWorkspaceDialog({
 								disabled={trusting}
 								onClick={() => void trustProject(trustNotice)}
 							>
-								Trust project
+								{t("Trust project")}
 							</Button>
 						</div>
 					</div>
@@ -593,7 +600,7 @@ export function NewWorkspaceDialog({
 								: null;
 							updatePromptDraft(next, nextSlotSession);
 						}}
-						placeholder="What do you want to work on?"
+						placeholder={t("What do you want to work on?")}
 						spellCheck={false}
 						rows={6}
 						className="min-h-[160px]"
@@ -639,12 +646,14 @@ export function NewWorkspaceDialog({
 							data-testid="workspace-naming-hint"
 							className="px-4 text-text-muted tr-text-metadata"
 						>
-							ThinkRail will name the workspace and branch from your request.
+							{t("ThinkRail will name the workspace and branch from your request.")}
 						</p>
 					) : (
 						<p className="mt-4 text-text-muted tr-text-metadata">
-							Type <span className="tr-code-text">/</span> for skills and prompt templates —
-							previewed from the current checkout; the created workspace's session is authoritative.
+							{t("Type")} <span className="tr-code-text">/</span>{" "}
+							{t(
+								"for skills and prompt templates — previewed from the current checkout; the created workspace's session is authoritative.",
+							)}
 						</p>
 					)}
 				</div>
@@ -682,11 +691,11 @@ export function NewWorkspaceDialog({
 						{creating ? (
 							<>
 								<Loader2 className="size-4 animate-spin motion-reduce:animate-none" />
-								{isolated ? "Creating…" : "Starting…"}
+								{isolated ? t("Creating…") : t("Starting…")}
 							</>
 						) : (
 							<>
-								{isolated ? "Create" : "Start"}
+								{isolated ? t("Create") : t("Start")}
 								<span className="inline-flex h-16 min-w-16 items-center justify-center rounded-sm bg-on-primary-soft px-4 tr-code-text">
 									↵
 								</span>
@@ -762,9 +771,9 @@ function ProjectPicker({
 			</PopoverTrigger>
 			<PopoverContent align="start" container={container} className="w-[280px] p-0">
 				<Command>
-					<CommandInput placeholder="Search projects…" />
+					<CommandInput placeholder={t("Search projects…")} />
 					<CommandList>
-						<CommandEmpty>No projects.</CommandEmpty>
+						<CommandEmpty>{t("No projects.")}</CommandEmpty>
 						<CommandGroup>
 							{projects.map((p) => (
 								<CommandItem

@@ -12,6 +12,7 @@ import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { cn } from "@thinkrail/ui/utils";
 import { useCallback, useEffect, useState } from "react";
 import { LoadingRegion } from "@/components/Skeleton";
+import { t } from "@/i18n";
 import { toast, useAppStore } from "@/store";
 import { errorText, getTransport, reloadSessionResourcesWithSkillBaseline } from "@/transport";
 import {
@@ -23,10 +24,14 @@ import {
 import { useProjectTrustSummary } from "./useProjectTrustSummary";
 
 const TIER_META: Record<string, { label: string; hint: string; rank: number }> = {
-	bundled: { label: "ThinkRail", hint: "Bundled with the app.", rank: 0 },
-	pi: { label: "Pi", hint: "Pi-native / configured.", rank: 1 },
-	personal: { label: "Personal", hint: "Your own libraries (~/.claude, ~/.codex, …).", rank: 2 },
-	project: { label: "Project", hint: "Committed to the repo — gated behind trust.", rank: 4 },
+	bundled: { label: "ThinkRail", hint: t("Bundled with the app."), rank: 0 },
+	pi: { label: t("Pi"), hint: t("Pi-native / configured."), rank: 1 },
+	personal: {
+		label: t("Personal"),
+		hint: t("Your own libraries (~/.claude, ~/.codex, …)."),
+		rank: 2,
+	},
+	project: { label: t("Project"), hint: t("Committed to the repo — gated behind trust."), rank: 4 },
 };
 
 interface Group {
@@ -128,9 +133,9 @@ export function SkillsDialog({
 				sessionId: workspace.sessionId,
 			});
 			workspace.onReloaded?.(syncedTick);
-			toast.success("This chat now uses the updated skills.", "Skills reloaded");
+			toast.success(t("This chat now uses the updated skills."), t("Skills reloaded"));
 		} catch (err) {
-			toast.error(errorText(err), "Couldn't reload skills");
+			toast.error(errorText(err), t("Couldn't reload skills"));
 		} finally {
 			setBusy(false);
 		}
@@ -199,7 +204,7 @@ export function SkillsDialog({
 						checked={groupOn}
 						busy={busy}
 						blockedReason={lockedByMaster ? "Off — turn on All plugins first" : undefined}
-						label={`Enable ${group.label} skill group`}
+						label={t("Enable {0} skill group", group.label)}
 						testId="group-toggle"
 						onCheckedChange={(enabled) => setGroupEnabled(group.key, enabled)}
 					/>
@@ -239,7 +244,7 @@ export function SkillsDialog({
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent data-testid="skills-dialog" className="max-w-[560px] gap-12 p-12">
 				<div className="flex items-center justify-between gap-8 pr-[2rem]">
-					<DialogTitle className="tr-text-ui text-text-default">Skills</DialogTitle>
+					<DialogTitle className="tr-text-ui text-text-default">{t("Skills")}</DialogTitle>
 					{workspace ? (
 						<IconTooltip
 							label={
@@ -257,7 +262,7 @@ export function SkillsDialog({
 								onClick={() => void reload()}
 							>
 								<RefreshCw className="size-14" />
-								Reload
+								{t("Reload")}
 							</Button>
 						</IconTooltip>
 					) : null}
@@ -268,8 +273,8 @@ export function SkillsDialog({
 						data-testid="skills-stale"
 						className="rounded-sm border border-border-default bg-container-elevated-bg px-12 py-8 text-text-muted tr-text-metadata"
 					>
-						This worktree's skills changed on disk —{" "}
-						<span className="text-text-default">Reload</span> to apply them to this chat.
+						{t("This worktree's skills changed on disk —")}{" "}
+						<span className="text-text-default">{t("Reload")}</span> to apply them to this chat.
 					</div>
 				) : null}
 
@@ -305,7 +310,7 @@ export function SkillsDialog({
 									)
 								}
 							>
-								Trust project
+								{t("Trust project")}
 							</Button>
 						</div>
 					</div>
@@ -315,7 +320,7 @@ export function SkillsDialog({
 					{entries === null ? (
 						<LoadingRegion rows={4} className="px-8 py-12" />
 					) : entries.length === 0 ? (
-						<p className="px-8 py-12 text-text-muted tr-text-ui">No skills discovered.</p>
+						<p className="px-8 py-12 text-text-muted tr-text-ui">{t("No skills discovered.")}</p>
 					) : (
 						<>
 							{leadingGroups.map(renderGroup)}
@@ -325,12 +330,12 @@ export function SkillsDialog({
 									className="sticky top-0 z-20 flex h-32 items-center gap-8 border-border-default border-y bg-container-header-bg px-8"
 								>
 									<span className="min-w-0 flex-1 tr-text-eyebrow text-text-default">
-										All plugins
+										{t("All plugins")}
 									</span>
 									<SkillSwitch
 										checked={!pluginsDisabled}
 										busy={busy}
-										label="Enable all plugins"
+										label={t("Enable all plugins")}
 										testId="all-plugins-toggle"
 										onCheckedChange={(enabled) => setGroupEnabled("@plugins", enabled)}
 									/>
@@ -409,7 +414,7 @@ function SkillRow({
 			{entry.decision === "pending-ack" ? (
 				<Button size="sm" data-testid="skill-ack" disabled={busy} onClick={onAcknowledge}>
 					<ShieldCheck className="size-14" />
-					Enable
+					{t("Enable")}
 				</Button>
 			) : (
 				<SkillSwitch
@@ -418,7 +423,7 @@ function SkillRow({
 					blockedReason={
 						entry.decision === "untrusted" ? "Off — trust this project first" : blockedReason
 					}
-					label={`Enable skill ${entry.name}`}
+					label={t("Enable skill {0}", entry.name)}
 					testId="skill-toggle"
 					onCheckedChange={onToggle}
 				/>

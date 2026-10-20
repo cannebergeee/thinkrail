@@ -1,9 +1,10 @@
+import { t } from "@/i18n";
 import { isPhoneViewport } from "@/lib";
 import type { ResourceRenderer } from "@/resources";
 
 export const codeRenderer: ResourceRenderer = {
 	id: "thinkrail/code",
-	label: "Source",
+	label: t("Source"),
 	match: { text: true },
 	rank: 100,
 	capabilities: {

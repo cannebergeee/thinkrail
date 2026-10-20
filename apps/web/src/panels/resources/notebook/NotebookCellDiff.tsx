@@ -1,6 +1,7 @@
 import { parseDiffFromFile } from "@pierre/diffs";
 import { FileDiff } from "@pierre/diffs/react";
 import { useEffect, useMemo, useState } from "react";
+import { t } from "@/i18n";
 import type { Size } from "../regionReview";
 import { svgIntrinsicSize } from "../svg/svgDocument";
 import { VisualDiff, type VisualDiffSide } from "../VisualDiff";
@@ -100,7 +101,11 @@ function NotebookImageOutputDiff({
 	const originalSide: VisualDiffSide = {
 		present: original !== null,
 		content: original ? (
-			<OutputImage output={original} onSize={setOriginalSize} title="Original notebook output" />
+			<OutputImage
+				output={original}
+				onSize={setOriginalSize}
+				title={t("Original notebook output")}
+			/>
 		) : null,
 		caption: original ? `Old: ${original.mime}` : "Old: No output",
 		intrinsicSize: originalSize,
@@ -108,7 +113,11 @@ function NotebookImageOutputDiff({
 	const modifiedSide: VisualDiffSide = {
 		present: modified !== null,
 		content: modified ? (
-			<OutputImage output={modified} onSize={setModifiedSize} title="Modified notebook output" />
+			<OutputImage
+				output={modified}
+				onSize={setModifiedSize}
+				title={t("Modified notebook output")}
+			/>
 		) : null,
 		caption: modified ? `New: ${modified.mime}` : "New: No output",
 		intrinsicSize: modifiedSize,
@@ -135,7 +144,7 @@ function OutputSide({ output, title }: { output: NotebookOutput | null; title: s
 					<NotebookOutputItem output={output} title={`${title} notebook output`} />
 				) : (
 					<div className="flex min-h-40 items-center justify-center tr-text-ui text-text-muted">
-						No output
+						{t("No output")}
 					</div>
 				)}
 			</div>
@@ -184,8 +193,8 @@ export function NotebookOutputsDiff({
 				if (outputNeedsSideBySide(before) || outputNeedsSideBySide(after)) {
 					return (
 						<div key={`rich:${index}`} className="grid grid-cols-1 gap-8 md:grid-cols-2">
-							<OutputSide output={before} title="Old" />
-							<OutputSide output={after} title="New" />
+							<OutputSide output={before} title={t("Old")} />
+							<OutputSide output={after} title={t("New")} />
 						</div>
 					);
 				}

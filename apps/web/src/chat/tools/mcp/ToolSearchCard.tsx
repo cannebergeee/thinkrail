@@ -1,5 +1,6 @@
 import { RiSearchLine } from "@remixicon/react";
 import { numArg, strArg, type ToolRenderProps } from "@thinkrail/extension-api/web";
+import { t } from "@/i18n";
 import { McpHeader, McpOutput, McpRunning } from "./McpCardParts";
 import { mcpText, readToolSearchLoaded, toolSearchDescriptions } from "./mcpResult";
 
@@ -22,12 +23,13 @@ export function ToolSearchCard({ toolCallId, args, result, status }: ToolRenderP
 				{limit !== null ? <span className="shrink-0 text-text-subtle">limit {limit}</span> : null}
 			</McpHeader>
 			{status === "running" ? (
-				<McpRunning label="Searching tools…" />
+				<McpRunning label={t("Searching tools…")} />
 			) : loaded && loaded.length > 0 ? (
 				<div className="flex min-w-0 flex-col gap-2 tr-text-metadata">
 					<span className="text-text-muted">
-						Loaded {loaded.length} {loaded.length === 1 ? "tool" : "tools"}, available from the next
-						call
+						{loaded.length === 1
+							? t("Loaded 1 tool, available from the next call")
+							: t("Loaded {0} tools, available from the next call", loaded.length)}
 					</span>
 					<ul data-testid="tool-search-loaded" className="flex min-w-0 flex-col gap-4">
 						{loaded.map((name) => {

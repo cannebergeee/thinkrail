@@ -10,6 +10,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { t } from "@/i18n";
 import type { AnchorDraft, SurfaceReview } from "@/resources";
 import { ReviewComposer } from "../ReviewComposer";
 import { ReviewThreadCard } from "../ReviewThreadCard";
@@ -213,7 +214,7 @@ export function RegionReviewSurface({
 							>
 								<button
 									type="button"
-									aria-label={`Show comment ${index + 1}`}
+									aria-label={t("Show comment {0}", index + 1)}
 									data-testid="region-comment-marker"
 									className="pointer-events-auto absolute -top-12 -right-12 flex size-24 items-center justify-center rounded-full bg-primary tr-text-action text-text-on-primary outline-none focus-visible:ring-2 focus-visible:ring-primary"
 									onPointerDown={(event) => event.stopPropagation()}
@@ -230,11 +231,11 @@ export function RegionReviewSurface({
 								style={regionStyle(composer.selection, primaryBounds)}
 							>
 								{!drag && !composer.composing ? (
-									<IconTooltip label={`Comment on this ${label}`}>
+									<IconTooltip label={t("Comment on this {0}", label)}>
 										<button
 											type="button"
 											data-testid="review-add-icon"
-											aria-label={`Comment on this ${label}`}
+											aria-label={t("Comment on this {0}", label)}
 											className="pointer-events-auto absolute -right-12 -bottom-12 flex size-24 items-center justify-center rounded-sm bg-primary text-text-on-primary outline-none focus-visible:ring-2 focus-visible:ring-primary"
 											onPointerDown={(event) => event.stopPropagation()}
 											onClick={composer.open}

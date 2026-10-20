@@ -10,6 +10,7 @@ import {
 import { type ImperativePanelGroupHandle, ResizablePanelGroup } from "@thinkrail/ui/resizable";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { memo, type ReactNode, useMemo, useRef } from "react";
+import { t } from "@/i18n";
 import { type LayoutAttention, readLayoutSelection, tupleKey } from "../../lib";
 import { AuxiliaryPaneHeader, AuxiliaryPaneHideButton } from "./AuxiliaryPaneHeader";
 import { resizeVisibleAuxiliaryGroups, visibleAuxiliaryGroups } from "./auxiliaryPresentation";
@@ -95,7 +96,7 @@ export const SideGroupView = memo(function SideGroupView({
 					<DropZone
 						id={tupleKey("dnd-side-group", side, group.id, "above")}
 						target={{ kind: "auxiliary-edge", region: side, index: groupIndex }}
-						label={`Create ${side} group above`}
+						label={t("Create {0} group above", side)}
 						className="absolute inset-x-4 top-4 bottom-1/2"
 					/>
 				) : null}
@@ -103,7 +104,7 @@ export const SideGroupView = memo(function SideGroupView({
 					<DropZone
 						id={tupleKey("dnd-side-group", side, group.id, "below")}
 						target={{ kind: "auxiliary-edge", region: side, index: groupIndex + 1 }}
-						label={`Create ${side} group below`}
+						label={t("Create {0} group below", side)}
 						className="absolute inset-x-4 top-1/2 bottom-4"
 					/>
 				) : null}
@@ -150,7 +151,7 @@ export const SideGroupView = memo(function SideGroupView({
 					/>
 				) : (
 					<div className="flex h-full items-center justify-center tr-text-metadata text-text-muted">
-						Empty group
+						{t("Empty group")}
 					</div>
 				)}
 				{creationTargets}
@@ -180,10 +181,10 @@ export function SideGroupMenu({
 	const paneBelowAvailable = !toolPane || document[side].groups.length < limit;
 	return (
 		<DropdownMenu>
-			<IconTooltip label="Add to this group" wrapTrigger>
+			<IconTooltip label={t("Add to this group")} wrapTrigger>
 				<DropdownMenuTrigger
 					data-testid="side-group-menu"
-					aria-label="Add to this group"
+					aria-label={t("Add to this group")}
 					className="flex w-panel-header-row shrink-0 items-center justify-center border-border-muted border-l text-text-muted hover:bg-control-bg-hovered hover:text-text-default"
 				>
 					<Plus className="size-16" />
@@ -196,8 +197,12 @@ export function SideGroupMenu({
 					onSelect={() => onNewTerminal(group.id, side, toolPane ? { newPaneBelow: true } : {})}
 				>
 					{toolPane
-						? `New terminal pane ${side === "bottom" ? "to the right" : "below"}${paneBelowAvailable ? "" : ` — limited to ${limit}`}`
-						: "New terminal"}
+						? t(
+								"New terminal pane {0}{1}",
+								side === "bottom" ? "to the right" : "below",
+								paneBelowAvailable ? "" : ` — limited to ${limit}`,
+							)
+						: t("New terminal")}
 				</DropdownMenuItem>
 				{missing.length > 0 ? <DropdownMenuSeparator /> : null}
 				{missing.map((tool) => (
@@ -206,7 +211,7 @@ export function SideGroupMenu({
 						data-testid={`show-tool-${tool}`}
 						onSelect={() => onRevealTool(tool)}
 					>
-						Show {toolTab(tool).name}
+						{t("Show")} {toolTab(tool).name}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>
@@ -258,7 +263,7 @@ export function AuxiliaryGroupHeader({
 					<button
 						type="button"
 						data-testid="remove-layout-group"
-						aria-label="Remove group"
+						aria-label={t("Remove group")}
 						disabled={isLayoutUnavailable(removal)}
 						onClick={() => {
 							if (!isLayoutUnavailable(removal)) shared.onApply(removal);

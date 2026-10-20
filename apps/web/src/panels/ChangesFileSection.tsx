@@ -15,6 +15,7 @@ import {
 	DropdownMenuTrigger,
 } from "@thinkrail/ui/dropdown-menu";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { t } from "@/i18n";
 import { copyText, isPhoneViewport } from "@/lib";
 import type { HunkTriage } from "@/resources";
 import { statusLetter } from "../chat/planView";
@@ -273,7 +274,7 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 					{hunkActions ? (
 						<HeaderIconButton
 							testid="changes-section-revert"
-							label="Revert file"
+							label={t("Revert file")}
 							onClick={() => void hunkActions.revertFile()}
 						>
 							<Revert className="size-14" />
@@ -281,7 +282,7 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 					) : null}
 					<HeaderIconButton
 						testid="changes-section-open-tab"
-						label="Open as its own tab"
+						label={t("Open as its own tab")}
 						onClick={openAsTab}
 					>
 						<OpenAsTab className="size-14" />
@@ -289,7 +290,7 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 					<DropdownMenu>
 						<DropdownMenuTrigger
 							data-testid="changes-section-menu"
-							aria-label={`Actions for ${path}`}
+							aria-label={t("Actions for {0}", path)}
 							className="flex size-24 items-center justify-center rounded-sm text-text-muted outline-none hover:bg-control-bg-hovered hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary data-[state=open]:bg-control-bg-selected"
 						>
 							<More className="size-14" />
@@ -297,7 +298,7 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 						<DropdownMenuContent align="end">
 							<DropdownMenuItem onSelect={openAsTab}>
 								<OpenAsTab />
-								Open as tab
+								{t("Open as tab")}
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onSelect={() => {
@@ -305,17 +306,17 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 								}}
 							>
 								<Copy />
-								Copy path
+								{t("Copy path")}
 							</DropdownMenuItem>
 							{hunkActions ? (
 								<DropdownMenuItem onSelect={() => void hunkActions.revertFile()}>
 									<Revert />
-									Revert file
+									{t("Revert file")}
 								</DropdownMenuItem>
 							) : null}
 							<DropdownMenuItem onSelect={onToggleViewed}>
 								<Check />
-								{viewed ? "Mark as not viewed" : "Mark as viewed"}
+								{viewed ? t("Mark as not viewed") : t("Mark as viewed")}
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -335,7 +336,7 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 						>
 							{viewed ? <Check className="size-10" /> : null}
 						</span>
-						Viewed
+						{t("Viewed")}
 					</button>
 				</span>
 			</div>
@@ -347,8 +348,8 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 					>
 						<span>
 							{changedLines > 0
-								? `Large change — ${changedLines} lines, collapsed by default.`
-								: "Collapsed by default."}
+								? t("Large change — {0} lines, collapsed by default.", changedLines)
+								: t("Collapsed by default.")}
 						</span>
 						<button
 							type="button"
@@ -356,14 +357,14 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 							onClick={toggleCollapsed}
 							className="text-text-muted underline-offset-2 hover:text-text-default hover:underline"
 						>
-							Expand
+							{t("Expand")}
 						</button>
 						<button
 							type="button"
 							onClick={openAsTab}
 							className="text-text-muted underline-offset-2 hover:text-text-default hover:underline"
 						>
-							Open as tab
+							{t("Open as tab")}
 						</button>
 					</div>
 				) : null
@@ -372,14 +373,16 @@ export const ChangesFileSection = memo(function ChangesFileSection({
 					data-testid="changes-section-error"
 					className="flex items-center gap-8 px-12 py-8 tr-text-metadata text-feedback-error"
 				>
-					<span>Could not read this diff: {error}</span>
+					<span>
+						{t("Could not read this diff:")} {error}
+					</span>
 					<button
 						type="button"
 						data-testid="changes-section-retry"
 						onClick={() => setError(null)}
 						className="text-text-muted underline-offset-2 hover:text-text-default hover:underline"
 					>
-						Retry
+						{t("Retry")}
 					</button>
 				</div>
 			) : !content ? (

@@ -1,4 +1,5 @@
 import type { SpecGraphNode } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 
 export interface SpecTreeNode {
 	node: SpecGraphNode;
@@ -11,11 +12,11 @@ interface SpecRole {
 }
 
 const SPEC_ROLES = {
-	"goal-and-requirements": { label: "Goal", tag: "GOAL" },
-	"architecture-design": { label: "Architecture", tag: "ARCH" },
-	"module-design": { label: "Module", tag: "MODULE" },
-	"submodule-design": { label: "Submodule", tag: "SUBMODULE" },
-	"task-spec": { label: "Task", tag: "TASK" },
+	"goal-and-requirements": { label: t("Goal"), tag: "GOAL" },
+	"architecture-design": { label: t("Architecture"), tag: "ARCH" },
+	"module-design": { label: t("Module"), tag: "MODULE" },
+	"submodule-design": { label: t("Submodule"), tag: "SUBMODULE" },
+	"task-spec": { label: t("Task"), tag: "TASK" },
 } as const satisfies Record<string, SpecRole>;
 
 type KnownSpecType = keyof typeof SPEC_ROLES;
@@ -27,7 +28,7 @@ function isKnownSpecType(type: string): type is KnownSpecType {
 export function specRoleLabel(type: string): string {
 	if (isKnownSpecType(type)) return SPEC_ROLES[type].label;
 	const words = type.split(/[-_\s]+/).filter(Boolean);
-	if (words.length === 0) return "Spec";
+	if (words.length === 0) return t("Spec");
 	return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 }
 

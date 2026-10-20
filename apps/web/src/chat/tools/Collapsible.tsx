@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { t } from "@/i18n";
 import { useFold } from "../foldState";
 
 const THRESHOLD = 24;
@@ -39,7 +40,7 @@ export function Collapsible({
 				onClick={toggle}
 				className="self-start text-primary tr-text-metadata hover:underline"
 			>
-				{expanded ? "Show less" : `Show all ${lines} lines`}
+				{expanded ? t("Show less") : t("Show all {0} lines", lines)}
 			</button>
 		</div>
 	);

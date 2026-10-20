@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import type { ResourceDiffProps } from "@/resources";
 import { PdfDiffPage } from "./PdfDiffPage";
 import { PdfToolbar } from "./PdfToolbar";
@@ -128,14 +129,14 @@ export default function PdfDiff({
 	if (originalLoaded.error || modifiedLoaded.error) {
 		return (
 			<div className="flex h-full items-center justify-center bg-container-content-bg tr-text-ui text-feedback-error">
-				PDF diff failed.
+				{t("PDF diff failed.")}
 			</div>
 		);
 	}
 	if (!originalLoaded.settled || !modifiedLoaded.settled) {
 		return (
 			<div className="flex h-full items-center justify-center bg-container-content-bg tr-text-ui text-text-muted">
-				Loading PDF diff…
+				{t("Loading PDF diff…")}
 			</div>
 		);
 	}

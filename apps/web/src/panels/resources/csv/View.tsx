@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { TableVirtuoso, type TableVirtuosoHandle } from "react-virtuoso";
+import { t } from "@/i18n";
 import type { ResourceViewProps, ReviewThread } from "@/resources";
 import { ReviewComposer } from "../../ReviewComposer";
 import { ReviewThreadCard } from "../../ReviewThreadCard";
@@ -120,7 +121,7 @@ export default function CsvView({
 							<button
 								key={entry.thread.id}
 								type="button"
-								aria-label={`Show comment ${entry.number}`}
+								aria-label={t("Show comment {0}", entry.number)}
 								className="flex size-20 items-center justify-center rounded-full bg-primary tr-text-metadata text-text-on-primary outline-none focus-visible:ring-2 focus-visible:ring-primary"
 								onClick={(event) => {
 									event.stopPropagation();
@@ -181,7 +182,7 @@ export default function CsvView({
 					/>
 				</div>
 			) : (
-				<p className="p-12 tr-text-ui text-text-muted">Empty table</p>
+				<p className="p-12 tr-text-ui text-text-muted">{t("Empty table")}</p>
 			)}
 			<StaleComposerNotice visible={composer.stale} />
 			{composer.composing && draft && review ? (

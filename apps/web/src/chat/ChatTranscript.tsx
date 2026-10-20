@@ -16,6 +16,7 @@ import {
 } from "react";
 import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useShallow } from "zustand/react/shallow";
+import { t } from "@/i18n";
 import {
 	EMPTY_RUNTIME,
 	selectChatAttended,
@@ -434,7 +435,7 @@ const ChatTranscript = forwardRef<
 				: currentTurns.findLast((t) => turnAnchorText(t).includes(prefix));
 		const index = target ? rowIndexForTurn(currentRows, target.id) : -1;
 		if (index === -1) {
-			toast.error("couldn't locate the message — the session may have changed");
+			toast.error(t("couldn't locate the message — the session may have changed"));
 			useAppStore.getState().clearChatLocation();
 			return;
 		}
@@ -456,7 +457,7 @@ const ChatTranscript = forwardRef<
 				if (useAppStore.getState().chatLocationRequest !== chatLocationRequest) return;
 				if (result === "found") setFlashRowId(rowId);
 				else if (result === "missing")
-					toast.error("couldn't locate the message — the session may have changed");
+					toast.error(t("couldn't locate the message — the session may have changed"));
 				useAppStore.getState().clearChatLocation();
 			},
 		);

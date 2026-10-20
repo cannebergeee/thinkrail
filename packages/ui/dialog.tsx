@@ -6,6 +6,17 @@ import { cn } from "./utils";
 
 const OPEN_MODAL_LAYER = '[data-modal-layer][data-state="open"]';
 
+/**
+ * The close button's accessible name. `@thinkrail/ui` cannot import the web app's catalog, and the app
+ * already declares the interface language on `<html lang>`, so the package reads it from there. An
+ * explicit `closeLabel` still wins for a caller that wants its own wording.
+ */
+function defaultCloseLabel(): string {
+	return typeof document !== "undefined" && document.documentElement.lang.startsWith("zh")
+		? "关闭"
+		: "Close";
+}
+
 function subscribeModalLayers(onChange: () => void): () => void {
 	const observer = new MutationObserver(onChange);
 	observer.observe(document.body, {
@@ -47,8 +58,13 @@ function DialogContent({
 	className,
 	children,
 	hideClose = false,
+	closeLabel,
 	...props
-}: React.ComponentProps<typeof DialogPrimitive.Content> & { hideClose?: boolean }) {
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+	hideClose?: boolean;
+	/** Accessible name of the built-in close button; defaults to the document language's word. */
+	closeLabel?: string;
+}) {
 	return (
 		<DialogPrimitive.Portal>
 			<DialogOverlay />
@@ -63,7 +79,7 @@ function DialogContent({
 				{hideClose ? null : (
 					<DialogPrimitive.Close className="absolute top-12 right-12 rounded-sm p-4 text-text-muted outline-none transition-colors hover:bg-control-bg-hovered hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary">
 						<X className="size-16" />
-						<span className="sr-only">Close</span>
+						<span className="sr-only">{closeLabel ?? defaultCloseLabel()}</span>
 					</DialogPrimitive.Close>
 				)}
 			</DialogPrimitive.Content>

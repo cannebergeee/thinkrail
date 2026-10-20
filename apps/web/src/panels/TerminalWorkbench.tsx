@@ -3,6 +3,7 @@ import type { TerminalTabsPush } from "@thinkrail/contracts";
 import { WS_CHANNELS } from "@thinkrail/contracts";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { lazy, type ReactNode, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { t } from "@/i18n";
 import type { TerminalTab } from "../store";
 import { isConnectedGeneration, toast, useAppStore } from "../store";
 import { errorText, getTransport } from "../transport";
@@ -62,11 +63,11 @@ export function useTerminalCatalog(workspaceId: string | null): boolean {
 export function TerminalWorkbenchBody({ tab, onAdd }: { tab: TerminalTab; onAdd: () => void }) {
 	return (
 		<div data-testid="terminal-panel" className="relative h-full min-h-0 bg-container-terminal-bg">
-			<IconTooltip label="New terminal">
+			<IconTooltip label={t("New terminal")}>
 				<button
 					type="button"
 					data-testid="terminal-add"
-					aria-label="New terminal"
+					aria-label={t("New terminal")}
 					onClick={onAdd}
 					className="absolute top-4 right-4 z-10 flex size-20 items-center justify-center rounded-sm bg-container-elevated-bg text-text-muted hover:bg-control-bg-hovered hover:text-text-default"
 				>
@@ -120,7 +121,7 @@ export function useTerminalClose(): {
 		if (forceSubmitted.current === request) forceSubmitted.current = null;
 		setCloseState((current) => (current?.request === request ? null : current));
 		if (!useAppStore.getState().removedWorkspaceIds[request.tab.workspaceId]) {
-			toast.error(errorText(error), "Couldn't close the terminal");
+			toast.error(errorText(error), t("Couldn't close the terminal"));
 		}
 	}, []);
 	const pending = closeState?.phase === "confirming" ? closeState.request : null;
@@ -181,9 +182,12 @@ export function useTerminalClose(): {
 					if (activeRequest.current === pending) activeRequest.current = null;
 					setCloseState(null);
 				}}
-				title="Something is running"
-				description={`“${pending?.tab.title ?? "This terminal"}” has a running process. Closing the tab ends it.`}
-				confirmLabel="Close anyway"
+				title={t("Something is running")}
+				description={t(
+					"“{0}” has a running process. Closing the tab ends it.",
+					pending?.tab.title ?? "This terminal",
+				)}
+				confirmLabel={t("Close anyway")}
 				confirmTestId="terminal-close-busy-confirm"
 				destructive
 				onConfirm={() => {

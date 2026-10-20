@@ -7,6 +7,7 @@ import {
 } from "@remixicon/react";
 import type { BackgroundCommandSummary, SubagentResourceSummary } from "@thinkrail/contracts";
 import { useState } from "react";
+import { t } from "@/i18n";
 import { actionKey, type ResourceActions, ResourceRow, sortLive, toResources } from "./resourceRow";
 
 const EXPANDED_ROW_LIMIT = 4;
@@ -83,7 +84,7 @@ export function ResourcesDock({
 					<RiLoader4Line className="size-12 shrink-0 animate-spin motion-reduce:animate-none" />
 				)}
 				<span>
-					{rows.length} active{authoritative ? "" : " · reconnecting"}
+					{rows.length} active{authoritative ? "" : t(" · reconnecting")}
 				</span>
 				{commands.length > 0 ? (
 					<span className="inline-flex items-center gap-4">

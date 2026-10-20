@@ -2,6 +2,7 @@ import type { ExtensionCatalogEntry } from "@thinkrail/contracts";
 import { Switch } from "@thinkrail/ui/switch";
 import { useEffect, useState } from "react";
 import { LoadingRegion } from "@/components/Skeleton";
+import { t } from "@/i18n";
 import { toast, useAppStore } from "@/store";
 import { getTransport } from "@/transport";
 
@@ -22,8 +23,8 @@ export function ExtensionsCatalog({
 				className="rounded-sm border border-border-default bg-container-elevated-bg px-12 py-8 text-text-muted tr-text-metadata"
 			>
 				{entries === "failed"
-					? "Couldn't load the extensions from this host."
-					: "This host has no ThinkRail extensions registered."}
+					? t("Couldn't load the extensions from this host.")
+					: t("This host has no ThinkRail extensions registered.")}
 			</p>
 		);
 	}
@@ -58,7 +59,7 @@ export function ExtensionsCatalog({
 						</div>
 						<Switch
 							checked={enabled}
-							label={`Enable ${entry.title}`}
+							label={t("Enable {0}", entry.title)}
 							testId={`extension-toggle-${entry.name}`}
 							onCheckedChange={(next) => onToggle(entry.name, next)}
 						/>
@@ -94,17 +95,17 @@ export function ExtensionsSettings() {
 			: [...disabled.filter((candidate) => candidate !== name), name];
 		getTransport()
 			.request("settings.update", { config: { disabledExtensions: next } })
-			.catch(() => toast.error("Couldn't change the extension"));
+			.catch(() => toast.error(t("Couldn't change the extension")));
 	};
 
 	return (
 		<section data-testid="settings-extensions" className="flex flex-col gap-16">
 			<div className="flex flex-col gap-4">
-				<h3 className="tr-title-section text-text-default">Extensions</h3>
+				<h3 className="tr-title-section text-text-default">{t("Extensions")}</h3>
 				<p className="text-text-muted tr-text-metadata">
-					The ThinkRail extensions this host gives the agent. Turning one off removes its tools from
-					new chats and from open chats once their current turn ends; past results still render.
-					Your choice is saved on the host and follows you across devices.
+					{t(
+						"The ThinkRail extensions this host gives the agent. Turning one off removes its tools from new chats and from open chats once their current turn ends; past results still render. Your choice is saved on the host and follows you across devices.",
+					)}
 				</p>
 			</div>
 			<ExtensionsCatalog entries={entries} disabled={disabled} onToggle={toggle} />

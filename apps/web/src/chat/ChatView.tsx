@@ -68,6 +68,7 @@ import { useModelCatalog } from "./useModelCatalog";
 import { useModelPreferences } from "./useModelPreferences";
 import { useSessionStats } from "./useSessionStats";
 import "./tools/register";
+import { t } from "@/i18n";
 import type { ChatAttachment } from "./types";
 import { useHistorySearch } from "./useHistorySearch";
 
@@ -410,7 +411,7 @@ export default function ChatView({
 					if (useAppStore.getState().sessions[sessionId]?.thinkingLevel === level) {
 						useAppStore.getState().setThinkingLevel(sessionId, previous);
 					}
-					toast.error(errorText(error), "Couldn't change the effort level");
+					toast.error(errorText(error), t("Couldn't change the effort level"));
 				}),
 		[sessionId],
 	);
@@ -641,7 +642,7 @@ export default function ChatView({
 			closeHistory();
 			useAppStore.getState().deleteChat(targetWorkspaceId, targetSessionId);
 		} catch (err) {
-			toast.error(errorText(err), "Couldn't delete the chat");
+			toast.error(errorText(err), t("Couldn't delete the chat"));
 		}
 	};
 
@@ -846,14 +847,16 @@ export default function ChatView({
 			/>
 			<Dialog open={stopAllOpen} onOpenChange={setStopAllOpen}>
 				<DialogContent onCloseAutoFocus={returnToResources}>
-					<DialogTitle>Stop all subagents?</DialogTitle>
+					<DialogTitle>{t("Stop all subagents?")}</DialogTitle>
 					<DialogDescription>
-						Stop {resources.groups.subagents.length} active subagents in this chat? The main chat
-						and future delegation are unaffected.
+						{t("Stop")} {resources.groups.subagents.length}{" "}
+						{t(
+							"active subagents in this chat? The main chat and future delegation are unaffected.",
+						)}
 					</DialogDescription>
 					<DialogFooter>
 						<Button variant="ghost" onClick={() => setStopAllOpen(false)}>
-							Cancel
+							{t("Cancel")}
 						</Button>
 						<Button
 							data-testid="resources-stop-all-confirm"
@@ -867,7 +870,7 @@ export default function ChatView({
 								setStopAllOpen(false);
 							}}
 						>
-							Stop {resources.groups.subagents.length} subagents
+							{t("Stop")} {resources.groups.subagents.length} subagents
 						</Button>
 					</DialogFooter>
 				</DialogContent>

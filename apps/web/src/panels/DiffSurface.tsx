@@ -9,6 +9,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { t } from "@/i18n";
 import { usePhoneViewport } from "@/lib";
 import {
 	describeResource,
@@ -203,12 +204,12 @@ export function useDiffSurface({
 			const code = wsErrorCode(error);
 			if (code === "STALE_VIEW") {
 				reload();
-				toast.info("This file changed since you opened it — review the new diff");
+				toast.info(t("This file changed since you opened it — review the new diff"));
 				return;
 			}
 			if (code === "RECEIPT_UNKNOWN") {
 				reload();
-				toast.info("This change can no longer be undone — the host no longer holds it");
+				toast.info(t("This change can no longer be undone — the host no longer holds it"));
 				return;
 			}
 			toast.error(errorText(error), title);
@@ -236,7 +237,7 @@ export function useDiffSurface({
 				message,
 				durationMs: 8000,
 				action: {
-					label: "Undo",
+					label: t("Undo"),
 					onClick: () => {
 						void undoReceipt(receipt);
 					},
@@ -360,8 +361,9 @@ export function DiffSurfaceBody({
 				{tooExpensive && !showLargeDiff ? (
 					<div data-testid="diff-too-large" className="flex flex-col items-start gap-8 px-12 py-8">
 						<p className="tr-text-ui text-text-muted">
-							This diff is too expensive to show automatically. Rendering it can freeze the app for
-							a while.
+							{t(
+								"This diff is too expensive to show automatically. Rendering it can freeze the app for a while.",
+							)}
 						</p>
 						<div className="flex gap-8">
 							<Button
@@ -370,7 +372,7 @@ export function DiffSurfaceBody({
 								data-testid="diff-show-anyway"
 								onClick={() => setShowLargeDiff(true)}
 							>
-								Show diff anyway
+								{t("Show diff anyway")}
 							</Button>
 							{surface.modified.kind === "text" && reviewable ? (
 								<Button
@@ -379,7 +381,7 @@ export function DiffSurfaceBody({
 									data-testid="diff-open-file"
 									onClick={() => void openFileInTab(workspaceId, path, "keep")}
 								>
-									Open file
+									{t("Open file")}
 								</Button>
 							) : null}
 						</div>

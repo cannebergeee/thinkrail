@@ -1,4 +1,5 @@
 import type { SlashCommandInfo } from "@thinkrail/contracts";
+import { t } from "@/i18n";
 import type { SlashCommandItem } from "@/prompt";
 import { type PreparedChatTitle, prepareChatTitle } from "./chatTitle";
 
@@ -21,7 +22,7 @@ export function compactSubmissionError(
 export const NATIVE_CHAT_COMMANDS: readonly SlashCommandItem[] = [
 	{
 		name: COMPACT_NAME,
-		description: "Manually compact context · optional instructions",
+		description: t("Manually compact context · optional instructions"),
 		source: "builtin",
 		sourceInfo: {
 			path: "<builtin:compact>",
@@ -32,7 +33,7 @@ export const NATIVE_CHAT_COMMANDS: readonly SlashCommandItem[] = [
 	},
 	{
 		name: NAME_NAME,
-		description: "Rename this chat · requires a title",
+		description: t("Rename this chat · requires a title"),
 		source: "builtin",
 		sourceInfo: {
 			path: "<builtin:name>",
@@ -43,7 +44,7 @@ export const NATIVE_CHAT_COMMANDS: readonly SlashCommandItem[] = [
 	},
 	{
 		name: MODEL_NAME,
-		description: "Choose model and effort · optional search, e.g. /model opus high",
+		description: t("Choose model and effort · optional search, e.g. /model opus high"),
 		source: "builtin",
 		sourceInfo: {
 			path: "<builtin:model>",
@@ -91,7 +92,7 @@ export function parseNativeChatCommand(
 }
 
 export function prepareNameChatCommand(titleInput: string, hasImages: boolean): PreparedChatTitle {
-	return hasImages ? { reason: "Remove images to use /name" } : prepareChatTitle(titleInput);
+	return hasImages ? { reason: t("Remove images to use /name") } : prepareChatTitle(titleInput);
 }
 
 export function mergeNativeChatCommands(

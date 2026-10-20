@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import type { AnchorDraft, SurfaceReview } from "@/resources";
 import { ToggleSegment } from "../ToggleSegment";
 import { RegionReviewSurface } from "./RegionReviewSurface";
@@ -10,9 +11,9 @@ export type VisualDiffMode = "2-up" | "swipe" | "onion" | "difference";
 
 const MODES: readonly { mode: VisualDiffMode; label: string }[] = [
 	{ mode: "2-up", label: "2-up" },
-	{ mode: "swipe", label: "Swipe" },
-	{ mode: "onion", label: "Onion skin" },
-	{ mode: "difference", label: "Difference" },
+	{ mode: "swipe", label: t("Swipe") },
+	{ mode: "onion", label: t("Onion skin") },
+	{ mode: "difference", label: t("Difference") },
 ];
 const ALL_MODES = MODES.map(({ mode }) => mode);
 
@@ -181,13 +182,13 @@ export function VisualDiff({
 						<div data-testid={`${prefix}-diff-side`} className="ml-auto flex items-center gap-2">
 							<ToggleSegment
 								testid={`${prefix}-diff-side-base`}
-								label="Comment on old"
+								label={t("Comment on old")}
 								active={activeSide === "base"}
 								onClick={() => setActiveSide("base")}
 							/>
 							<ToggleSegment
 								testid={`${prefix}-diff-side-worktree`}
-								label="Comment on new"
+								label={t("Comment on new")}
 								active={activeSide === "worktree"}
 								onClick={() => setActiveSide("worktree")}
 							/>
@@ -199,7 +200,7 @@ export function VisualDiff({
 				{mode === "2-up" ? (
 					<div className="grid min-h-full grid-cols-1 gap-12 md:grid-cols-2">
 						<SideSurface
-							label="Old"
+							label={t("Old")}
 							selectionKey={`${regionLabel}:base`}
 							side={original}
 							regionLabel={regionLabel}
@@ -207,7 +208,7 @@ export function VisualDiff({
 							emptyLabel={emptyLabel}
 						/>
 						<SideSurface
-							label="New"
+							label={t("New")}
 							selectionKey={`${regionLabel}:worktree`}
 							side={modified}
 							regionLabel={regionLabel}
@@ -255,7 +256,7 @@ export function VisualDiff({
 								{mode === "swipe" ? (
 									<button
 										type="button"
-										aria-label={`Move ${noun} comparison divider`}
+										aria-label={t("Move {0} comparison divider", noun)}
 										className="absolute inset-y-0 z-20 w-4 -translate-x-1/2 cursor-col-resize bg-primary outline-none focus-visible:ring-2 focus-visible:ring-primary"
 										style={{ left: `${divider}%` }}
 										onPointerDown={(event) => {
@@ -273,7 +274,7 @@ export function VisualDiff({
 						</RegionReviewSurface>
 						{mode === "onion" ? (
 							<label className="flex items-center gap-8 tr-text-metadata text-text-muted">
-								New {noun} opacity
+								{t("New")} {noun} opacity
 								<input
 									type="range"
 									min={0}

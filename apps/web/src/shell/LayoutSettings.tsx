@@ -17,6 +17,7 @@ import { Button } from "@thinkrail/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@thinkrail/ui/popover";
 import { IconTooltip } from "@thinkrail/ui/tooltip";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { randomId } from "../lib";
 import { ConfirmDialog } from "../panels/ConfirmDialog";
 import { SettingsGroup } from "../panels/SettingsGroup";
@@ -58,7 +59,7 @@ async function updateCustomPresets(customLayoutPresets: LayoutPreset[]): Promise
 		});
 		return true;
 	} catch (error) {
-		toast.error(errorText(error), "Couldn't save custom layout presets");
+		toast.error(errorText(error), t("Couldn't save custom layout presets"));
 		return false;
 	}
 }
@@ -126,7 +127,7 @@ function GroupLimitInput({
 			/>
 			{invalid ? (
 				<span id={errorId} className="text-feedback-error tr-text-metadata">
-					Use {GROUP_LIMIT_MIN}–{GROUP_LIMIT_MAX}
+					{t("Use")} {GROUP_LIMIT_MIN}–{GROUP_LIMIT_MAX}
 				</span>
 			) : null}
 		</span>
@@ -172,7 +173,7 @@ export function LayoutSettings() {
 			applyLayoutPresetLocally(preset);
 			toast.success(`${preset.name} layout applied`);
 		} catch (error) {
-			toast.error(errorText(error), "Couldn't apply the layout");
+			toast.error(errorText(error), t("Couldn't apply the layout"));
 		}
 	};
 
@@ -214,7 +215,7 @@ export function LayoutSettings() {
 							{isEffectiveDefault && (
 								<div className="absolute top-12 right-12 flex items-center gap-4">
 									<span className="rounded-full bg-primary-subtle px-8 py-2 tr-text-label-pill text-primary">
-										{isStoredDefault ? "Default" : "Fallback"}
+										{isStoredDefault ? t("Default") : t("Fallback")}
 									</span>
 									<IconTooltip
 										label={
@@ -225,7 +226,7 @@ export function LayoutSettings() {
 									>
 										<button
 											type="button"
-											aria-label="About the default layout"
+											aria-label={t("About the default layout")}
 											className="rounded-sm p-2 text-text-muted transition-colors hover:text-text-default focus-visible:ring-2 focus-visible:ring-primary outline-none"
 										>
 											<RiQuestionLine className="size-14" />
@@ -245,7 +246,7 @@ export function LayoutSettings() {
 											if (event.key === "Enter") commitRename(preset.id);
 											if (event.key === "Escape") setRenaming(null);
 										}}
-										aria-label={`Rename ${preset.name}`}
+										aria-label={t("Rename {0}", preset.name)}
 										data-settings-draft-input
 										maxLength={200}
 										className="min-w-0 flex-1 rounded-sm border border-control-border-default bg-control-bg px-4 py-2 tr-text-ui text-text-default outline-none focus:border-control-border-active"
@@ -267,7 +268,7 @@ export function LayoutSettings() {
 											<>
 												<button
 													type="button"
-													aria-label={`Save ${preset.name} name`}
+													aria-label={t("Save {0} name", preset.name)}
 													disabled={!renaming.name.trim() || saving}
 													onClick={() => commitRename(preset.id)}
 													className="rounded-sm p-4 text-primary hover:bg-control-bg-hovered disabled:text-control-disabled-text"
@@ -276,7 +277,7 @@ export function LayoutSettings() {
 												</button>
 												<button
 													type="button"
-													aria-label={`Cancel renaming ${preset.name}`}
+													aria-label={t("Cancel renaming {0}", preset.name)}
 													onClick={() => setRenaming(null)}
 													className="rounded-sm p-4 text-text-muted hover:bg-control-bg-hovered"
 												>
@@ -286,7 +287,7 @@ export function LayoutSettings() {
 										) : (
 											<button
 												type="button"
-												aria-label={`Rename ${preset.name}`}
+												aria-label={t("Rename {0}", preset.name)}
 												disabled={saving}
 												onClick={() => setRenaming({ id: preset.id, name: preset.name })}
 												className="rounded-sm p-4 text-text-muted hover:bg-control-bg-hovered hover:text-text-default disabled:text-control-disabled-text"
@@ -296,7 +297,7 @@ export function LayoutSettings() {
 										)}
 										<button
 											type="button"
-											aria-label={`Delete ${preset.name}`}
+											aria-label={t("Delete {0}", preset.name)}
 											disabled={saving}
 											onClick={() => {
 												const customPresets = customLayoutPresets.filter(
@@ -338,7 +339,7 @@ export function LayoutSettings() {
 											})
 										}
 									>
-										Set default
+										{t("Set default")}
 									</Button>
 								)}
 								<Button
@@ -347,7 +348,7 @@ export function LayoutSettings() {
 									disabled={!canApply || isCurrentlyApplied}
 									onClick={() => setApplying(preset)}
 								>
-									Apply now…
+									{t("Apply now…")}
 								</Button>
 							</div>
 						</div>
@@ -375,10 +376,10 @@ export function LayoutSettings() {
 						>
 							<Plus className="size-24 text-text-muted group-disabled:text-control-disabled-text" />
 							<p className="mt-8 tr-text-ui text-text-default group-disabled:text-control-disabled-text">
-								Add new layout
+								{t("Add new layout")}
 							</p>
 							<p className="mt-2 tr-text-metadata text-text-muted group-disabled:text-control-disabled-text">
-								Save your current panel arrangement as a reusable layout.
+								{t("Save your current panel arrangement as a reusable layout.")}
 							</p>
 						</button>
 					</PopoverTrigger>
@@ -409,8 +410,8 @@ export function LayoutSettings() {
 								ref={addLayoutInputRef}
 								value={name}
 								onChange={(event) => setName(event.target.value)}
-								placeholder="Layout name"
-								aria-label="Custom preset name"
+								placeholder={t("Layout name")}
+								aria-label={t("Custom preset name")}
 								maxLength={200}
 								className="w-full rounded-sm border border-control-border-default bg-control-bg px-8 py-4 tr-text-ui text-text-default outline-none placeholder:text-text-subtle focus:border-control-border-active"
 							/>
@@ -421,16 +422,16 @@ export function LayoutSettings() {
 									size="sm"
 									onClick={() => setAddLayoutOpen(false)}
 								>
-									Cancel
+									{t("Cancel")}
 								</Button>
 								<Button
 									type="submit"
 									variant="default"
 									size="sm"
-									aria-label="Save preset"
+									aria-label={t("Save preset")}
 									disabled={!name.trim() || saving}
 								>
-									Save
+									{t("Save")}
 								</Button>
 							</div>
 						</form>
@@ -440,8 +441,8 @@ export function LayoutSettings() {
 
 			<SettingsRow
 				className="mt-24"
-				label="Reset to default"
-				description={`Rearranges this window into ${selected.name}.`}
+				label={t("Reset to default")}
+				description={t("Rearranges this window into {0}.", selected.name)}
 				control={
 					<Button
 						variant="outline"
@@ -450,7 +451,7 @@ export function LayoutSettings() {
 						disabled={!canApply}
 						onClick={() => setApplying(selected)}
 					>
-						Reset…
+						{t("Reset…")}
 					</Button>
 				}
 			/>
@@ -470,31 +471,31 @@ export function LayoutSettings() {
 							<RiArrowRightSLine className="size-16 text-text-muted" aria-hidden="true" />
 						)}
 					</span>
-					<span className="tr-text-ui text-text-default">Advanced</span>
+					<span className="tr-text-ui text-text-default">{t("Advanced")}</span>
 				</button>
 				{advancedOpen && (
 					<div className="pb-12">
 						<SettingsGroup
-							title="Group limits"
-							description="Maximum groups per region for new arrangements."
+							title={t("Group limits")}
+							description={t("Maximum groups per region for new arrangements.")}
 							testId="layout-group-limits"
 						>
 							<SettingsRow
-								label="Side groups"
+								label={t("Side groups")}
 								control={
 									<GroupLimitInput
 										id="layout-side-group-limit"
-										label="Maximum side groups"
+										label={t("Maximum side groups")}
 										limitKey="maxSideGroups"
 									/>
 								}
 							/>
 							<SettingsRow
-								label="Bottom groups"
+								label={t("Bottom groups")}
 								control={
 									<GroupLimitInput
 										id="layout-bottom-group-limit"
-										label="Maximum bottom groups"
+										label={t("Maximum bottom groups")}
 										limitKey="maxBottomGroups"
 									/>
 								}
@@ -509,9 +510,9 @@ export function LayoutSettings() {
 				onOpenChange={(open) => {
 					if (!open) setApplying(null);
 				}}
-				title="Apply this layout?"
-				description="Rearranges panels in this window. Open files and terminals are preserved."
-				confirmLabel="Apply layout"
+				title={t("Apply this layout?")}
+				description={t("Rearranges panels in this window. Open files and terminals are preserved.")}
+				confirmLabel={t("Apply layout")}
 				confirmTestId="layout-apply-confirm"
 				onConfirm={() => {
 					if (applying) apply(applying);

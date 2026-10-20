@@ -1,5 +1,6 @@
 import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { t } from "@/i18n";
 import type { SurfaceReview } from "@/resources";
 import { RegionReviewSurface } from "../RegionReviewSurface";
 import type { Size } from "../regionReview";
@@ -107,7 +108,9 @@ export function PdfPageCanvas({
 			data-page={page}
 			className="flex flex-col gap-4"
 		>
-			<span className="tr-text-metadata text-text-muted">Page {page}</span>
+			<span className="tr-text-metadata text-text-muted">
+				{t("Page")} {page}
+			</span>
 			<RegionReviewSurface
 				review={pageReview}
 				intrinsicSize={size}
@@ -117,7 +120,11 @@ export function PdfPageCanvas({
 				label={`page ${page} region`}
 				draftForRegion={(region) => pdfRegionDraft(region, page)}
 			>
-				<canvas ref={canvasRef} className="block h-full w-full" aria-label={`PDF page ${page}`} />
+				<canvas
+					ref={canvasRef}
+					className="block h-full w-full"
+					aria-label={t("PDF page {0}", page)}
+				/>
 			</RegionReviewSurface>
 		</section>
 	);

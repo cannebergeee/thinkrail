@@ -17,6 +17,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { LoginDialog } from "@/auth";
 import { AUTH_KIND_LABEL } from "@/chat/modelPicker";
 import { SkeletonRows } from "@/components/Skeleton";
+import { t } from "@/i18n";
 import { selectLoginBusy, toast, useAppStore } from "@/store";
 import { errorText, getTransport } from "@/transport";
 import { JetBrainsAiCard } from "./JetBrainsAiCard";
@@ -78,7 +79,7 @@ export function ProvidersSettings() {
 			const { loginId } = await getTransport().request("provider.loginStart", { providerId, type });
 			useAppStore.getState().beginLogin(loginId, providerId);
 		} catch (err) {
-			toast.error(errorText(err), "Couldn't start the connection");
+			toast.error(errorText(err), t("Couldn't start the connection"));
 		} finally {
 			useAppStore.getState().finishLoginStart();
 			setBusyProvider(null);
@@ -91,7 +92,7 @@ export function ProvidersSettings() {
 			try {
 				await getTransport().request("provider.logout", { providerId });
 			} catch (err) {
-				toast.error(errorText(err), "Couldn't sign out");
+				toast.error(errorText(err), t("Couldn't sign out"));
 				return;
 			} finally {
 				setBusyProvider(null);
@@ -105,7 +106,7 @@ export function ProvidersSettings() {
 		try {
 			await getTransport().request("settings.update", { config });
 		} catch (error) {
-			toast.error(errorText(error), "Couldn't save JetBrains quota settings");
+			toast.error(errorText(error), t("Couldn't save JetBrains quota settings"));
 			throw error;
 		}
 	}, []);
@@ -137,18 +138,18 @@ export function ProvidersSettings() {
 		<div data-testid="settings-providers" className="flex flex-col gap-24">
 			<div className="flex items-center justify-between gap-12">
 				<p className="tr-text-metadata text-text-muted">
-					Connect at least one provider so the agent can run — a subscription or an API key.
+					{t("Connect at least one provider so the agent can run — a subscription or an API key.")}
 				</p>
 				<Button
 					variant="ghost"
 					size="sm"
 					data-testid="providers-refresh"
-					aria-label="Refresh provider status"
+					aria-label={t("Refresh provider status")}
 					disabled={refreshing}
 					onClick={() => void load()}
 				>
 					<RefreshCw className={cn("size-14", refreshing && "animate-spin")} />
-					Refresh
+					{t("Refresh")}
 				</Button>
 			</div>
 
@@ -156,12 +157,12 @@ export function ProvidersSettings() {
 				<SkeletonRows rows={3} />
 			) : failed ? (
 				<p data-testid="providers-error" className="text-text-muted tr-text-ui">
-					Couldn't read the provider status from the host — try Refresh.
+					{t("Couldn't read the provider status from the host — try Refresh.")}
 				</p>
 			) : (
 				<SettingsPageContainer>
 					{configured.length > 0 ? (
-						<SettingsGroup title="Connected">
+						<SettingsGroup title={t("Connected")}>
 							{configured.map((p) => (
 								<ConnectedRow
 									key={p.id}
@@ -184,8 +185,10 @@ export function ProvidersSettings() {
 
 					{subscriptionRows.length > 0 ? (
 						<SettingsGroup
-							title="Subscriptions"
-							description="Use your existing Claude, ChatGPT, or Copilot plan — no API key needed."
+							title={t("Subscriptions")}
+							description={t(
+								"Use your existing Claude, ChatGPT, or Copilot plan — no API key needed.",
+							)}
 						>
 							{subscriptionRows.map((p) => (
 								<ProviderRow
@@ -200,7 +203,7 @@ export function ProvidersSettings() {
 					) : null}
 
 					{apiKeyRows.length > 0 ? (
-						<SettingsGroup title={`Available (${apiKeyRows.length})`}>
+						<SettingsGroup title={t("Available ({0})", apiKeyRows.length)}>
 							{shownKeys.map((p) => (
 								<ProviderRow
 									key={p.id}
@@ -218,7 +221,7 @@ export function ProvidersSettings() {
 										data-testid="providers-show-more"
 										onClick={() => setShowAllKeys(true)}
 									>
-										Show {hiddenKeyCount} more
+										{t("Show {0} more", hiddenKeyCount)}
 									</Button>
 								</div>
 							) : null}
@@ -227,8 +230,8 @@ export function ProvidersSettings() {
 
 					{noInApp.length > 0 ? (
 						<p data-testid="providers-more" className="text-text-muted tr-text-metadata">
-							{noInApp.length} more configured outside the app (environment variables or
-							models.json):{" "}
+							{noInApp.length}{" "}
+							{t("more configured outside the app (environment variables or models.json):")}{" "}
 							{noInApp
 								.slice(0, MAX_REST_NAMES)
 								.map((p) => p.name)
@@ -247,7 +250,7 @@ export function ProvidersSettings() {
 					onReply={(value) => {
 						getTransport()
 							.request("provider.loginReply", { loginId: activeLogin.loginId, value })
-							.catch((err) => toast.error(errorText(err), "Couldn't submit"));
+							.catch((err) => toast.error(errorText(err), t("Couldn't submit")));
 						useAppStore.getState().clearLoginInput();
 					}}
 					onCancel={() => {
@@ -304,7 +307,7 @@ function ConnectedRow({
 					onClick={onSignOut}
 				>
 					<LogOut className="size-14" />
-					Sign out
+					{t("Sign out")}
 				</Button>
 			) : (
 				<span
@@ -312,7 +315,7 @@ function ConnectedRow({
 					title={managedTitle}
 				>
 					<Lock className="size-12" />
-					Managed
+					{t("Managed")}
 				</span>
 			)}
 		</div>
@@ -349,7 +352,7 @@ function ProviderRow({
 						onClick={onSignIn}
 					>
 						<LogIn className="size-14" />
-						Sign in
+						{t("Sign in")}
 					</Button>
 				)}
 				{provider.canApiKey && (
@@ -362,7 +365,7 @@ function ProviderRow({
 						onClick={onApiKey}
 					>
 						<KeyRound className="size-14" />
-						API key
+						{t("API key")}
 					</Button>
 				)}
 			</div>

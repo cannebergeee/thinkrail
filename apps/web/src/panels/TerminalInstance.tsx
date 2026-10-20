@@ -14,6 +14,7 @@ import "@xterm/xterm/css/xterm.css";
 import { Button } from "@thinkrail/ui/button";
 import { onThemeSwap } from "@thinkrail/ui/theme";
 import { type QuietScrollEdges, QuietScrollFrame } from "@/components/QuietScrollArea";
+import { t } from "@/i18n";
 import { cssColorToHex } from "@/lib";
 import { SettingsSection, useAppStore } from "../store";
 import { errorText, getTransport } from "../transport";
@@ -326,7 +327,7 @@ export default function TerminalInstance({ tabKey, workspaceId, initialCommand }
 					attemptPrebind.stop();
 					setDetached(false);
 					setRetrying(false);
-					setFailureMessage(errorText(error, "Couldn’t start or attach the shell."));
+					setFailureMessage(errorText(error, t("Couldn’t start or attach the shell.")));
 				});
 		};
 		reattachRef.current = () => attach(true);
@@ -411,7 +412,9 @@ export default function TerminalInstance({ tabKey, workspaceId, initialCommand }
 					data-testid="terminal-detached-overlay"
 					className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-8 bg-overlay"
 				>
-					<p className="tr-text-metadata text-text-muted">This terminal is open somewhere else.</p>
+					<p className="tr-text-metadata text-text-muted">
+						{t("This terminal is open somewhere else.")}
+					</p>
 					<button
 						type="button"
 						data-testid="terminal-take-back"
@@ -419,7 +422,7 @@ export default function TerminalInstance({ tabKey, workspaceId, initialCommand }
 						onClick={retrying ? undefined : retry}
 						className="rounded-sm bg-control-bg px-8 py-4 tr-text-ui text-text-default hover:bg-control-bg-hovered"
 					>
-						{retrying ? "Taking it back…" : "Take it back"}
+						{retrying ? t("Taking it back…") : t("Take it back")}
 					</button>
 				</div>
 			) : null}
@@ -430,7 +433,7 @@ export default function TerminalInstance({ tabKey, workspaceId, initialCommand }
 				>
 					<div className="flex flex-col items-center gap-8 rounded-md border border-border-default bg-container-elevated-bg p-16 shadow-sm">
 						<div role="alert" className="flex flex-col items-center gap-4">
-							<p className="tr-title-compact text-text-default">Terminal couldn’t start</p>
+							<p className="tr-title-compact text-text-default">{t("Terminal couldn’t start")}</p>
 							<p className="tr-text-metadata text-text-muted">{failureMessage}</p>
 						</div>
 						<div className="flex items-center gap-8">
@@ -441,7 +444,7 @@ export default function TerminalInstance({ tabKey, workspaceId, initialCommand }
 								disabled={retrying}
 								onClick={openTerminalSettings}
 							>
-								Terminal settings
+								{t("Terminal settings")}
 							</Button>
 							<Button
 								size="sm"
@@ -449,7 +452,7 @@ export default function TerminalInstance({ tabKey, workspaceId, initialCommand }
 								aria-disabled={retrying}
 								onClick={retrying ? undefined : retry}
 							>
-								{retrying ? "Retrying…" : "Retry"}
+								{retrying ? t("Retrying…") : t("Retry")}
 							</Button>
 						</div>
 					</div>
