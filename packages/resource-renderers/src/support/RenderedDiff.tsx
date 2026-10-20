@@ -248,6 +248,7 @@ function Placeholder({ testid, children }: { testid: string; children: string })
 
 export default function RenderedDiff({
 	resource,
+	originalResource = resource,
 	original,
 	modified,
 	viewState,
@@ -262,8 +263,8 @@ export default function RenderedDiff({
 			renderToStaticMarkup(
 				<MarkdownDocument
 					content={originalText}
-					workspaceId={resource.workspaceId}
-					path={resource.path}
+					workspaceId={originalResource.workspaceId}
+					path={originalResource.path}
 					Markdown={Markdown}
 					links={{ bytesUrl, openFile }}
 				/>,
@@ -278,7 +279,17 @@ export default function RenderedDiff({
 				/>,
 			),
 		],
-		[originalText, modifiedText, resource.workspaceId, resource.path, Markdown, bytesUrl, openFile],
+		[
+			originalText,
+			modifiedText,
+			originalResource.workspaceId,
+			originalResource.path,
+			resource.workspaceId,
+			resource.path,
+			Markdown,
+			bytesUrl,
+			openFile,
+		],
 	);
 	const merge = useHtmldiffMerge(before, after);
 	const view = useMemo(() => {
