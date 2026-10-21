@@ -833,7 +833,7 @@ export function TurnDivider({
 			id: "specs",
 			icon: FileText,
 			paths: specs,
-			label: (n) => `${n} ${n === 1 ? "spec" : "specs"}`,
+			label: (n) => `${n} ${n === 1 ? t("spec") : t("specs")}`,
 			expanded: selected === "specs",
 			onOpen: onOpenSpec,
 			reveal: () => onReveal("specs"),
@@ -843,7 +843,7 @@ export function TurnDivider({
 			icon: FileDiffGlyph,
 			paths: changedFiles,
 			label: (n) =>
-				`${n} ${n === 1 ? "file changed" : "files changed"}${
+				`${n === 1 ? t("{0} file changed", n) : t("{0} files changed", n)}${
 					totals ? ` · +${totals.added} −${totals.removed}` : ""
 				}`,
 			expanded: selected === "files",
@@ -874,7 +874,7 @@ export function TurnDivider({
 				{toolCount > 0 ? (
 					<span className="flex items-center gap-4">
 						<Wrench className="size-12 shrink-0" />
-						{toolCount} {toolCount === 1 ? "tool call" : "tool calls"}
+						{toolCount === 1 ? t("{0} tool call", toolCount) : t("{0} tool calls", toolCount)}
 					</span>
 				) : null}
 				{groups.map((group) => (

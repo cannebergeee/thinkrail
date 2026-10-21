@@ -646,10 +646,10 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
 							rows={1}
 							placeholder={
 								isStreaming
-									? "Steer the agent at its next step…"
+									? t("Steer the agent at its next step…")
 									: expanded
-										? "Message the agent…  (@ files · / commands)"
-										: "Message…"
+										? t("Message the agent…  (@ files · / commands)")
+										: t("Message…")
 							}
 							className={cn(
 								"absolute inset-0 size-full resize-none overflow-x-hidden overflow-y-auto rounded-sm bg-transparent px-12 py-8 tr-text-ui text-text-default outline-none placeholder:text-text-muted",

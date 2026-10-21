@@ -117,7 +117,7 @@ export function ThinkingGroup({
 			? live
 				? liveActivityTicker(tools, workspaceRoot)
 				: summarizeSteps(tools)
-			: `${formatChars(thought.text.length)} chars`;
+			: t("{0} chars", formatChars(thought.text.length));
 	return (
 		<GroupDisclosure
 			id={id}
@@ -318,8 +318,8 @@ export function summarizeSteps(steps: ActivityStep[]): string {
 	const MAX_NAMES = 4;
 	const shown = names.slice(0, MAX_NAMES).join(", ");
 	const more = names.length - MAX_NAMES;
-	const count = `${flatSteps.length} ${flatSteps.length === 1 ? "step" : "steps"}`;
-	return `${count} · ${shown}${more > 0 ? `, +${more} more` : ""}`;
+	const count = flatSteps.length === 1 ? t("1 step") : t("{0} steps", flatSteps.length);
+	return `${count} · ${shown}${more > 0 ? t(", +{0} more", more) : ""}`;
 }
 
 function liveActivityTicker(steps: ActivityStep[], workspaceRoot: string | undefined): string {

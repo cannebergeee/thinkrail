@@ -86,21 +86,29 @@ export const LAYOUT_TOOL_DEFAULT_SIDES: Record<LayoutToolId, LayoutSide> = {
 	plan: "right",
 };
 
-const LAYOUT_TOOL_NAMES: Record<LayoutToolId, string> = {
-	projects: "Projects",
-	specs: "Specs",
-	files: "Files",
-	changes: "Changes",
-	review: "Review",
-	plan: "TODO List",
-};
+function layoutToolName(tool: LayoutToolId): string {
+	switch (tool) {
+		case "projects":
+			return t("Projects");
+		case "specs":
+			return t("Specs");
+		case "files":
+			return t("Files");
+		case "changes":
+			return t("Changes");
+		case "review":
+			return t("Review");
+		case "plan":
+			return t("TODO List");
+	}
+}
 
 export function layoutTabName(tab: LayoutTab): string {
-	return tab.kind === "tool" ? LAYOUT_TOOL_NAMES[tab.tool] : tab.name;
+	return tab.kind === "tool" ? layoutToolName(tab.tool) : tab.name;
 }
 
 export function toolTab(tool: LayoutToolId): LayoutToolTab {
-	return { kind: "tool", id: `tool:${tool}`, name: LAYOUT_TOOL_NAMES[tool], tool };
+	return { kind: "tool", id: `tool:${tool}`, name: layoutToolName(tool), tool };
 }
 
 export function collectCenterGroups(node: LayoutCenterNode): LayoutCenterGroup[] {

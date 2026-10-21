@@ -3338,7 +3338,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 				kind: "chat",
 				id: chatTabId(workspaceId, sessionId),
 				workspaceId,
-				name: "Chat",
+				name: t("Chat"),
 				sessionId,
 			};
 			const id = existing?.id ?? availableEditorTabId(tabs, preferred);
@@ -4169,7 +4169,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 					kind: "chat",
 					id: target.tabId,
 					workspaceId: target.workspaceId,
-					name: "Chat",
+					name: t("Chat"),
 					sessionId: target.sessionId,
 				} satisfies ChatTab);
 			const resourcePlacement = selectLayoutResourcePlacement(s, target.workspaceId, resource);

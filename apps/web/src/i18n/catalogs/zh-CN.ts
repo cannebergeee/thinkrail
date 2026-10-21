@@ -48,6 +48,23 @@ export const IDENTICAL_KEYS: ReadonlySet<string> = new Set([
 ]);
 
 export const zhCN: Catalog = {
+	"{0} chars": "{0} 字符",
+	"{0} file changed": "{0} 个文件已更改",
+	"{0} files changed": "{0} 个文件已更改",
+	"{0} steps": "{0} 个步骤",
+	"{0} tool call": "{0} 次工具调用",
+	"{0} tool calls": "{0} 次工具调用",
+	"1 step": "1 个步骤",
+	", +{0} more": "，另有 {0} 个",
+	Changes: "更改",
+	Files: "文件",
+	"Message…": "发送消息…",
+	"Message the agent…  (@ files · / commands)": "给智能体发消息…（@ 文件 · / 命令）",
+	Specs: "规格",
+	"Steer the agent at its next step…": "在智能体下一步引导它…",
+	"TODO List": "待办列表",
+	spec: "规格",
+	specs: "规格",
 	" · applies when the chat is idle": " · 聊天空闲时生效",
 	" · reasoning": " · 推理",
 	" · reconnecting": " · 重新连接中",
