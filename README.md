@@ -41,21 +41,25 @@ ThinkRail 是一个会随着你的使用越来越好的智能体 IDE —— 今�
 
 ## 安装
 
-ThinkRail 以两种可叠加的形式发布：原生桌面安装包，和自包含的 `thinkrail` CLI。两者都会连同 `SHA256SUMS` 一起发布在 [releases 页面](https://github.com/cannebergeee/thinkrail/releases)上。
+ThinkRail 以两种形式提供：自包含的 `thinkrail` CLI，以及基于 Electrobun 的原生桌面应用。本仓库只发布 CLI 二进制（连同 `SHA256SUMS`）到 [releases 页面](https://github.com/cannebergeee/thinkrail/releases)；桌面应用目前需要自己构建。
 
-### 桌面版
+### 桌面版（从源码构建）
 
-下载对应平台的 `thinkrail-desktop-*` 产物：
+本仓库还没有发布桌面安装包。桌面应用基于 Electrobun，用系统 webview 渲染（不打包 Chromium）：
 
-- **macOS（Apple Silicon）** —— 打开 DMG。没有 Intel 桌面版。
-- **Windows x64** —— 解压完整的 setup ZIP，然后在原地、紧挨着它的 payload 运行安装程序。
-- **Linux x64 / ARM64** —— 解压 setup tarball 并运行 `installer`。桌面版需要 glibc 2.38+ 以及 GTK 3、WebKitGTK 4.1、Ayatana AppIndicator 3 和 librsvg 2 —— 即 Ubuntu 24.04 或更新版本：
+```bash
+bun install
+bun run desktop:build   # 只打包，不打开窗口
+bun run desktop:dev     # 打包并打开原生窗口
+```
 
-  ```bash
-  sudo apt install libgtk-3-0 libwebkit2gtk-4.1-0 libayatana-appindicator3-1 librsvg2-2
-  ```
+Linux 上需要 glibc 2.38+ 以及 GTK 3、WebKitGTK 4.1、Ayatana AppIndicator 3 和 librsvg 2 —— 即 Ubuntu 24.04 或更新版本：
 
-打包好的 stable 和 nightly 桌面版会在后台检查更新，并在**设置 → 更新**里提示：**下载** → **准备更新** → **安装并重启**。在你选择**安装并重启**之前，不会应用任何东西。只有当包内带有有效的 HTTPS 更新源标识时，更新器才会出现；在此标识之前安装的版本需要先手动安装一次。
+```bash
+sudo apt install libgtk-3-0 libwebkit2gtk-4.1-0 libayatana-appindicator3-1 librsvg2-2
+```
+
+打包好的 stable/canary 构建会在**设置 → 更新**里检查更新源，地址取自 `apps/desktop/electrobun.config.ts` 的 `release.baseUrl`。本仓库还没有发布对应的更新 feed，因此自建的包暂时查不到更新。
 
 ### 命令行
 
@@ -111,12 +115,12 @@ set "THINKRAIL_CHANNEL=stable" && set "THINKRAIL_VERSION=0.1.2" && powershell -c
 
 | 平台 | 桌面版 | CLI |
 | --- | --- | --- |
-| macOS Apple Silicon | DMG | 已签名二进制 |
+| macOS Apple Silicon | 从源码构建 | 已发布，未签名 |
 | macOS Intel | 无 Electrobun 构建 | 无预构建 —— [从源码构建](#开发-thinkrail) |
-| Windows x64 | 已签名安装程序 | 已签名 `.exe` |
-| Linux x64 / ARM64 | setup tarball，未签名 | 未签名 |
+| Windows x64 | 从源码构建 | 已发布，未签名 |
+| Linux x64 / ARM64 | 从源码构建 | 已发布，未签名 |
 
-JetBrains 为 Windows CLI 和桌面安装程序签名。macOS CLI 已签名但尚未公证。签名并公证的桌面 DMG 需要 JetBrains 的协同服务流水线；较早发布的 DMG 和本地构建的包可能仍未签名，会被 Gatekeeper 拦截。Linux 产物未签名。
+本仓库的发布产物均未签名、未公证，上游 JetBrains 的签名与公证流水线不适用于这个 fork。因此 macOS 首次打开和 Windows 下载时都可能出现系统拦截提示。
 
 ## 分析与隐私
 

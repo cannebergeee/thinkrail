@@ -67,27 +67,32 @@ create the tools it needs based on how you actually work.
 
 ## Install
 
-ThinkRail ships in two additive forms: a native desktop installer and the self-contained `thinkrail` CLI.
-Both are published with `SHA256SUMS` on the [releases page](https://github.com/JetBrains/thinkrail/releases).
+ThinkRail ships in two forms: the self-contained `thinkrail` CLI and a native desktop app built on
+Electrobun. This repository publishes only the CLI binaries (with `SHA256SUMS`) on the
+[releases page](https://github.com/cannebergeee/thinkrail/releases); the desktop app must be built from
+source.
 
-### Desktop
+### Desktop (build from source)
 
-Download the `thinkrail-desktop-*` asset for your platform:
+No desktop installer is published yet. The desktop app is built on Electrobun and renders in the system
+webview — it does not bundle Chromium:
 
-- **macOS (Apple Silicon)** — open the DMG. There is no Intel desktop build.
-- **Windows x64** — extract the complete setup ZIP, then run its setup executable in place, next to its
-  payload.
-- **Linux x64 / ARM64** — extract the setup tarball and run `installer`. Desktop builds need glibc 2.38+
-  with GTK 3, WebKitGTK 4.1, Ayatana AppIndicator 3, and librsvg 2 — Ubuntu 24.04 or newer:
+```bash
+bun install
+bun run desktop:build   # package without opening a window
+bun run desktop:dev     # package and open the native window
+```
 
-  ```bash
-  sudo apt install libgtk-3-0 libwebkit2gtk-4.1-0 libayatana-appindicator3-1 librsvg2-2
-  ```
+On Linux it needs glibc 2.38+ with GTK 3, WebKitGTK 4.1, Ayatana AppIndicator 3, and librsvg 2 — Ubuntu
+24.04 or newer:
 
-Packaged stable and nightly desktop builds check for updates in the background and offer them in
-**Settings → Updates**: **Download** → **Preparing update** → **Install & Restart**. Nothing is applied until
-you choose **Install & Restart**. The updater appears only when the package carries a valid HTTPS feed
-identity; installations that predate that identity need one manual installation first.
+```bash
+sudo apt install libgtk-3-0 libwebkit2gtk-4.1-0 libayatana-appindicator3-1 librsvg2-2
+```
+
+Packaged stable/canary builds check for updates in **Settings → Updates**, using the feed URL from
+`release.baseUrl` in `apps/desktop/electrobun.config.ts`. This repository does not publish that feed yet,
+so a self-built package finds no updates.
 
 ### Command line
 
@@ -96,13 +101,13 @@ The installer downloads the right binary, verifies its SHA-256 checksum, and put
 **macOS / Linux** (also Windows under Git Bash):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/JetBrains/thinkrail/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/cannebergeee/thinkrail/main/install.sh | bash
 ```
 
 **Windows** — the same command works from cmd and PowerShell:
 
 ```powershell
-powershell -c "irm https://raw.githubusercontent.com/JetBrains/thinkrail/main/install.ps1 | iex"
+powershell -c "irm https://raw.githubusercontent.com/cannebergeee/thinkrail/main/install.ps1 | iex"
 ```
 
 Then run `thinkrail`, optionally with a git repo to open as a project:
@@ -121,17 +126,17 @@ The installer takes `--channel stable|nightly` and `--version`; a pinned version
 selected channel:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/JetBrains/thinkrail/main/install.sh | bash -s -- --channel nightly
-curl -fsSL https://raw.githubusercontent.com/JetBrains/thinkrail/main/install.sh | bash -s -- --channel stable --version 0.1.2
-curl -fsSL https://raw.githubusercontent.com/JetBrains/thinkrail/main/install.sh | bash -s -- --channel nightly --version 0.2.0-nightly.10
+curl -fsSL https://raw.githubusercontent.com/cannebergeee/thinkrail/main/install.sh | bash -s -- --channel nightly
+curl -fsSL https://raw.githubusercontent.com/cannebergeee/thinkrail/main/install.sh | bash -s -- --channel stable --version 0.1.2
+curl -fsSL https://raw.githubusercontent.com/cannebergeee/thinkrail/main/install.sh | bash -s -- --channel nightly --version 0.2.0-nightly.10
 ```
 
 On Windows the options are environment variables (`THINKRAIL_CHANNEL`, `THINKRAIL_VERSION`,
 `THINKRAIL_PREFIX`, `THINKRAIL_NO_MODIFY_PATH`):
 
 ```powershell
-$env:THINKRAIL_CHANNEL='nightly'; irm https://raw.githubusercontent.com/JetBrains/thinkrail/main/install.ps1 | iex   # PowerShell
-set "THINKRAIL_CHANNEL=stable" && set "THINKRAIL_VERSION=0.1.2" && powershell -c "irm https://raw.githubusercontent.com/JetBrains/thinkrail/main/install.ps1 | iex"   # cmd
+$env:THINKRAIL_CHANNEL='nightly'; irm https://raw.githubusercontent.com/cannebergeee/thinkrail/main/install.ps1 | iex   # PowerShell
+set "THINKRAIL_CHANNEL=stable" && set "THINKRAIL_VERSION=0.1.2" && powershell -c "irm https://raw.githubusercontent.com/cannebergeee/thinkrail/main/install.ps1 | iex"   # cmd
 ```
 
 Installed stable and nightly CLI hosts periodically offer **Run Update** in **Settings → Updates**. It runs
@@ -155,14 +160,14 @@ manually or reinstalled with the script.
 
 | Platform | Desktop | CLI |
 | --- | --- | --- |
-| macOS Apple Silicon | DMG | signed binary |
+| macOS Apple Silicon | build from source | published, unsigned |
 | macOS Intel | no Electrobun build | not prebuilt — [build from source](#developing-thinkrail) |
-| Windows x64 | signed setup executable | signed `.exe` |
-| Linux x64 / ARM64 | setup tarball, unsigned | unsigned |
+| Windows x64 | build from source | published, unsigned |
+| Linux x64 / ARM64 | build from source | published, unsigned |
 
-JetBrains signs the Windows CLI and desktop setup executable. The macOS CLI is signed but not yet notarized.
-Signed and notarized desktop DMGs require the coordinated JetBrains service pipeline; older published DMGs
-and locally built packages may still be unsigned and blocked by Gatekeeper. Linux artifacts are unsigned.
+Nothing this repository publishes is signed or notarized, and upstream JetBrains' signing and notarization
+pipeline does not apply to this fork. Expect a Gatekeeper prompt on macOS and a SmartScreen prompt on
+Windows.
 
 ## Analytics & privacy
 
@@ -197,7 +202,7 @@ You need **Bun** 1.4.3 (the pinned package manager and runtime), **Node.js** ≥
 in-process `pi` engine), and an authenticated `pi` provider for agent work.
 
 ```bash
-git clone https://github.com/JetBrains/thinkrail.git
+git clone https://github.com/cannebergeee/thinkrail.git
 cd thinkrail
 bun install
 bun run dev                          # host + web client together; Ctrl+C stops both

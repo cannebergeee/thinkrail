@@ -15,7 +15,10 @@ export default {
 		exitOnLastWindowClosed: true,
 	},
 	release: {
-		baseUrl: "https://github.com/JetBrains/thinkrail/releases/download/desktop-updates",
+		// The updater feed must belong to the repository that publishes the build. Upstream's feed
+		// carries English desktop packages, so a fork build pointing there would offer to replace
+		// itself with upstream's.
+		baseUrl: "https://github.com/cannebergeee/thinkrail/releases/download/desktop-updates",
 		generatePatch: false,
 	},
 	build: {
