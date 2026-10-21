@@ -14,8 +14,8 @@ ThinkRail 是一个会随着你的使用越来越好的智能体 IDE —— 今�
 ⭐ 如果 ThinkRail 对你有帮助，请点个 star —— 这能让更多人发现它。
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/readme-assets/workbench-dark.png">
-  <img src=".github/readme-assets/workbench-light.png" alt="ThinkRail 工作台：左侧工具轨旁边是「项目」面板，列出各工作树工作区及其「已沉降」搁板；中间是一段已完成的 pi 对话和它的工具步骤；右侧是本次改动产生的 diff，以及「更改」列表上方的规格树" width="900">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme-assets/workbench-dark.zh-CN.png">
+  <img src=".github/readme-assets/workbench-light.zh-CN.png" alt="ThinkRail 工作台：左侧工具轨旁边是「项目」面板，列出各工作树工作区及其「已沉降」搁板；中间是一段已完成的 pi 对话和它的工具步骤；右侧是本次改动产生的 diff，以及「更改」列表上方的规格树" width="900">
 </picture>
 
 *一段 `pi` 会话和它产生的改动，限定在一个隔离的 git worktree 工作区里。*
@@ -33,8 +33,8 @@ ThinkRail 是一个会随着你的使用越来越好的智能体 IDE —— 今�
 - **桌面应用或浏览器。** 原生桌面应用，或者用 `thinkrail` CLI 在浏览器里打开同一个应用。两者内嵌同一个引擎宿主；应用状态保存在 `~/.thinkrail` 下。
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/readme-assets/specs-dark.png">
-  <img src=".github/readme-assets/specs-light.png" alt="从右侧工具轨打开的规格工具，列出项目的规格树，同时编辑器里渲染着产品目标规格" width="900">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme-assets/specs-dark.zh-CN.png">
+  <img src=".github/readme-assets/specs-light.zh-CN.png" alt="从右侧工具轨打开的规格工具，列出项目的规格树，同时编辑器里渲染着产品目标规格" width="900">
 </picture>
 
 *项目的规格图以树的形式呈现，规格本身在旁边一起渲染。*
