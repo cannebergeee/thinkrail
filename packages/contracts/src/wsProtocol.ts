@@ -5,9 +5,13 @@ import type {
 	BackgroundCommandOutputResult,
 	BranchList,
 	ChangeReceipt,
+	CustomProvider,
+	CustomProviderInput,
 	DelegationRunDetails,
 	DelegationRunStatus,
 	DiffStats,
+	DiscoverModelsRequest,
+	DiscoverModelsResult,
 	EditorInfo,
 	ExistingWorktreeCandidate,
 	ExtensionCatalogEntry,
@@ -112,7 +116,8 @@ export type TemplateReadLocation =
 	| { projectId: string; workspaceId?: never }
 	| { workspaceId?: never; projectId?: never };
 
-export const PROTOCOL_VERSION = 86;
+export const PROTOCOL_VERSION = 87;
+export const CUSTOM_PROVIDER_PROTOCOL_VERSION = 87;
 export const WORKSPACE_READ_STATE_PROTOCOL_VERSION = 86;
 export const PROJECT_RENAME_PROTOCOL_VERSION = 85;
 export const MCP_TOOL_GRANTS_PROTOCOL_VERSION = 84;
@@ -295,6 +300,10 @@ export const WS_METHODS = {
 	providerLoginReply: "provider.loginReply",
 	providerLoginCancel: "provider.loginCancel",
 	providerLogout: "provider.logout",
+	providerCustomList: "provider.customList",
+	providerCustomSave: "provider.customSave",
+	providerCustomDelete: "provider.customDelete",
+	providerDiscoverModels: "provider.discoverModels",
 	providerJbcentralConnect: "provider.jbcentralConnect",
 	providerJbcentralDisconnect: "provider.jbcentralDisconnect",
 	providerJbcentralStartProxy: "provider.jbcentralStartProxy",
@@ -820,6 +829,13 @@ export interface WsMethodMap {
 	"provider.loginReply": { params: LoginReply; result: Ack };
 	"provider.loginCancel": { params: { loginId: string }; result: Ack };
 	"provider.logout": { params: { providerId: string }; result: Ack };
+	"provider.customList": { params: Record<string, never>; result: CustomProvider[] };
+	"provider.customSave": { params: { provider: CustomProviderInput }; result: CustomProvider[] };
+	"provider.customDelete": { params: { providerId: string }; result: CustomProvider[] };
+	"provider.discoverModels": {
+		params: DiscoverModelsRequest;
+		result: DiscoverModelsResult;
+	};
 	"provider.jbcentralConnect": { params: Record<string, never>; result: JbcentralConnectResult };
 	"provider.jbcentralDisconnect": { params: Record<string, never>; result: JbcentralActionResult };
 	"provider.jbcentralStartProxy": { params: Record<string, never>; result: JbcentralActionResult };

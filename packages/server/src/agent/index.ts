@@ -9,6 +9,14 @@ export {
 	stopSubagent,
 } from "./chatResources";
 export {
+	customProviderIds,
+	deleteCustomProvider,
+	discoverProviderModels,
+	listCustomProviders,
+	saveCustomProvider,
+	setCustomProviderPublisher,
+} from "./customProviders";
+export {
 	type ReviewSubagentRun,
 	readChildTranscript,
 	refreshSubagentConcurrency,

@@ -7,6 +7,8 @@ import {
 } from "@remixicon/react";
 import {
 	type AppConfigUpdate,
+	CUSTOM_PROVIDER_PROTOCOL_VERSION,
+	type CustomProvider,
 	JBCENTRAL_QUOTA_PROTOCOL_VERSION,
 	type ProviderStatus,
 	type ProviderStatusReport,
@@ -20,14 +22,20 @@ import { SkeletonRows } from "@/components/Skeleton";
 import { t } from "@/i18n";
 import { selectLoginBusy, toast, useAppStore } from "@/store";
 import { errorText, getTransport } from "@/transport";
+import { CustomProvidersSection } from "./CustomProvidersSettings";
 import { JetBrainsAiCard } from "./JetBrainsAiCard";
 import { SettingsGroup, SettingsPageContainer } from "./SettingsGroup";
 
 const API_KEY_VISIBLE = 8;
 const MAX_REST_NAMES = 5;
 
+function supportsCustomProviders(version: number | null): boolean {
+	return version !== null && version >= CUSTOM_PROVIDER_PROTOCOL_VERSION;
+}
+
 export function ProvidersSettings() {
 	const [report, setReport] = useState<ProviderStatusReport | null>(null);
+	const [customProviders, setCustomProviders] = useState<CustomProvider[]>([]);
 	const [failed, setFailed] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 	const [busyProvider, setBusyProvider] = useState<string | null>(null);
@@ -46,11 +54,18 @@ export function ProvidersSettings() {
 		const isCurrent = () =>
 			sequence === loadSequence.current &&
 			providerVersion === useAppStore.getState().providerVersion;
+		const customSupported = supportsCustomProviders(useAppStore.getState().protocolVersion);
 		setRefreshing(true);
 		try {
-			const next = await getTransport().request("provider.status", {});
+			const [next, custom] = await Promise.all([
+				getTransport().request("provider.status", {}),
+				customSupported
+					? getTransport().request("provider.customList", {})
+					: Promise.resolve([] as CustomProvider[]),
+			]);
 			if (!isCurrent()) return;
 			setReport(next);
+			setCustomProviders(custom);
 			setFailed(false);
 		} catch {
 			if (!isCurrent()) return;
@@ -122,7 +137,10 @@ export function ProvidersSettings() {
 						saveQuotaSetting({ jbcentralQuotaRefreshSeconds: seconds }),
 				}
 			: null;
-	const providers = report?.providers ?? [];
+	const customSupported = supportsCustomProviders(protocolVersion);
+	const allProviders = report?.providers ?? [];
+	const customIds = new Set(customProviders.map((provider) => provider.id));
+	const providers = allProviders.filter((provider) => !customIds.has(provider.id));
 	const configured = providers.filter((p) => p.configured);
 	const unconfigured = providers.filter((p) => !p.configured);
 	const subscriptionRows = unconfigured.filter((p) => p.canOAuth);
@@ -131,7 +149,11 @@ export function ProvidersSettings() {
 	const hiddenKeyCount = apiKeyRows.length - shownKeys.length;
 	const noInApp = unconfigured.filter((p) => !p.canOAuth && !p.canApiKey);
 	const loginProviderName =
-		providers.find((p) => p.id === activeLogin?.providerId)?.name ?? activeLogin?.providerId ?? "";
+		allProviders.find((p) => p.id === activeLogin?.providerId)?.name ??
+		activeLogin?.providerId ??
+		"";
+	const statusOf = (providerId: string) =>
+		allProviders.find((provider) => provider.id === providerId);
 	const rowBusy = (id: string) => busyProvider === id || loginBusy;
 
 	return (
@@ -172,6 +194,18 @@ export function ProvidersSettings() {
 								/>
 							))}
 						</SettingsGroup>
+					) : null}
+
+					{customSupported ? (
+						<CustomProvidersSection
+							providers={customProviders}
+							statusOf={statusOf}
+							busyOf={rowBusy}
+							onChanged={() => void load()}
+							onSaved={setCustomProviders}
+							onConnect={(providerId) => void startLogin(providerId, "api_key")}
+							onSignOut={(providerId) => void logout(providerId)}
+						/>
 					) : null}
 
 					{report ? (

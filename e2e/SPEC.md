@@ -87,6 +87,10 @@ therefore proven through every composition root.
 
 ## Chat resource controls
 
+`custom-providers.spec.ts` uses a test-owned local model-list endpoint and the isolated host to cover
+custom provider creation, discovery, model-ID typing without focus loss, secret-free editing,
+catalog availability, sign-out and confirmed deletion. It never sends an agent prompt or uses real keys.
+
 Resource wire coverage opens persisted chat fixtures through the real UI and checks the authoritative
 catalog's session/workspace scope, missing-output result, unavailable controls and empty stop-all.
 Its wire connection uses the launched page's port, not the source host's fixed port: binary and

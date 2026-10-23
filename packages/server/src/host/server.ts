@@ -34,6 +34,7 @@ import {
 	refreshSubagentConcurrency,
 	refreshSubagentTools,
 	setAgentReviewEnabledResolver,
+	setCustomProviderPublisher,
 	setDisabledExtensionsResolver,
 	setExtUiPublisher,
 	setMcpLoginPublisher,
@@ -826,6 +827,7 @@ export async function createServer(options: CreateServerOptions = {}): Promise<R
 	};
 	setJbcentralChangedPublisher(publishProviderChanged);
 	setModelContextPublisher(publishProviderChanged);
+	setCustomProviderPublisher(publishProviderChanged);
 
 	const initialConfig = getConfig();
 	initializeAnalytics({
@@ -872,6 +874,7 @@ export async function createServer(options: CreateServerOptions = {}): Promise<R
 		setFeedbackPublisher(null);
 		setSettingsPublisher(null);
 		setModelContextPublisher(null);
+		setCustomProviderPublisher(null);
 		setJbcentralAppliedPublisher(() => {});
 		setJbcentralChangedPublisher(() => {});
 		server.stop(true);

@@ -14,8 +14,9 @@ tags: [auth, pi]
 Everything about **model-provider credentials**: the read side the Welcome strip renders
 (`provider.status`) and the write side that configures them from inside the app — OAuth sign-in,
 interactive API-key entry (both over the **same login channel**, issue #97), and logout. All of it goes
-through the shared `ModelRuntime` (pi's model/auth facade); we never parse `auth.json` / `models.json`
-ourselves and never surface a credential value over the wire.
+through the shared `ModelRuntime` (pi's model/auth facade); we never parse `auth.json`, and the only
+`models.json` input is the provider-id list that keeps user-authored custom providers on the page —
+never a credential value, and never one over the wire.
 
 ## Boundary
 
@@ -43,8 +44,10 @@ ourselves and never surface a credential value over the wire.
     Assembly is a pure `buildProviderReport(sources)` over a narrow sources slice, unit-tested with
     fixture data; the kind/detail mapping itself is `agent`'s `describeProviderAuth`, shared with the
     catalog's per-model `WireModel.auth` projection so a provider row and a picker row never disagree. Its runtime reads are restricted to the generation's provider-id allowlist captured before
-    the opaque Central extension loads (after invariant host registrations): providers Central *introduces*
-    never become rows or cross the wire. A built-in Central *replaces* (`anthropic`, `openai`, `google-vertex`
+    the opaque Central extension loads (after invariant host registrations), unioned with the ids
+    `agent`'s `customProviderIds()` finds in `models.json` behind a `baseUrl`: providers Central *introduces*
+    never become rows or cross the wire (a Central artifact never writes `models.json`), while a
+    hand-written or in-app gateway stays visible and counts as configured. A built-in Central *replaces* (`anthropic`, `openai`, `google-vertex`
     in the real artifact) stays a row — the user must be able to see which providers reach them through
     JetBrains AI — and is reported as `kind: "central"` with no `detail`, decided purely by the id's membership
     in the generation's `opaqueProviderIds`; its `name` is the generation's pre-extension display name (pi

@@ -123,7 +123,33 @@ answer-injection path, and the **restart repair** that keeps re-opened transcrip
     appear. Live sessions keep the model they were created with; new chats resolve the updated metadata.
     pi owns schema validation and the effective value; error messages are generic and never carry file
     contents. Accepted gap: a Central rebuild whose runtime loaded the file before a save and activated
-    after its refresh serves the old budget until the next read refreshes it.
+    after its refresh serves the old budget until the next read refreshes it. The read/parse/atomic-write
+    plumbing, symlink resolution and the cross-module write serialization live in `modelsFile`, shared with
+    `customProviders`.
+  - `customProviders` — the in-app editor for **third-party endpoints pi does not ship**: a provider entry
+    in `getAgentDir()/models.json` (`name`, `baseUrl`, `api` ∈ openai-completions / openai-responses /
+    anthropic-messages, and a static `models` list with explicit id, name, context window, max output and
+    input kinds). Provider definitions are the user's, so the list only surfaces entries the form can
+    represent (a `baseUrl`, a provider-level `api`, a non-empty `models`); anything else — overrides-only
+    stubs, exotic hand-written shapes — stays untouched and invisible rather than being rewritten, and
+    `customProviderIds()` exposes the wider set (every entry with a `baseUrl`) to `auth`'s provider strip.
+    A create refuses an id that already belongs to a built-in or extension provider (overlaying those stays
+    a hand-edit), validates every field against `CUSTOM_PROVIDER_LIMITS`, then patches
+    `providers.<id>` with `jsonc-parser`, writes through `modelsFile`, and refreshes the current generation
+    before succeeding; edits preserve provider and matching model fields outside the form, and refuse
+    existing entries the form cannot represent. On any failure the previous file is restored so a rejected save leaves no partial
+    provider. The API key never enters `models.json`: it is handed to pi's `login(id, "api_key", …)` prompt,
+    which persists it in pi's credential store, so `provider.status` reports the row as a stored `api-key`
+    credential, `provider.logout` clears it, and an edit with a blank key keeps it. Deleting removes the
+    entry, refreshes, and drops the stored credential; a failed credential drop only logs. Defensive
+    checks keep the surface honest: a malformed input is refused before the file is read, and the write is
+    the only path — pi owns composition, so the host verifies the composed provider exists and rolls back
+    otherwise. Model discovery calls the endpoint's own listing (`GET <baseUrl>/models`, or
+    `<baseUrl>/v1/models` for Anthropic) with the key currently typed or, when editing and the field is
+    blank, the one pi has stored for that custom provider's unchanged base URL and protocol. Discovery
+    refuses redirects so a gateway cannot forward credentials elsewhere; timeouts, refusals, non-JSON and empty listings surface as ordinary
+    errors because discovery is a convenience, never the only way to add a model. Every mutation publishes
+    `provider.changed`.
   - `agentSessionManager` — sessions keyed by `session.sessionId` (each `Entry` also tracks its
     `workspaceId`), `createSession({ cwd, workspaceId, model?, thinkingLevel? })` → `createAgentSession(...)`
     with a per-session `SessionManager` **and `buildSessionSettings(cwd, projectTrusted)`** (the user's

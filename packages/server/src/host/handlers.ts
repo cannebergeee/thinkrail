@@ -24,7 +24,9 @@ import {
 	clearQueueSession,
 	compactSession,
 	createSession,
+	deleteCustomProvider,
 	deleteSession,
+	discoverProviderModels,
 	ensureSessionAttached,
 	followUpSession,
 	getSessionCommands,
@@ -37,6 +39,7 @@ import {
 	isMcpLoginId,
 	isPiSessionId,
 	listAvailableModels,
+	listCustomProviders,
 	listModelContextSettings,
 	listProjectAliasSkillNames,
 	listSessionStates,
@@ -61,6 +64,7 @@ import {
 	renameSession,
 	replyMcpProbe,
 	resolveExtUi,
+	saveCustomProvider,
 	sendReviewFixToSession,
 	setModelContextWindow,
 	setSessionModel,
@@ -1075,6 +1079,10 @@ const handlers: WsHandlers = {
 		await logoutProvider(params.providerId);
 		return { ok: true } as const;
 	},
+	"provider.customList": () => listCustomProviders(),
+	"provider.customSave": (params) => saveCustomProvider(params.provider),
+	"provider.customDelete": (params) => deleteCustomProvider(params.providerId),
+	"provider.discoverModels": (params) => discoverProviderModels(params),
 	"provider.jbcentralConnect": () =>
 		observeSetupAction("provider_connect", connectJbcentral, centralConnectOutcome),
 	"provider.jbcentralDisconnect": () => disconnectJbcentral(),

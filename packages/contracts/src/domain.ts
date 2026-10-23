@@ -649,6 +649,64 @@ export interface ProviderStatusReport {
 	jbcentralInstall: JbcentralInstall;
 }
 
+export type CustomProviderApi = "openai-completions" | "openai-responses" | "anthropic-messages";
+
+export const CUSTOM_PROVIDER_APIS: readonly CustomProviderApi[] = [
+	"openai-completions",
+	"openai-responses",
+	"anthropic-messages",
+];
+
+export const CUSTOM_PROVIDER_LIMITS = {
+	id: { pattern: /^[a-z][a-z0-9-]{0,47}$/ },
+	name: 80,
+	models: 200,
+	modelId: 200,
+	contextWindow: { min: 1_000, max: 10_000_000 },
+	maxTokens: { min: 1, max: 2_000_000 },
+	apiKey: 4_096,
+} as const;
+
+export interface CustomProviderModel {
+	id: string;
+	name: string;
+	contextWindow: number;
+	maxTokens: number;
+	input: ("text" | "image")[];
+}
+
+export interface CustomProvider {
+	id: string;
+	name: string;
+	baseUrl: string;
+	api: CustomProviderApi;
+	models: CustomProviderModel[];
+}
+
+/** `apiKey` is write-only: the host stores it through pi's credential store and never returns it. */
+export interface CustomProviderInput extends CustomProvider {
+	apiKey?: string;
+}
+
+export interface DiscoverModelsRequest {
+	providerId?: string;
+	baseUrl: string;
+	api: CustomProviderApi;
+	apiKey?: string;
+}
+
+export interface DiscoverModelsResult {
+	models: string[];
+}
+
+export function isCustomProviderApi(value: unknown): value is CustomProviderApi {
+	return typeof value === "string" && (CUSTOM_PROVIDER_APIS as readonly string[]).includes(value);
+}
+
+export function isCustomProviderId(value: unknown): value is string {
+	return typeof value === "string" && CUSTOM_PROVIDER_LIMITS.id.pattern.test(value);
+}
+
 export type JbcentralActionResult =
 	| { outcome: "applied" }
 	| { outcome: "failed"; reason: JbcentralActionFailureReason };

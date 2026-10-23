@@ -6,6 +6,7 @@ import type {
 } from "@thinkrail/contracts";
 import { jbcentralInstall } from "@thinkrail/shared/jbcentral";
 import {
+	customProviderIds,
 	describeProviderAuth,
 	type ProviderAuthFacts,
 	settledAvailableModels,
@@ -78,7 +79,9 @@ export async function getProviderStatus(): Promise<ProviderStatusReport> {
 	const jbcentral = await getJbcentralStatus();
 	const install = jbcentralInstall(process.platform);
 	return usePiRuntime(async (runtime, generation) => {
-		const providerStatusIds = [...generation.providerStatusIds];
+		const providerStatusIds = [
+			...new Set([...generation.providerStatusIds, ...customProviderIds()]),
+		];
 		try {
 			await runtime.refresh({ providers: providerStatusIds });
 		} catch {

@@ -573,6 +573,21 @@ default, narrow cross-ring guards, and the quit-confirmation rule both clients d
   `"api_key"`, issue #97 — both auth routes ride one channel; a flow can take minutes and must
   not sit on the request nor block the WS pump) / **`loginReply`** — answers a live `select`/`prompt`,
   correlated by `loginId` / **`loginCancel`** / **`logout`** /
+  **`provider.customList`** / **`provider.customSave`** / **`provider.customDelete`** (v87,
+  **`CUSTOM_PROVIDER_PROTOCOL_VERSION`** — the third-party endpoint set. Reads return
+  **`CustomProvider[]`**: id, display name, base URL, the closed **`CustomProviderApi`** protocol union
+  (`openai-completions` / `openai-responses` / `anthropic-messages`) and a static
+  **`CustomProviderModel[]`** with explicit id, name, context window, max output and input kinds. A write
+  takes **`CustomProviderInput`**, whose optional `apiKey` exists **only** on the input: the host hands it
+  to pi's credential store, so no read can ever return a credential; a blank key on an edit keeps the
+  stored one. Delete names the provider id. **`provider.discoverModels`** asks an endpoint for its model
+  ids (**`DiscoverModelsRequest`** → **`DiscoverModelsResult`**, with an optional `providerId` so a blank
+  key field can fall back to that custom provider's stored credential only for its saved URL and protocol)
+  and is a convenience, so its failures are ordinary
+  errors rather than a state machine. `CUSTOM_PROVIDER_APIS`, `CUSTOM_PROVIDER_LIMITS`,
+  `isCustomProviderId` and `isCustomProviderApi` are the bounds both sides validate against (ids start
+  with a lowercase letter and use lowercase letters, digits and dashes). Every mutation emits
+  `provider.changed`; a pre-v87 host offers none of the four, so clients hide the surface) /
   the **JetBrains AI** set **`jbcentralConnect`** / **`jbcentralDisconnect`** /
   **`jbcentralStartProxy`** / **`jbcentralUpdate`** / **`jbcentralLogin`** (native global Central actions
   returning `JbcentralActionResult`; none accepts an executable, artifact path, output, URL, or secret from

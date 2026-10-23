@@ -655,7 +655,19 @@ a project picker, the prompt hero, and the reused
   lifecycle state. The flag defaults on; the interval defaults to 30 and accepts whole `1–3600` values.
   Off disables (but retains) the interval. The field edits locally, commits on blur/Enter, reports invalid
   range inline, and waits for `settings.changed` rather than installing optimistic authority. Older hosts get
-  neither control. **`GithubSettings`** (the Integrations section's "Local GitHub" group —
+  neither control. **`CustomProvidersSettings`** is the third-party endpoint editor on the same page
+  (protocol v87+, hidden from older hosts): one row per `models.json` provider the host can represent,
+  showing display name, protocol, base URL and model count plus the auth truth `provider.status` reports —
+  a stored key signs out, an unconfigured row offers pi's API-key login, an environment-only credential
+  offers neither — with **Edit** and a confirming **Delete** that removes the definition and its stored key.
+  **Add custom provider** opens a dialog over the id (immutable once created), display name, protocol, base
+  URL, a write-only key and the model rows (id, name, context window, max output, image input). The dialog
+  validates against the contracts' bounds before the host validates again, opens with a blank key on every
+  edit so an unchanged secret is never retyped, and never renders a saved value; a failed save keeps the
+  dialog open with the host's message. **Fetch available models** asks the host to query the endpoint and
+  opens a filterable multi-select whose ids merge into the model rows with default capacities — discovery
+  failing is an inline message, never a blocked form, because the ids can always be typed by hand.
+  **`GithubSettings`** (the Integrations section's "Local GitHub" group —
   `github.authStatus()` shown as `settings-gh-status[data-connected]`: Connected + login, or a Not connected
   notice naming `gh auth login`; Refresh (`github.refresh`) is offered in both states);
   **`AppearanceSettings`** (the catalog-driven theme settings: a **Theme mode** segmented control,

@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import {
 	DEFAULT_CONFIG,
+	isCustomProviderApi,
+	isCustomProviderId,
 	isSettleIdleDays,
 	isSubagentMaxConcurrent,
 	RECENT_MODELS_LIMIT,
@@ -14,6 +16,7 @@ import {
 	CHANGE_MUTATIONS_PROTOCOL_VERSION,
 	CHAT_RESOURCES_PROTOCOL_VERSION,
 	CONTEXT_WINDOW_SETTINGS_PROTOCOL_VERSION,
+	CUSTOM_PROVIDER_PROTOCOL_VERSION,
 	customMessageText,
 	DEFAULT_MODEL_PROTOCOL_VERSION,
 	EXTENSION_CATALOG_PROTOCOL_VERSION,
@@ -198,7 +201,7 @@ test("the project trust summary and pi-level resource consent are pinned to v81"
 });
 
 test("workspace read state is pinned to v86", () => {
-	expect(PROTOCOL_VERSION).toBe(86);
+	expect(PROTOCOL_VERSION).toBeGreaterThanOrEqual(WORKSPACE_READ_STATE_PROTOCOL_VERSION);
 	expect(WORKSPACE_READ_STATE_PROTOCOL_VERSION).toBe(86);
 	expect(WS_METHODS.workspaceMarkUnread).toBe("workspace.markUnread");
 	expect(WS_METHODS.workspaceMarkRead).toBe("workspace.markRead");
@@ -247,6 +250,29 @@ test("model context settings name their two methods at v76", () => {
 	expect(WS_METHODS.modelSetContextWindow).toBe("model.setContextWindow");
 	expect(CONTEXT_WINDOW_SETTINGS_PROTOCOL_VERSION).toBe(76);
 	expect(PROTOCOL_VERSION).toBeGreaterThanOrEqual(CONTEXT_WINDOW_SETTINGS_PROTOCOL_VERSION);
+});
+
+test("custom providers add their own read, write, remove and discovery at v87", () => {
+	expect(CUSTOM_PROVIDER_PROTOCOL_VERSION).toBe(87);
+	expect(PROTOCOL_VERSION).toBeGreaterThanOrEqual(CUSTOM_PROVIDER_PROTOCOL_VERSION);
+	expect(WS_METHODS.providerCustomList).toBe("provider.customList");
+	expect(WS_METHODS.providerCustomSave).toBe("provider.customSave");
+	expect(WS_METHODS.providerCustomDelete).toBe("provider.customDelete");
+	expect(WS_METHODS.providerDiscoverModels).toBe("provider.discoverModels");
+});
+
+test("custom provider ids stay lowercase, dashes and digits", () => {
+	expect(isCustomProviderId("my-gateway")).toBe(true);
+	expect(isCustomProviderId("a")).toBe(true);
+	expect(isCustomProviderId("Gateway")).toBe(false);
+	expect(isCustomProviderId("1gateway")).toBe(false);
+	expect(isCustomProviderId("my_gateway")).toBe(false);
+	expect(isCustomProviderId("")).toBe(false);
+	expect(isCustomProviderId(`${"a".repeat(49)}`)).toBe(false);
+	expect(isCustomProviderApi("openai-completions")).toBe(true);
+	expect(isCustomProviderApi("anthropic-messages")).toBe(true);
+	expect(isCustomProviderApi("openai-responses")).toBe(true);
+	expect(isCustomProviderApi("google-generative-ai")).toBe(false);
 });
 
 test("resource metadata rides the two content reads from v75", () => {
