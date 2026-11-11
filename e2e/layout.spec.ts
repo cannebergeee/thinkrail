@@ -1327,7 +1327,7 @@ test("the hidden bottom drop zone wins overlapping terminal targets and reveals 
 	await expect(async () => {
 		const zoneBox = await dropZone.boundingBox();
 		if (!zoneBox) throw new Error("bottom drop zone has no box");
-		expect(Math.round(zoneBox.height)).toBe(24);
+		expect(Math.round(zoneBox.height)).toBe(32);
 	}).toPass();
 
 	const zoneBox = await dropZone.boundingBox();

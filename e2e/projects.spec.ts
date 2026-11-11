@@ -509,9 +509,13 @@ test("project context actions stay compact and close/reopen is lossless across c
 	await expect(page.getByTestId("add-project-menu")).toBeFocused();
 
 	await page.getByTestId("add-project-menu").click();
-	const fixtureRecent = page.getByRole("menuitem").filter({ hasText: E2E_FIXTURE_REPO });
+	const fixtureRecent = page
+		.getByRole("menuitem")
+		.filter({ hasText: E2E_FIXTURE_REPO.replaceAll("\\", "/") });
 	await expect(fixtureRecent).toBeVisible();
-	await expect(page.getByRole("menuitem").filter({ hasText: secondRepo })).toBeVisible();
+	await expect(
+		page.getByRole("menuitem").filter({ hasText: secondRepo.replaceAll("\\", "/") }),
+	).toBeVisible();
 	await fixtureRecent.click();
 	await expect(page.getByTestId("welcome-title")).toHaveText("sample-project");
 	await expect(
