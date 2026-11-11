@@ -1,5 +1,5 @@
 import { chmodSync, existsSync, writeFileSync } from "node:fs";
-import { delimiter, join } from "node:path";
+import { delimiter, dirname, join, resolve } from "node:path";
 import { LOGIN_ENV_MARKER } from "@thinkrail/shared/shellEnv";
 
 export function resolveBunExecutable(env: NodeJS.ProcessEnv = process.env): string {
@@ -14,14 +14,28 @@ export function resolveBunExecutable(env: NodeJS.ProcessEnv = process.env): stri
 }
 
 export function hermeticE2ePath(fakeBinDir: string): string {
+	if (process.platform === "win32") {
+		const gitRoot = windowsGitRoot();
+		const systemRoot = process.env.SystemRoot ?? "C:\\Windows";
+		return [
+			fakeBinDir,
+			join(gitRoot, "cmd"),
+			join(gitRoot, "usr", "bin"),
+			join(gitRoot, "mingw64", "bin"),
+			join(systemRoot, "System32"),
+			systemRoot,
+		].join(delimiter);
+	}
 	return [fakeBinDir, "/usr/bin", "/bin", "/usr/sbin", "/sbin"].join(delimiter);
 }
 
 export function hermeticE2eShell(fakeBinDir: string): string {
+	if (process.platform === "win32") return join(windowsGitRoot(), "bin", "bash.exe");
 	return join(fakeBinDir, "login-shell");
 }
 
 export function writeHermeticE2eShell(fakeBinDir: string, realShell: string): void {
+	if (process.platform === "win32") return;
 	const script = [
 		"#!/bin/sh",
 		'case "$*" in',
@@ -33,6 +47,17 @@ export function writeHermeticE2eShell(fakeBinDir: string, realShell: string): vo
 	const target = hermeticE2eShell(fakeBinDir);
 	writeFileSync(target, script);
 	chmodSync(target, 0o755);
+}
+
+function windowsGitRoot(): string {
+	for (const directory of (process.env.PATH ?? "").split(delimiter).filter(Boolean)) {
+		if (!existsSync(join(directory, "git.exe"))) continue;
+		for (const root of [dirname(resolve(directory)), resolve(directory, "../..")]) {
+			if (existsSync(join(root, "cmd", "git.exe")) && existsSync(join(root, "bin", "bash.exe")))
+				return root;
+		}
+	}
+	throw new Error("Git for Windows is required by the e2e host");
 }
 
 function shellQuote(value: string): string {

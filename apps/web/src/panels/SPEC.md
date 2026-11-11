@@ -11,6 +11,11 @@ tags: [ui]
 
 ## Responsibility
 
+Project Home uses a centered task entry: a project-scoped prompt opens the existing New workspace
+dialog with that draft, without submitting to an agent. Enter submits that entry; Shift+Enter adds a
+line and IME composition never submits. Secondary cards retain project-folder and spec-setup routes.
+Settings uses a quiet sidebar and a wider reading surface; selected sections expose aria-current.
+
 The layout-agnostic, store-driven feature views. A panel fills its container and never knows its
 arrangement (so the mobile shell is an additive layer, not a rewrite).
 
@@ -280,18 +285,13 @@ treatment.
   dialog would preselect it and persist it as the workspace's `baseBranch`, and that worktree would forever
   diff against its own head. Empty means "unknown", so `create` omits `baseRef` and the host resolves the
   real branch. **`WelcomePanel`** is the first-touch surface the shell mounts (centered, left-nav beside it) whenever no
-workspace is active. **One hero heading** (`welcome-title`, the topbar's brand styling — accent font,
-`text-primary` — enlarged): the **shown project's name**, or `PRODUCT_NAME` when no project is shown —
-the wordmark is the empty-state identity, a project's own name is the identity once one is open (so no
-separate project eyebrow). **No pitch prose in any state** — the marketing paragraph was removed as
-unread; the screen is heading → banners → **one-to-three cards** (icon top-left,
-label + explainer bottom-left; the primary is a filled-primary card carrying the stable `welcome-cta`
-hook, others quiet `welcome-action`s). Welcome is **the mode fork**: with a project shown it always pairs
-**"Start building"** (isolated worktree) with **"Work in project folder"** (the Default workspace) so the
-two working modes are a visible choice, not a hidden default. The cards by state: **no projects** →
-**"Open project"** (one card); **project + `hasSpecs`** → **"Start building"** (primary) + "Work in
-project folder"; **project + no specs** → a spec-first **"Set up project"** (primary) + "Start building"
-+ "Work in project folder". **"Open project" appears only in the no-projects state** — where it's the
+workspace is active. A compact product label precedes the interface-font heading (`welcome-title`):
+the shown project's name, or a task invitation when no project is open. The screen is heading →
+banners → project-scoped prompt → secondary actions. The prompt's **Start building** primary action
+(`welcome-cta`) opens `NewWorkspaceDialog` with the draft. **Work in project folder** remains a quiet
+`welcome-action`; projects without specs also show **Set up project**. Draft state is keyed to the
+project, is preserved on dialog cancellation, and never sends a prompt before workspace confirmation.
+**Open project** is the no-projects `welcome-cta` — where it's the
 only possible action; once a project is shown, opening another is the projects-rail **"+"** (the same
 dropdown), so Welcome stays the *work-in-this-project* surface. That card hangs the shared
 **`AddProjectMenu`** dropdown off it (same menu as the projects-rail "+": Open project / Enter host

@@ -173,7 +173,7 @@ export const TabStrip = memo(function TabStrip({
 			data-group-id={location.groupId}
 			data-drop-active={groupDropOver || undefined}
 			data-drop-hint={(acceptsAppend && !groupDropOver) || undefined}
-			className="relative flex h-panel-header-row shrink-0 items-stretch border-border-default border-b bg-container-workspace-bg data-[drop-hint]:ring-1 data-[drop-hint]:ring-inset data-[drop-hint]:ring-primary-soft data-[drop-active]:bg-primary-subtle data-[drop-active]:ring-2 data-[drop-active]:ring-inset data-[drop-active]:ring-primary"
+			className="relative flex h-panel-header-row shrink-0 items-stretch border-border-default border-b bg-container-header-bg data-[drop-hint]:ring-1 data-[drop-hint]:ring-inset data-[drop-hint]:ring-primary-soft data-[drop-active]:bg-primary-subtle data-[drop-active]:ring-2 data-[drop-active]:ring-inset data-[drop-active]:ring-primary"
 		>
 			<div className="relative min-w-0 flex-1 overflow-hidden">
 				<div
@@ -619,7 +619,7 @@ export const WorkbenchTab = memo(function WorkbenchTab({
 						"group data-[dragging]:opacity-40",
 						rail
 							? railEntryFrameClass(location.area)
-							: "relative flex min-w-96 max-w-192 shrink-0 items-center border-border-default border-r text-text-muted after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:z-10 after:h-[2px] after:rounded-full after:content-[''] has-[[role=tab]:focus-visible]:ring-2 has-[[role=tab]:focus-visible]:ring-inset has-[[role=tab]:focus-visible]:ring-primary data-[active=true]:bg-control-bg-selected data-[active=true]:text-text-default data-[active=true]:after:bg-primary",
+							: "relative my-4 ml-4 flex min-w-96 max-w-192 shrink-0 items-center rounded-sm text-text-muted has-[[role=tab]:focus-visible]:ring-2 has-[[role=tab]:focus-visible]:ring-inset has-[[role=tab]:focus-visible]:ring-primary data-[active=true]:bg-control-bg-selected data-[active=true]:text-text-default",
 					)}
 				>
 					<div

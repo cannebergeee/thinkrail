@@ -29,6 +29,7 @@ import { getTransport } from "@/transport";
 import { ACTIVITY_BREADCRUMB_HEIGHT, ActivityBreadcrumbTrail } from "./activityBreadcrumbs";
 import { AskStatesContext, deriveAskStates } from "./askState";
 import { type ChatActions, ChatActionsContext } from "./ChatActions";
+import { ChatStarter } from "./ChatStarter";
 import type { ChatMessageOrder } from "./chatPreferences";
 import { type PendingExtUi, PendingExtUiContext, PendingExtUiPrompt } from "./ExtUiPrompt";
 import { FoldGeometryProvider } from "./foldState";
@@ -165,6 +166,7 @@ const ChatTranscript = forwardRef<
 		openSubagentTranscript: (childSessionId: string | null) => void;
 		resultOpener: ChatActions["resultOpener"];
 		onTryAgain: () => void;
+		onUsePrompt?: (prompt: string) => void;
 		historyOpen: boolean;
 		inspectorOpen: boolean;
 		stillRunning: { count: number; onOpen: () => void } | undefined;
@@ -183,6 +185,7 @@ const ChatTranscript = forwardRef<
 		openSubagentTranscript,
 		resultOpener,
 		onTryAgain,
+		onUsePrompt,
 		historyOpen,
 		inspectorOpen,
 		stillRunning,
@@ -603,6 +606,14 @@ const ChatTranscript = forwardRef<
 								chatLineWidthBounded ? "overflow-x-hidden" : "overflow-x-auto",
 							)}
 						>
+							{onUsePrompt &&
+							rows.length === 0 &&
+							!isStreaming &&
+							!pendingExtUi &&
+							status === "connected" &&
+							runtime.syncedConnectionGeneration === connectionGeneration ? (
+								<ChatStarter onUsePrompt={onUsePrompt} />
+							) : null}
 							{/* One provider above the list: its value is the single transcript-wide callback, so a
 						    per-row provider would only re-commit that identical value for every visible row. */}
 							<FoldGeometryProvider onBeforeChange={prepareFoldChange}>

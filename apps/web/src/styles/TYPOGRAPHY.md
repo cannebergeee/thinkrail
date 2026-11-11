@@ -45,7 +45,7 @@ both markdown surfaces, the `<body>` base).
 
 | Group | Ids |
 |---|---|
-| `fontFamilies` | `interface` (Geist Variable, all proportional UI + reading text) · `code` (JetBrains Mono Variable, code only) · `brand` → **Orbitron Variable** (self-hosted `@fontsource-variable/orbitron`, a distinct display face for the brand role — `wordmark` + `hero`; it was formerly a `$ref` to `interface`). Orbitron is **latin-only** and `brand.hero` renders a project's own name, so the stack falls back to the *interface* face before any system font — a non-Latin name lands on Geist (cyrillic/latin-ext/vietnamese, already bundled) rather than on whatever the OS supplies |
+| `fontFamilies` | `interface` (Geist + Noto Sans SC, proportional UI and reading text) · `code` (JetBrains Mono Variable) · `brand` (Orbitron Variable, retained as the shared website display-family source) |
 | `fontWeights` | `light` 370 · `regular` 400 · `medium` 500 · `semibold` 600 · `brand` 400 |
 | `fontSizes` | `s10` `s11` `s12` `s13` `s14` `s16` `s18` `s20` `s24` `s44` (px) |
 | `lineHeights` | `compact` 1.25 · `metadata` 1.25 (12px→15px) · `ui` 1.3 (14px→18.2px) · `code` 1.4 · `relaxed` 1.4 (13px→18.2px) · `default` 1.3 (14px→18.2px) · `reading` 1.45 (14px→20.3px) |
@@ -90,7 +90,9 @@ not fit, `action`→title.compact, `emphasis`→title.compact) · **body** (`rea
 inline code in table cells). `proseSystems` holds one entry per markdown surface, almost entirely aliases
 into the above. Dead aliases are not retained: prose points directly to the semantic style it uses.
 
-**20 canonical definitions + 30 aliases = 50 styles.**
+**19 canonical definitions + 30 aliases = 49 styles.** The former display-font hero is removed;
+project/task headings use `heading.xl`. The brand family remains the shared source consumed by
+`apps/website`; the application no longer renders a display-font project name.
 
 One prose rule is deliberately *not* a semantic style: `<strong>` / `<b>` gets **weight only**
 (`--tr-font-weight-medium`), emitted by the generator into each prose system. A complete style there
@@ -122,7 +124,6 @@ The generator derives one class per semantic style, mechanically:
 
 | Source id | Generated class |
 |---|---|
-| `brand.hero` | `.tr-brand-hero` |
 | `heading.xl` · `heading.lg` · `heading.md` · `heading.sm` | `.tr-heading-xl` · `.tr-heading-lg` · `.tr-heading-md` · `.tr-heading-sm` |
 | `title.dialog` · `title.card` · `title.section` · `title.compact` · `title.entity` | `.tr-title-dialog` · `.tr-title-card` · `.tr-title-section` · `.tr-title-compact` · `.tr-title-entity` |
 | `ui.default` · `ui.metadata` | `.tr-text-ui` · `.tr-text-metadata` |

@@ -171,7 +171,7 @@ export const BottomGroupView = memo(function BottomGroupView({
 			data-folded="false"
 			tabIndex={-1}
 			aria-label={selectedName ? `Bottom group: ${selectedName}` : "Empty bottom group"}
-			className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-container-sidebar-bg outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+			className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden rounded-lg border border-border-muted bg-container-sidebar-bg outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
 			onFocusCapture={() => shared.onFocusGroup(location, selected?.id)}
 		>
 			<AuxiliaryGroupHeader

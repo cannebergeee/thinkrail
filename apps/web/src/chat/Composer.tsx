@@ -61,8 +61,7 @@ export type ComposerSubmitDisposition = { accepted: true } | { accepted: false; 
 const COMPOSER_EDITOR_LIMIT_CLASS = {
 	compact: "max-h-[calc(6lh+var(--space-8)+var(--space-8))]",
 	roomy: "max-h-[calc(10lh+var(--space-8)+var(--space-8))]",
-	"half-chat":
-		"max-h-[calc(50cqh-var(--space-16)-var(--space-16)-var(--space-4)-var(--space-4)-var(--space-4)-var(--space-4))]",
+	"half-chat": "max-h-[calc(50cqh-var(--space-32)-var(--space-16)-var(--space-4))]",
 } satisfies Record<ComposerGrowthLimit, string>;
 
 const WIDE_ONLY = "@max-md:hidden";
@@ -562,11 +561,11 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
 				}
 			/>
 
-			<div className="p-chat-gutter">
+			<div className="mx-auto w-full max-w-[var(--chat-transcript-width)] p-chat-gutter">
 				<div
 					data-testid="chat-composer-shell"
 					className={cn(
-						"relative grid grid-cols-[auto_minmax(0,1fr)_auto] grid-rows-[minmax(0,1fr)_auto] items-end gap-x-4 gap-y-4 overflow-hidden rounded-md border border-control-border-default bg-control-bg bg-clip-padding p-4 transition-colors focus-within:border-control-border-active",
+						"relative grid grid-cols-[minmax(0,1fr)_auto] grid-rows-[minmax(0,1fr)_auto] items-end gap-x-4 gap-y-4 overflow-hidden rounded-lg border border-control-border-default bg-control-bg bg-clip-padding p-8 transition-colors focus-within:border-control-border-active",
 						expanded && growthLimit === "half-chat" && "max-h-[50cqh]",
 					)}
 				>
@@ -581,12 +580,12 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
 							onSelect={onSelectModel}
 							onSelectLevel={onSelectThinking}
 							preferences={modelPreferences}
-							className="max-w-[60vw] px-4 sm:max-w-[320px]"
+							className="max-w-full px-4"
 						/>
 					</div>
 					<div
 						className={cn(
-							"relative col-span-3 col-start-1 row-start-1 min-h-0 overflow-hidden rounded-sm tr-text-ui",
+							"relative col-span-2 col-start-1 row-start-1 min-h-[min(64px,calc(50cqh-var(--space-32)-var(--space-16)-var(--space-4)))] overflow-hidden rounded-sm tr-text-ui",
 							COMPOSER_EDITOR_LIMIT_CLASS[growthLimit],
 						)}
 					>
@@ -657,7 +656,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
 							)}
 						/>
 					</div>
-					<div className="col-start-3 row-start-2 flex shrink-0 items-center gap-4 self-end">
+					<div className="col-start-2 row-start-2 flex shrink-0 items-center gap-4 self-end">
 						<IconTooltip label={t("Search history")}>
 							<Button
 								variant="ghost"

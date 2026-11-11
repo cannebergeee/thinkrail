@@ -23,6 +23,7 @@ import {
 	E2E_PLAIN_DIR,
 } from "./paths";
 import { fixtureRepoHealthy, seedFixtureRepo } from "./repo";
+import { closeFixtureTerminals } from "./terminalCleanup";
 import { E2eWire } from "./wire";
 
 export const PHONE_VIEWPORT = { width: 390, height: 780 } as const;
@@ -123,6 +124,7 @@ async function disposeLiveSessions(page: Page): Promise<void> {
 	const hostUrl = new URL(health.url());
 	health.dispose();
 	const port = Number(hostUrl.port) || (hostUrl.protocol === "https:" ? 443 : 80);
+	await closeFixtureTerminals(port);
 	const wire = await E2eWire.connect(port);
 	try {
 		for (const workspace of workspaces) {

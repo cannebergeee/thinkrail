@@ -8,7 +8,7 @@ import {
 	visibleTerminalScreen,
 	waitTerminalReady,
 } from "./fixtures/app";
-import { BRAND_FACE, CODE_FACE, INTERFACE_FACE } from "./fixtures/typography";
+import { CODE_FACE, INTERFACE_FACE } from "./fixtures/typography";
 
 type TypeInfo = {
 	family: string;
@@ -34,12 +34,12 @@ async function typeOf(locator: import("@playwright/test").Locator): Promise<Type
 	});
 }
 
-test("welcome hero renders the generated brand style", async ({ page }) => {
+test("welcome heading renders the generated interface heading style", async ({ page }) => {
 	await openAppFresh(page);
 	await openFixtureProject(page);
 	const welcomeTitle = await typeOf(page.getByTestId("welcome-title"));
-	expect(welcomeTitle).toMatchObject({ size: "44px", weight: "400", lineHeight: "55px" });
-	expect(welcomeTitle.family).toMatch(BRAND_FACE);
+	expect(welcomeTitle).toMatchObject({ size: "24px", weight: "600", lineHeight: "30px" });
+	expect(welcomeTitle.family).toMatch(INTERFACE_FACE);
 });
 
 test("dialog title and card title share one typography", async ({ page }) => {

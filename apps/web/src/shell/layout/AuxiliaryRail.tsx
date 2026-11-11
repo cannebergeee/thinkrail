@@ -121,10 +121,10 @@ export function AuxiliaryRail({
 			aria-orientation={horizontal ? "horizontal" : "vertical"}
 			data-testid={region === "bottom" ? "bottom-tool-rail" : `${region}-layout-rail`}
 			className={cn(
-				"relative flex shrink-0 items-center gap-4 bg-container-header-bg",
+				"relative flex shrink-0 items-center gap-4 bg-container-content-bg",
 				horizontal
 					? "h-panel-header-row min-w-0 overflow-x-auto overflow-y-hidden border-border-muted border-t px-4"
-					: "h-full w-40 flex-col overflow-x-hidden overflow-y-auto py-4",
+					: "h-full w-40 flex-col overflow-x-hidden overflow-y-auto py-8",
 				region === "left" && "border-border-muted border-r",
 				region === "right" && "border-border-muted border-l",
 			)}

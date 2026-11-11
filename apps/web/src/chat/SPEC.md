@@ -21,6 +21,11 @@ a future `packages/chat-ui`). Built-in tool renderers live in the child
 
 ## Rendering model — rows and progressive disclosure
 
+The ZCode-inspired presentation uses neutral user bubbles with a clipped trailing corner and a
+rounded, two-row composer with a comfortably sized draft area. Transcript, streaming, queue and
+tool ownership stay unchanged. An empty, synchronized transcript offers props-driven starter prompts;
+selecting one fills and focuses the existing draft without sending it or replacing an existing draft.
+
 The transcript is pi-canonical turns (`ChatTurn` in `types.ts`: user/assistant are pi messages; `system`,
 `error`, `retry` are web-local notices; `compaction` carries both the live lifecycle and the durable summary
 record pi leaves where it replaced earlier messages), but the list renders **derived rows, not raw turns** — folding
@@ -849,11 +854,12 @@ both message orders. *Rejected:* keeping the modal for non-MCP extensions — ev
   collapse to one read, and a response superseded by a newer session revision, host generation, or unmount
   is ignored. Text deltas do not trigger reads because Pi itself cannot finalize new usage until the message
   boundary; transient read failure keeps the last good snapshot rather than replacing it with guessed state.
-- **Adaptive composer geometry** (`Composer`) — an idle draft that fits one visual line renders as a
-  shared two-tier shell: a full-width, one-visual-line message row above a stable action footer. The
+- **Adaptive composer geometry** (`Composer`) — an idle draft uses a shared two-tier shell:
+  a full-width message row with a 64px resting minimum above a stable action footer. Short panes
+  cap that minimum at the half-chat editor budget so controls cannot be clipped. The
   model · effort pill is the footer's one left-hand trigger; History and Send remain explicit on the right. A wrap, explicit
-  newline, or width change that makes the draft exceed one visual line grows the message row without moving
-  the footer; fitting one line again shrinks only the message row. This is one persistent textarea, never
+  newline, or width change enables wrapping; content beyond the minimum grows the message row without moving
+  the footer. Short drafts return to the same minimum. This is one persistent textarea, never
   conditional twins — the transition cannot lose focus, caret/selection, recall, draft, or a template-slot
   session. Streaming deliberately uses the expanded message row even with an empty draft, because Stop +
   send options join the footer. `ChatView` passes the server-synced

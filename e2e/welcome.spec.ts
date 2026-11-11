@@ -21,7 +21,7 @@ test("opens a clean ThinkRail with no projects imported", async ({ page }) => {
 	await expect(page.getByTestId("right-panel")).toHaveCount(0);
 	await expect(page.getByTestId("terminal-panel")).toHaveCount(0);
 
-	await expect(page.getByTestId("welcome-title")).toHaveText("ThinkRail");
+	await expect(page.getByTestId("welcome-title")).toHaveText("What would you like to build?");
 	await expect(page.getByTestId("welcome-cta")).toContainText("Open project");
 	await expect(page.getByTestId("welcome-action")).toHaveCount(0);
 
@@ -190,16 +190,16 @@ test("a project without specs suggests setting it up", async ({ page }) => {
 	try {
 		await openFixtureProject(page);
 		await expect(page.getByTestId("welcome-title")).toHaveText("sample-project");
-		await expect(page.getByTestId("welcome-cta")).toContainText("Set up project");
+		await expect(page.getByTestId("welcome-cta")).toContainText("Start building");
 		await expect(page.getByTestId("welcome-action")).toHaveCount(2);
 		await expect(
-			page.getByTestId("welcome-action").filter({ hasText: "Start building" }),
+			page.getByTestId("welcome-action").filter({ hasText: "Set up project" }),
 		).toBeVisible();
 		await expect(
 			page.getByTestId("welcome-action").filter({ hasText: "Work in project folder" }),
 		).toBeVisible();
 
-		await page.getByTestId("welcome-cta").click();
+		await page.getByTestId("welcome-action").filter({ hasText: "Set up project" }).click();
 		const dialog = page.getByTestId("new-workspace-dialog");
 		await expect(dialog).toBeVisible();
 		await expect(dialog.getByTestId("ws-prompt")).toHaveValue("/skill:setting-up-a-project ");
@@ -252,7 +252,7 @@ test("opening a non-git folder from the Welcome screen offers to initialise a re
 	await expect(page.getByTestId("welcome")).toBeVisible();
 	await expect(page.getByTestId("center-tabs")).toHaveCount(0);
 	await expect(page.getByTestId("welcome-title")).toHaveText(basename(E2E_PLAIN_DIR));
-	await expect(page.getByTestId("welcome-cta")).toContainText("Set up project");
+	await expect(page.getByTestId("welcome-cta")).toContainText("Start building");
 	await expect(
 		page.getByTestId("welcome-action").filter({ hasText: "Work in project folder" }),
 	).toBeVisible();

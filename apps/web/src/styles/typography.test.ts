@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { normalizeEol } from "../../scripts/generatedFiles";
 import type { Style, StyleRef, Typography } from "../../scripts/typography";
 import {
@@ -20,7 +21,7 @@ import {
 } from "../../scripts/typography";
 
 const typography = loadTypography();
-const SRC = new URL("..", import.meta.url).pathname;
+const SRC = fileURLToPath(new URL("..", import.meta.url));
 const GENERATED = normalizeEol(readFileSync(GENERATED_PATH, "utf8"));
 
 const read = (p: string) => readFileSync(p, "utf8");
@@ -43,10 +44,10 @@ describe("typography source", () => {
 		}
 	});
 
-	it("holds 20 canonical definitions and 30 aliases (50 styles)", () => {
+	it("holds 19 canonical definitions and 30 aliases (49 styles)", () => {
 		const styles = allStyles(typography);
-		expect(styles).toHaveLength(50);
-		expect(styles.filter((s) => !s.ref)).toHaveLength(20);
+		expect(styles).toHaveLength(49);
+		expect(styles.filter((s) => !s.ref)).toHaveLength(19);
 		expect(styles.filter((s) => s.ref)).toHaveLength(30);
 		expect(styles.filter((s) => s.prose)).toHaveLength(28);
 	});

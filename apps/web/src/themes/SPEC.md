@@ -16,13 +16,18 @@ fixed id plus fixed/system mode and optional light/dark pair; this module owns w
 this client, including operating-system color-scheme observation and same-appearance fallback. **Adding a
 theme = adding one `bundled/*.theme.json` file** (a PR + rebuild) — no code, contract, CSS, or test changes.
 
-Six manifests ship: the standard **Dark** and **Light** (the configured default and its pair, unchanged),
+Six manifests ship: the standard **Dark** and **Light** (the configured default and its pair),
 **Minimal Dark** and **Minimal Light** (the quiet neutral surface hierarchy, restrained green accent and
 neutral `bubbleAccent` of the Minimal interface study, sharing the standard pair's syntax and terminal
 palettes), and the two High Contrast palettes with their stricter accessibility contract. Minimal is a
 palette a user picks in Appearance and nothing more: every theme renders the same roles, so a component
 never branches on the active theme or its contrast metadata to drop a fill or a border. What a palette
 cannot express through the manifest keys is a product decision for all themes, not a theme.
+
+Standard Dark/Light adapt ZCode's Zai neutral surfaces and monochrome primary actions. Their opaque
+text and feedback colors retain ThinkRail's contrast floors; translucent upstream separators become
+opaque surface-relative equivalents. Existing theme ids and preferences remain stable. Attribution
+and source revision are in `THIRD-PARTY-NOTICES.md` at the repository root.
 
 ## Boundary
 

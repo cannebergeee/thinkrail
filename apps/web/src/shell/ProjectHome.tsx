@@ -49,7 +49,7 @@ export function ProjectHome({ projects }: { projects: CollapsibleRegion<HTMLDivE
 		<div
 			data-testid="welcome-shell-layout"
 			data-left-collapsed={collapsed}
-			className="flex h-full min-h-0 min-w-0"
+			className="flex h-full min-h-0 min-w-0 px-4 pb-4"
 		>
 			<AuxiliaryRail
 				region="left"
@@ -86,7 +86,7 @@ export function ProjectHome({ projects }: { projects: CollapsibleRegion<HTMLDivE
 						aria-label={t("Projects")}
 						aria-hidden={collapsed || undefined}
 						inert={collapsed ? true : undefined}
-						className="flex h-full min-h-0 flex-col bg-container-sidebar-bg"
+						className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border-muted bg-container-sidebar-bg"
 					>
 						<AuxiliaryPaneHeader
 							title={t("Projects")}
@@ -127,7 +127,7 @@ export function ProjectHome({ projects }: { projects: CollapsibleRegion<HTMLDivE
 					defaultSize={100 - PROJECTS_PANE_DEFAULT_PERCENT}
 					minSize={WELCOME_MIN_PERCENT}
 				>
-					<div className="h-full min-h-0 bg-container-content-bg">
+					<div className="h-full min-h-0 overflow-hidden rounded-lg border border-border-muted bg-container-workspace-bg">
 						<WelcomePanel />
 					</div>
 				</ResizablePanel>

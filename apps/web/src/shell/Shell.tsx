@@ -128,10 +128,13 @@ export function Shell() {
 		onSessionSwitcher: () => useAppStore.getState().toggleSessionSwitcher(),
 	});
 	return (
-		<div data-testid="shell" className="grid h-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr]">
+		<div
+			data-testid="shell"
+			className="grid h-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr] bg-container-content-bg"
+		>
 			<header
 				data-testid="topbar"
-				className="relative window-drag flex h-topbar-row min-w-0 select-none items-center border-b border-border-default bg-container-header-bg px-16"
+				className="relative window-drag flex h-topbar-row min-w-0 select-none items-center bg-container-content-bg px-16"
 			>
 				<div
 					aria-hidden="true"
@@ -215,7 +218,7 @@ export function Shell() {
 				) : null}
 			</header>
 			{hasActiveWorkspace && activeWorkspaceId ? (
-				<div data-testid="workspace-shell-layout" className="h-full min-h-0 min-w-0">
+				<div data-testid="workspace-shell-layout" className="h-full min-h-0 min-w-0 px-4 pb-4">
 					<WorkspaceWorkbench workspaceId={activeWorkspaceId} />
 				</div>
 			) : (

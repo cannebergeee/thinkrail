@@ -132,7 +132,7 @@ test("workbench strips and feature toolbars keep one-row geometry with ARIA tabs
 	const centerStrip = page.getByTestId("center-tab-strip").first();
 	const bottomStrip = page.getByTestId("bottom-tab-strip");
 	for (const strip of [centerStrip, bottomStrip]) {
-		await expect(strip).toHaveCSS("height", "28px");
+		await expect(strip).toHaveCSS("height", "36px");
 		await expect(strip.getByRole("tablist")).toHaveCount(1);
 		await expect(strip.getByRole("button", { name: /^Scroll tabs (left|right)$/ })).toHaveCount(0);
 		const active = strip.locator('[role="tab"][aria-selected="true"]');
@@ -158,12 +158,12 @@ test("workbench strips and feature toolbars keep one-row geometry with ARIA tabs
 
 	await revealWorkbenchTool(page, "changes");
 	for (const header of await page.getByTestId("auxiliary-pane-header").all()) {
-		await expect(header).toHaveCSS("height", "28px");
+		await expect(header).toHaveCSS("height", "36px");
 		await expect(header.getByRole("tablist")).toHaveCount(0);
 	}
-	await expect(page.getByTestId("chat-toolbar")).toHaveCSS("height", "28px");
+	await expect(page.getByTestId("chat-toolbar")).toHaveCSS("height", "36px");
 	await expect(page.getByTestId("chat-toolbar")).toHaveCSS("overflow-x", "clip");
-	await expect(page.getByTestId("changes-view-toggle")).toHaveCSS("height", "28px");
+	await expect(page.getByTestId("changes-view-toggle")).toHaveCSS("height", "36px");
 });
 
 test("overflow uses directional fades without changing tab-strip geometry", async ({ page }) => {
@@ -189,9 +189,9 @@ test("overflow uses directional fades without changing tab-strip geometry", asyn
 			tablist.evaluate((element) => getComputedStyle(element, "::-webkit-scrollbar").display),
 		)
 		.toBe("none");
-	await expect(strip).toHaveCSS("height", "28px");
+	await expect(strip).toHaveCSS("height", "36px");
 	const listHeight = await height(tablist);
-	await expect.poll(() => height(strip.getByRole("tab").first())).toBeCloseTo(listHeight, 1);
+	await expect.poll(() => height(strip.getByRole("tab").first())).toBeCloseTo(listHeight - 8, 1);
 
 	await tablist.evaluate((element) => {
 		element.scrollLeft = 0;
@@ -218,8 +218,8 @@ test("overflow uses directional fades without changing tab-strip geometry", asyn
 			return tabBox.x >= listBox.x && tabBox.x + tabBox.width <= listBox.x + listBox.width + 1;
 		})
 		.toBe(true);
-	await expect(strip).toHaveCSS("height", "28px");
-	await expect.poll(() => height(last)).toBeCloseTo(listHeight, 1);
+	await expect(strip).toHaveCSS("height", "36px");
+	await expect.poll(() => height(last)).toBeCloseTo(listHeight - 8, 1);
 });
 
 test("auxiliary panel scrollbars stay quiet at rest and expose only clipped edges", async ({

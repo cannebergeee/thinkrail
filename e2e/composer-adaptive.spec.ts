@@ -7,7 +7,7 @@ async function box(locator: import("@playwright/test").Locator) {
 	return value;
 }
 
-test("idle composer keeps one message line above a stable controls row", async ({ page }) => {
+test("idle composer keeps a roomy draft area above a stable controls row", async ({ page }) => {
 	await openWorkspaceChat(page);
 
 	const composer = page.getByTestId("chat-composer");
@@ -21,13 +21,12 @@ test("idle composer keeps one message line above a stable controls row", async (
 	const compactInput = await box(input);
 	const compactWrapMeasure = await box(page.getByTestId("chat-input-sizer"));
 	const compactModel = await box(model);
-	expect(compactInput.height).toBeGreaterThanOrEqual(32);
-	expect(compactInput.height).toBeLessThanOrEqual(40);
+	expect(compactInput.height).toBeCloseTo(64, 0);
 	await expect(composer).toHaveAttribute("data-expanded", "false");
 	expect(compactShell.height).toBeGreaterThanOrEqual(compactInput.height + compactModel.height);
-	expect(compactInput.x).toBeLessThanOrEqual(compactShell.x + 8);
+	expect(compactInput.x).toBeLessThanOrEqual(compactShell.x + 10);
 	expect(compactInput.x + compactInput.width).toBeGreaterThanOrEqual(
-		compactShell.x + compactShell.width - 8,
+		compactShell.x + compactShell.width - 10,
 	);
 	expect(Math.abs(compactWrapMeasure.x - compactInput.x)).toBeLessThanOrEqual(0.5);
 	expect(Math.abs(compactWrapMeasure.width - compactInput.width)).toBeLessThanOrEqual(0.5);
@@ -39,7 +38,9 @@ test("idle composer keeps one message line above a stable controls row", async (
 		expect(Math.abs(controlBox.y + controlBox.height - compactFooterBottom)).toBeLessThanOrEqual(4);
 	}
 
-	await input.fill("Inspect the retry flow.\nThen add focused coverage.");
+	await input.fill(
+		"Inspect the retry flow.\nFind the cause.\nKeep the fix focused.\nThen add coverage.",
+	);
 	await expect(composer).toHaveAttribute("data-expanded", "true");
 	const expandedInput = await box(input);
 	const expandedModel = await box(model);
@@ -49,7 +50,7 @@ test("idle composer keeps one message line above a stable controls row", async (
 
 	await input.fill("Short follow-up");
 	await expect(composer).toHaveAttribute("data-expanded", "false");
-	expect((await box(input)).height).toBeLessThanOrEqual(40);
+	expect((await box(input)).height).toBeLessThanOrEqual(64);
 	expect(Math.abs((await box(model)).y - compactModel.y)).toBeLessThanOrEqual(2);
 });
 
@@ -61,9 +62,7 @@ test("panel width changes expand and collapse the same textarea", async ({ page 
 	const input = page.getByTestId("chat-input");
 	const initialElement = await input.elementHandle();
 	if (!initialElement) throw new Error("composer textarea missing");
-	await input.fill(
-		"Keep the same focused draft and selection while a narrower mounted chat panel makes this line wrap.",
-	);
+	await input.fill("Keep this draft and selection while a narrow panel makes the line wrap.");
 	await expect(composer).toHaveAttribute("data-expanded", "false");
 	await input.evaluate((element) => element.setSelectionRange(18, 18));
 
@@ -171,9 +170,9 @@ test("compact phone controls remain inside the chat viewport", async ({ page }) 
 		expect(controlBox.x + controlBox.width).toBeLessThanOrEqual(PHONE_VIEWPORT.width);
 	}
 	const inputBox = await box(page.getByTestId("chat-input"));
-	expect(inputBox.height).toBeLessThanOrEqual(40);
-	expect(inputBox.x).toBeLessThanOrEqual(shellBox.x + 8);
-	expect(inputBox.x + inputBox.width).toBeGreaterThanOrEqual(shellBox.x + shellBox.width - 8);
+	expect(inputBox.height).toBeLessThanOrEqual(64);
+	expect(inputBox.x).toBeLessThanOrEqual(shellBox.x + 10);
+	expect(inputBox.x + inputBox.width).toBeGreaterThanOrEqual(shellBox.x + shellBox.width - 10);
 	expect((await box(page.getByTestId("model-selector"))).y).toBeGreaterThanOrEqual(
 		inputBox.y + inputBox.height,
 	);

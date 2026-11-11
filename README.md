@@ -15,12 +15,14 @@ ThinkRail 是一个会随着你的使用越来越好的智能体 IDE —— 今�
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/readme-assets/workbench-dark.zh-CN.png">
-  <img src=".github/readme-assets/workbench-light.zh-CN.png" alt="ThinkRail 工作台：左侧工具轨旁边是「项目」面板，列出各工作树工作区及其「已沉降」搁板；中间是一段已完成的 pi 对话和它的工具步骤；右侧是本次改动产生的 diff，以及「更改」列表上方的规格树" width="900">
+  <img src=".github/readme-assets/workbench-light.zh-CN.png" alt="ThinkRail 中文工作台：左侧项目与工作区导航，中间是任务对话入口及模型选择，右侧是规格与更改工具" width="900">
 </picture>
 
-*一段 `pi` 会话和它产生的改动，限定在一个隔离的 git worktree 工作区里。*
+*任务工作台、对话入口与项目工具，使用隔离演示数据。*
 
 ## 你能得到什么
+
+- **沿用 ZCode 风格的任务界面。** 中性深浅配色、圆角面板和清晰的项目导航。首页先描述任务，再选择工作区；空白聊天可用快捷提示起草，点击提示不会自动发送。界面适配参考 [ZCode](https://github.com/zai-org/ZCode)，源码复用说明见 [第三方声明](THIRD-PARTY-NOTICES.md)。
 
 - **隔离的工作区。** 把任意 git 仓库作为项目打开，再从它切出工作区 —— 每个工作区就是一个 `git worktree`，有自己的分支和工作目录。多个智能体可以并行工作而不碰你的检出目录；好的分支合并进来，其余删掉即可。你也可以挂上已有的 worktree，或明确地直接在项目文件夹里工作。完成的和闲置的工作区会自动沉降到每个项目自己的搁板上 —— 当它们的 PR 合并或关闭时，或者闲置一周之后 —— 而一旦你在里面工作，它们立刻回来。
 - **围绕智能体的真正的 IDE。** 一个可拆分的工作台：Monaco 编辑器标签页、实时的 git 更改视图、终端和文档，全部限定在当前工作区内。你可以在文件和 diff 上留下锚定的审查评论，作为结构化上下文发给聊天，也可以用你已安装的 IDE 打开这个 worktree。

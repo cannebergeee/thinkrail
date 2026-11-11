@@ -124,7 +124,7 @@ export const SideGroupView = memo(function SideGroupView({
 			data-group-id={group.id}
 			data-tools={group.tabs.flatMap((tab) => (tab.kind === "tool" ? [tab.tool] : [])).join(" ")}
 			data-folded="false"
-			className="relative flex h-full min-h-0 flex-col overflow-hidden bg-container-sidebar-bg"
+			className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border-muted bg-container-sidebar-bg"
 			onFocusCapture={() => {
 				if (selected) shared.onFocusGroup(location, selected.id);
 			}}

@@ -680,6 +680,14 @@ export default function ChatView({
 		performSendRef.current = performSend;
 	});
 	const onTryAgain = useCallback(() => performSendRef.current(TRY_AGAIN_PROMPT, [], "send"), []);
+	const onUsePrompt = useCallback(
+		(prompt: string) => {
+			const store = useAppStore.getState();
+			if (!store.sessions[sessionId]?.draft.trim()) store.setChatDraft(sessionId, prompt);
+			focusComposer();
+		},
+		[sessionId, focusComposer],
+	);
 
 	return (
 		<div
@@ -730,6 +738,7 @@ export default function ChatView({
 				openSubagentTranscript={setTranscriptChildId}
 				resultOpener={resultOpener}
 				onTryAgain={onTryAgain}
+				onUsePrompt={onUsePrompt}
 				historyOpen={historyState.open}
 				inspectorOpen={inspectorOpen}
 				stillRunning={stillRunning}

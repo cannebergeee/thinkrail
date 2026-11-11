@@ -217,9 +217,9 @@ themselves.
   drops an unknown utility silently, so an unpublished token renders as nothing at all).
 - **Ordinary radius and rhythm-spacing values come from their scales, never raw pixel lengths** — `rounded-md`
   and `p-8` / `gap-12`, not `rounded-[7px]` or `py-[3px]`. Radius is the project t-shirt family
-  (`--radius-xs/sm/md/lg` — a small primitive geometry capped at 8px: `sm` (4px) is the default corner,
-  `md` (6px) the outer corner for surfaces nesting 4px children, `lg` (8px) the exception for large
-  standalone elevated surfaces (dialogs, user-message bubbles)). Spacing is **one canonical numeric
+  (`--radius-xs/sm/md/lg` — `xs` (2px) for text accents, `sm` (6px) for controls,
+  `md` (8px) for nested cards, and `lg` (12px) for workbench panes, dialogs, composer and user bubbles,
+  following ZCode's restrained rounded surfaces). Spacing is **one canonical numeric
   scale** — `0 / 2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 64` — where the step name *is* its pixel value, so
   `p-8` / `gap-12` / `py-4` resolve to exactly that many pixels; it is generated from a single JSON source
   (`src/styles/spacing.json` → `src/styles/generated/spacing.css`), so each canonical length is written

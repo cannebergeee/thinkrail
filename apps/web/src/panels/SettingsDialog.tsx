@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@thinkrail/ui/dialog";
 import { cn } from "@thinkrail/ui/utils";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { t } from "@/i18n";
 import { SettingsSection, useAppStore } from "@/store";
 import { AppearanceSettings } from "./AppearanceSettings";
@@ -32,6 +32,10 @@ export function SettingsDialog({
 	const filteredGroups = settingsNavGroups(protocolVersion, updateSettings !== undefined);
 	const selectedSection = resolveSettingsSection(section, filteredGroups);
 	const feedbackActive = selectedSection === SettingsSection.Feedback;
+	const selectedNavigation = useRef<HTMLButtonElement>(null);
+	useEffect(() => {
+		if (open) selectedNavigation.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
+	}, [open, selectedSection]);
 
 	return (
 		<Dialog
@@ -42,6 +46,12 @@ export function SettingsDialog({
 		>
 			<DialogContent
 				data-testid="settings-dialog"
+				onOpenAutoFocus={(event) => {
+					if (selectedNavigation.current) {
+						event.preventDefault();
+						selectedNavigation.current.focus();
+					}
+				}}
 				onEscapeKeyDown={(event) => {
 					if (
 						document.activeElement instanceof HTMLElement &&
@@ -50,7 +60,7 @@ export function SettingsDialog({
 						event.preventDefault();
 					}
 				}}
-				className="flex h-[80vh] max-h-[85vh] w-full max-w-[52rem] flex-col gap-0 overflow-hidden p-0"
+				className="flex h-[80vh] max-h-[85vh] w-full max-w-[64rem] flex-col gap-0 overflow-hidden p-0"
 			>
 				<DialogHeader className="border-border-default border-b px-16 py-12">
 					<DialogTitle>{t("Settings")}</DialogTitle>
@@ -59,7 +69,7 @@ export function SettingsDialog({
 				<div className="flex min-h-0 flex-1 flex-col md:flex-row">
 					<nav
 						aria-label={t("Settings sections")}
-						className="flex shrink-0 gap-4 overflow-x-auto border-border-default border-b p-8 md:w-192 md:flex-col md:gap-12 md:overflow-x-visible md:overflow-y-auto md:border-r md:border-b-0 md:bg-container-elevated-bg md:p-12"
+						className="flex shrink-0 gap-4 overflow-x-auto border-border-default border-b p-8 md:w-224 md:flex-col md:gap-12 md:overflow-x-visible md:overflow-y-auto md:border-r md:border-b-0 md:bg-container-sidebar-bg md:p-12"
 					>
 						{filteredGroups.map((group) => (
 							<div key={group.label} className="flex shrink-0 md:flex-col">
@@ -72,14 +82,16 @@ export function SettingsDialog({
 										return (
 											<button
 												key={id}
+												ref={active ? selectedNavigation : undefined}
 												type="button"
 												data-testid={`settings-nav-${id}`}
 												data-active={active}
+												aria-current={active ? "page" : undefined}
 												onClick={() => useAppStore.getState().setSettingsSection(id)}
 												className={cn(
-													"flex shrink-0 items-center gap-4 rounded-sm px-4 py-4 text-left tr-text-ui outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary md:h-28 md:w-full md:px-8 md:py-0",
+													"flex shrink-0 items-center gap-4 rounded-sm px-4 py-4 text-left tr-text-ui outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary md:h-36 md:w-full md:px-8 md:py-0",
 													active
-														? "bg-primary-subtle text-primary"
+														? "bg-control-bg-selected text-text-default"
 														: "text-text-muted hover:bg-control-bg-hovered hover:text-text-default",
 												)}
 											>
@@ -95,6 +107,8 @@ export function SettingsDialog({
 						<button
 							type="button"
 							data-testid="settings-nav-feedback"
+							ref={feedbackActive ? selectedNavigation : undefined}
+							aria-current={feedbackActive ? "page" : undefined}
 							data-active={feedbackActive}
 							onClick={() => useAppStore.getState().setSettingsSection(SettingsSection.Feedback)}
 							className={cn(
@@ -108,7 +122,7 @@ export function SettingsDialog({
 						</button>
 					</nav>
 
-					<div className="min-h-0 flex-1 overflow-y-auto p-16">
+					<div className="min-h-0 min-w-0 flex-1 overflow-y-auto bg-container-workspace-bg p-16 md:p-24">
 						{selectedSection === SettingsSection.Models ? (
 							<ModelsSettings />
 						) : selectedSection === SettingsSection.Providers ? (

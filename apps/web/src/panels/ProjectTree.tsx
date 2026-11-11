@@ -14,12 +14,14 @@ import {
 	RiMore2Line as MoreVertical,
 	RiPencilLine as Pencil,
 	RiAddLine as Plus,
+	RiApps2Line,
 	RiCheckboxCircleLine,
 	RiFolderFill,
 	RiFolderLine,
 	RiFolderOpenFill,
 	RiGitBranchFill,
 	RiHome2Fill,
+	RiSearchLine,
 	RiDeleteBin6Line as Trash2,
 	RiCloseLine as X,
 } from "@remixicon/react";
@@ -56,9 +58,11 @@ import {
 	isExternalWorkspace,
 	SETTLED_SHELF_MORE,
 	SETTLED_SHELF_PAGE,
+	SettingsSection,
 	type SettledReason,
 	selectActiveWorkspaceProjectId,
 	selectAutoSettledCounts,
+	selectContextProject,
 	selectProjectIsRunning,
 	selectProjectNeedsAttention,
 	selectWorkspaceIsRunning,
@@ -106,6 +110,7 @@ const HOVER_CONTROL_CLASS =
 	"flex size-20 shrink-0 items-center justify-center rounded-sm text-text-muted opacity-100 outline-none transition hover:bg-container-elevated-bg hover:text-text-default [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary data-[state=open]:opacity-100 disabled:pointer-events-none disabled:opacity-0";
 
 export function ProjectTree() {
+	const contextProject = useAppStore(selectContextProject);
 	const projects = useAppStore((s) => s.projects);
 	const recentProjects = useAppStore((s) => s.recentProjects);
 	const selectedProjectId = useAppStore((s) => s.selectedProjectId);
@@ -265,6 +270,39 @@ export function ProjectTree() {
 
 	return (
 		<nav data-testid="project-tree" className="flex flex-col gap-4">
+			<div data-testid="project-primary-navigation" className="mb-16 flex flex-col gap-4">
+				<Button
+					variant="outline"
+					className="h-36 w-full justify-start gap-4"
+					data-testid="sidebar-new-workspace"
+					onClick={() =>
+						contextProject ? openWorkspaceDialog(contextProject.id, false) : void pickAndOpen()
+					}
+				>
+					<Plus className="size-14" />
+					<span className="truncate">
+						{contextProject ? t("New workspace") : t("Open project")}
+					</span>
+				</Button>
+				<Button
+					variant="ghost"
+					className="h-36 w-full justify-start gap-4"
+					data-testid="sidebar-session-switcher"
+					onClick={() => useAppStore.getState().openSessionSwitcher()}
+				>
+					<RiSearchLine className="size-14" />
+					<span className="truncate">{t("Switch session")}</span>
+				</Button>
+				<Button
+					variant="ghost"
+					className="h-36 w-full justify-start gap-4"
+					data-testid="sidebar-extensions"
+					onClick={() => useAppStore.getState().openSettings(SettingsSection.Extensions)}
+				>
+					<RiApps2Line className="size-14" />
+					<span className="truncate">{t("Extensions")}</span>
+				</Button>
+			</div>
 			<header className="flex h-panel-row items-center justify-between pr-4 pl-8">
 				<span className="tr-text-eyebrow text-text-muted">{t("Projects")}</span>
 				<AddProjectMenu

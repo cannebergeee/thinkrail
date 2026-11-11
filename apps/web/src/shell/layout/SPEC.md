@@ -49,6 +49,10 @@ Frame groups may remain empty in any workspace. Closing a final resource therefo
 
 ## Auxiliary presentation and recall
 
+Center panes use a 12px rounded perimeter and inset, neutral selected tabs. Shared header and tree
+roles are 36px and 30px respectively. The four-pixel outer inset belongs to Shell, not the docking
+model, so persisted geometry, focus recovery, drag/drop and pane ownership keep their existing contract.
+
 Edge entries are a derived projection of the current document and attention, never a second persisted
 layout. **The rail mirrors the region's panes**: entries come in ordered clusters, one per group in
 document order, separated by a hairline, so the rail answers "which icons share a pane" without a tab
@@ -98,7 +102,7 @@ saved dimensions remain workbench-wide ratios; viewport projection never rewrite
 observers follow the actual DOM node through ref attachment/cleanup, including keyed panel-group
 replacement; a mounted workbench does not imply its measured descendants survived. Rail selection is
 the tab strip's grammar turned sideways: the selected fill, a Fill icon, and a short accent edge (the
-rail's analogue of a resource tab's underline), identical in every theme — a palette decides how loud
+rail's explicit expanded-pane marker), identical in every theme — a palette decides how loud
 each reads, never a per-theme selector in the component.
 
 ## Layout grammar

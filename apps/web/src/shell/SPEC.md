@@ -35,6 +35,12 @@ The sibling dependency graph is: `layoutState → layout`; `chatReconciliation �
 
 ## Composition
 
+The interface follows ZCode's neutral workspace treatment: inset, rounded content surfaces, quiet
+navigation, monochrome primary actions and roomier controls. The existing workbench remains the only
+layout owner; ZCode's runtime, stores and desktop bridge are not imported. Projects exposes labelled
+New workspace, attention switcher and Extensions entry points above its tree. These reuse existing
+actions and dialogs rather than introducing another navigation model. Persisted layouts remain valid.
+
 The topbar keeps ThinkRail identity, connection state, Settings, and compact location context, and doubles
 as the **window title bar** when a native host removes its own strip ([[module-desktop]], *Native window
 chrome*). It is a fixed `h-topbar-row` (`--topbar-row-height`, 40px — macOS title-bar proportions, so

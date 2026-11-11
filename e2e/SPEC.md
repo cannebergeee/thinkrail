@@ -18,6 +18,18 @@ explicit, authenticated, on-demand runs.
 
 ## Execution model
 
+On Windows the isolated host PATH includes only its fake bin, the discovered Git for Windows
+installation's command/POSIX/runtime directories, and Windows system directories. It does not inherit
+the developer's full PATH. This lets browser fixtures inspect real repositories while preserving the
+provider/editor isolation. Windows uses that installation's Bash executable rather than the POSIX
+login-shell script. Before fixture reset and host teardown, terminal catalogs are closed through the
+wire so running PTYs cannot keep Windows worktree directories locked. The source style guards convert file URLs with `fileURLToPath` so the same
+checks run on Windows drive paths.
+
+`zcode-ui.spec.ts` covers project-home draft handoff (including IME and multiline input), labelled
+sidebar navigation, non-submitting starter prompts, and narrow/light/dark UI screenshots. It does not
+send an agent prompt or contact a provider.
+
 `bun run e2e` is the complete no-agent gate. It builds the web bundle once and runs machine-adaptive,
 process-level Playwright shards. A shard owns one host and one Playwright worker; serial execution inside
 that lane preserves the suite's destructive reset semantics, while lane-qualified state and ports make

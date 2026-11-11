@@ -43,7 +43,7 @@
 			]
 		},
 		"brand": {
-			"note": "Orbitron ships LATIN ONLY, and `brand.hero` renders a project's own name — so the next fallback is the interface face (Geist covers cyrillic/cyrillic-ext/latin-ext/vietnamese and is already bundled), not a system font. A non-Latin project name then falls back within our own type system instead of to whatever the OS supplies.",
+			"note": "Shared display-family source for apps/website; application headings use the interface family.",
 			"stack": [
 				"Orbitron Variable",
 				"Orbitron",
@@ -101,17 +101,6 @@
 		"lineHeight": "default"
 	},
 	"textStyles": {
-		"brand": {
-			"hero": {
-				"fontFamily": "brand",
-				"fontSize": "s44",
-				"fontWeight": "brand",
-				"lineHeight": "compact",
-				"letterSpacing": "brand",
-				"textTransform": "none",
-				"fontStyle": "normal"
-			}
-		},
 		"heading": {
 			"xl": {
 				"fontFamily": "interface",

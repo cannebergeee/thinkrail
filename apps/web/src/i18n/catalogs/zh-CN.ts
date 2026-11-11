@@ -53,6 +53,19 @@ export const IDENTICAL_KEYS: ReadonlySet<string> = new Set([
 ]);
 
 export const zhCN: Catalog = {
+	"What would you like to build?": "今天，想实现什么？",
+	"Describe a task, then choose how to work on it.": "描述你的任务，再选择合适的工作方式。",
+	"Open a project and turn your ideas into working code.": "打开项目，让想法变成可运行的代码。",
+	"Describe your task": "描述你想完成的任务…",
+	"Explore this project": "了解项目",
+	"Review code": "审查代码",
+	"Plan a change": "规划改动",
+	"Explain this project's structure and the main entry points.": "请介绍这个项目的结构和主要入口。",
+	"Review the current changes for bugs and suggest focused improvements.":
+		"请审查当前改动，找出潜在问题并提出具体的改进建议。",
+	"Help me plan a change. Start by asking what I want to build.":
+		"请帮我规划一次改动，先询问我想实现什么。",
+	"Start with an idea, a question, or a change to your code.": "从一个想法、问题，或代码改动开始。",
 	"{0} chars": "{0} 字符",
 	"{0} file changed": "{0} 个文件已更改",
 	"{0} files changed": "{0} 个文件已更改",

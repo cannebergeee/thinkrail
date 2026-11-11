@@ -27,7 +27,7 @@ export function ProviderWarningBanner() {
 	return (
 		<div
 			data-testid="welcome-provider-warning"
-			className="mt-16 flex w-full max-w-[560px] items-center gap-8 rounded-sm border border-feedback-warning-muted bg-container-elevated-bg px-12 py-8 text-left"
+			className="mt-16 grid w-full max-w-[560px] grid-cols-[auto_minmax(0,1fr)] items-center gap-8 rounded-sm border border-feedback-warning-muted bg-container-elevated-bg px-12 py-8 text-left sm:grid-cols-[auto_minmax(0,1fr)_auto]"
 		>
 			<TriangleAlert className="-mt-2 size-14 shrink-0 text-feedback-warning" aria-hidden />
 			<span className="min-w-0 flex-1 tr-text-ui text-text-default">
@@ -38,7 +38,7 @@ export function ProviderWarningBanner() {
 				size="sm"
 				data-testid="welcome-connect-provider"
 				onClick={() => useAppStore.getState().openSettings("providers")}
-				className="shrink-0"
+				className="col-start-2 shrink-0 justify-self-start sm:col-start-auto"
 			>
 				{t("Connect a provider")}
 			</Button>

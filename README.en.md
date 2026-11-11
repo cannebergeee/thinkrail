@@ -19,12 +19,18 @@ create the tools it needs based on how you actually work.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/readme-assets/workbench-dark.zh-CN.png">
-  <img src=".github/readme-assets/workbench-light.zh-CN.png" alt="ThinkRail workbench: the Projects pane beside the left tool rail listing worktree workspaces and their Settled shelf, a finished pi conversation with its tool steps in the center, the resulting diff beside it, and the Specs tree above the Changes list on the right with their tools on the edge rail" width="900">
+  <img src=".github/readme-assets/workbench-light.zh-CN.png" alt="ThinkRail's Chinese workbench: project and workspace navigation on the left, a task conversation entry and model selector in the center, and Specs and Changes tools on the right" width="900">
 </picture>
 
-*A `pi` session and the change it made, scoped to an isolated git-worktree workspace.*
+*A task workspace with the conversation entry and project tools, using isolated demonstration data.*
 
 ## What you get
+
+- **A ZCode-inspired task interface.** Neutral light and dark palettes, rounded panels and clear project
+  navigation. Describe a task on the project home before choosing a workspace, or use a starter prompt
+  in an empty chat; selecting a starter never sends it automatically. Adapted from
+  [ZCode](https://github.com/zai-org/ZCode); source reuse is documented in
+  [third-party notices](THIRD-PARTY-NOTICES.md).
 
 - **Isolated workspaces.** Open any git repo as a project and cut workspaces from it as `git worktree`s,
   each with its own branch and working directory. Agents work in parallel without touching your

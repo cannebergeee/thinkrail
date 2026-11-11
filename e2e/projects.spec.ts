@@ -504,8 +504,8 @@ test("project context actions stay compact and close/reopen is lossless across c
 	await page.getByTestId("confirm-close-project").click();
 	await expect(page.getByTestId("project-item")).toHaveCount(0);
 	await expect(observer.getByTestId("project-item")).toHaveCount(0);
-	await expect(page.getByTestId("welcome-title")).toHaveText("ThinkRail");
-	await expect(observer.getByTestId("welcome-title")).toHaveText("ThinkRail");
+	await expect(page.getByTestId("welcome-title")).toHaveText("What would you like to build?");
+	await expect(observer.getByTestId("welcome-title")).toHaveText("What would you like to build?");
 	await expect(page.getByTestId("add-project-menu")).toBeFocused();
 
 	await page.getByTestId("add-project-menu").click();
